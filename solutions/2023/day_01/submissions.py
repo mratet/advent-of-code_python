@@ -1,4 +1,4 @@
-lines = open('input.txt').read().split("\n")[:-1]
+lines = open('input.txt').read().splitlines()
 
 # WRITE YOUR SOLUTION HERE
 
