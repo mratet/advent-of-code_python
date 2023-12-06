@@ -1,4 +1,4 @@
-
+from math import floor, ceil
 lines = open('input.txt').read().splitlines()
 
 # WRITE YOUR SOLUTION HERE
@@ -10,8 +10,11 @@ def nb_records(time, distance):
     In particular, we're computing the distance between both squares-roots
     With a bit of basic algebra, we can show that :
     """
-    nb_records = int((time ** 2 - 4 * distance) ** 0.5)
-    return nb_records
+    y = (time ** 2 - 4 * distance) ** 0.5
+    x_1 = ceil((time - y) / 2)
+    x_2 = floor((time + y) / 2)
+
+    return x_2 - x_1 + 1
 
 def part_1(lines):
     ans = 1
