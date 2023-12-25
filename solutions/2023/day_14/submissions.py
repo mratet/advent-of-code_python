@@ -82,6 +82,7 @@ def part_2(lines):
     len_numbers = len(str(compute_load(platform)) + ' ')
     start_cycle = match.start() // len_numbers - 1
 
+    print(start_cycle, length_cycle)
     nb_cycles = 1e9
     ans = sequences.split()[int((nb_cycles - start_cycle) % length_cycle)]
     return ans

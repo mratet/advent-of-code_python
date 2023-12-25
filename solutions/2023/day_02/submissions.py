@@ -2,6 +2,8 @@
 lines = open('input.txt', 'r').readlines()
 
 # WRITE YOUR SOLUTION HERE
+
+
 def main(lines):
 
     m_values = {

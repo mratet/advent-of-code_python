@@ -18,6 +18,8 @@ def mapping(lines, seed):
         elif not line:
             seed = singular_mapping(x_to_y, seed)
             x_to_y = []
+    if x_to_y:
+        seed = singular_mapping(x_to_y, seed)
     return seed
 
 def part_1(lines):

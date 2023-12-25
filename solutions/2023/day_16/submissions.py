@@ -1,6 +1,5 @@
 
 lines = open('input.txt').read().splitlines()
-import time
 
 # WRITE YOUR SOLUTION HERE
 L, R, U, D = (-1, 0), (1, 0), (0, 1), (0, -1)

@@ -27,6 +27,7 @@ def part_1(lines):
             distance_bateau = j * (time - j)
             if distance_bateau > distance:
                 records += 1
+        print(records)
         ans *= records
     return ans
 
