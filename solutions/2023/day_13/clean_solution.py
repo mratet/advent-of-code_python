@@ -21,6 +21,7 @@ def check_mirrors(tab, mismatched):
     return 0
 
 def _parse(input):
+    #can be optimize using [....splitlines() for block in input.split('\n\n')]
     patterns, pattern = [], []
 
     for line in input:
