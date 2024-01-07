@@ -28,9 +28,11 @@ def part_1(input):
 def part_2(input):
     graph = _parse(input)
     guest = list(graph.keys())
+
     for v in guest:
         graph['me'][v] = 0
         graph[v]['me'] = 0
+
     return compute_hapiness(graph)
 
 

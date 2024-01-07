@@ -8,25 +8,18 @@ def part_1(input):
     return sum([int(match) for match in matchs])
 
 def recsum(r):
-    s = 0
-
     if isinstance(r, list):
-        d = r
+        return sum(map(recsum, r))
+
     elif isinstance(r, dict):
         if 'red' in r.values():
             return 0
-        else:
-            d = r.values()
-    else:
-        return 0
+        return sum(map(recsum, r.values()))
 
-    for v in d:
-        try:
-            s += v
-        except:
-            s += recsum(v)
+    elif isinstance(r, int):
+        return r
 
-    return s
+    return 0
 
 def part_2(input):
     d = json.loads(input)
