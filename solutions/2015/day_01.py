@@ -2,23 +2,13 @@ from aocd import get_data
 input = get_data(day=1, year=2015)
 
 def part_1(input):
-    t = 0
-    for c in input:
-        if c == '(':
-            t += 1
-        else:
-            t -=1
-    return t
+    sequence = [1 if c == '(' else -1 for c in input]
+    return sum(sequence)
 
 def part_2(input):
     t, i = 0, 0
-
     while t != -1:
-        match input[i]:
-            case '(':
-                t += 1
-            case ')':
-                t -=1
+        t += 1 if input[i] == '(' else -1
         i += 1
 
     return i

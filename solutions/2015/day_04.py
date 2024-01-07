@@ -5,8 +5,7 @@ from hashlib import md5
 
 def match_md5(input, match):
     my_hash, i = '2', 0
-    n = len(match)
-    while my_hash[:n] != match:
+    while not my_hash.startswith(match):
         new_input = input + str(i)
         my_hash = md5(new_input.encode()).hexdigest()
         i += 1
