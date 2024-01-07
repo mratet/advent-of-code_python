@@ -1,37 +1,21 @@
 from aocd import get_data
 input = get_data(day=9, year=2015).splitlines()
 import itertools
-
+import collections
 def _parse(lines):
-    nodes_id = []
+    graph = collections.defaultdict(dict)
     for line in lines:
-        start, _, end, *_ = line.split()
-        if start not in nodes_id:
-            nodes_id.append(start)
-        if end not in nodes_id:
-            nodes_id.append(end)
-
-    n = len(nodes_id)
-    weights = [[0]*n for _ in range(n)]
-    for line in lines:
-        start, _, end, _ , distance = line.split()
-        start_id, end_id = nodes_id.index(start), nodes_id.index(end)
-        weights[start_id][end_id] = int(distance)
-        weights[end_id][start_id] = int(distance)
-
-    return weights
+        start, _, end, _, distance = line.split()
+        graph[start][end] = int(distance)
+        graph[end][start] = int(distance)
+    return graph
 
 def part_1(input):
     weights = _parse(input)
-
-    n = len(weights)
-    V = range(n)
     shortest_route = 1e9
 
-    for perm in itertools.permutations(V, n):
-        path = 0
-        for i, j in zip(perm, perm[1:]):
-            path += weights[i][j]
+    for perm in itertools.permutations(weights.keys()):
+        path = sum([weights[i][j] for i, j in itertools.pairwise(perm)])
         shortest_route = min(shortest_route, path)
 
     return shortest_route
@@ -39,15 +23,10 @@ def part_1(input):
 
 def part_2(input):
     weights = _parse(input)
-
-    n = len(weights)
-    V = range(n)
     longest_route = 0
 
-    for perm in itertools.permutations(V, n):
-        path = 0
-        for i, j in zip(perm, perm[1:]):
-            path += weights[i][j]
+    for perm in itertools.permutations(weights.keys()):
+        path = sum([weights[i][j] for i, j in itertools.pairwise(perm)])
         longest_route = max(longest_route, path)
 
     return longest_route
