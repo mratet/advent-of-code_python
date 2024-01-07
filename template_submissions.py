@@ -1,4 +1,3 @@
-
 lines = open('input.txt').read().splitlines()
 
 # WRITE YOUR SOLUTION HERE

@@ -57,6 +57,7 @@ if __name__ == "__main__":
 
     year_dir = Path("solutions", ARGS.year)
     year_dir.mkdir(parents=True, exist_ok=True)
+    year = ARGS.year
 
     if ARGS.day is None:
         day = next_day(year_dir) + 1
@@ -66,15 +67,12 @@ if __name__ == "__main__":
     if not 1 <= day <= 25:
         PARSER.error(f"day {day} is not in range [1,25]")
 
-    day_dir = Path(year_dir, f"day_{day:02}")
-
-    day_dir.mkdir(parents=True, exist_ok=True)
-    command = 'aocd > ' + str(day_dir) + '/input.txt'
+    command = f'aocd {day} {year} > {year_dir}/input.txt'
     os.system(command)
-    command = 'aocd --example  > ' + str(day_dir) + '/input-test.txt'
+    # command = f'aocd {day} {year} --example  > {year_dir}/test.txt'
     os.system(command)
 
-    submission_path = Path(day_dir, "submissions.py")
-    shutil.copyfile('template_submissions.py', submission_path)
+    submission_path = Path(year_dir, f"solution.py")
+    shutil.copyfile('template_clean_solution.py', submission_path)
 
 
