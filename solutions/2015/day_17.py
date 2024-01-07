@@ -6,8 +6,8 @@ def find_combinations(containers, eggnog):
     combs = []
     for i in range(2, len(containers) + 1):
         combs += list(itertools.combinations(containers, i))
-    combs = [i for i in combs if sum(i) == eggnog]
-    return combs
+    valid_combs = [i for i in combs if sum(i) == eggnog]
+    return valid_combs
 
 def part_1(input):
     containers = list(map(int, input))

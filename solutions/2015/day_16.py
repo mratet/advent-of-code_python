@@ -17,7 +17,7 @@ def _parse(input):
     sues = []
     pattern = r'(\w+): (\d+)'
     for line in input:
-        matchs =  re.findall(pattern, line)
+        matchs = re.findall(pattern, line)
         sue_dict = {k: v for k, v in matchs}
         sues.append(sue_dict)
     return sues
@@ -37,7 +37,6 @@ def check(types, value):
     elif types in ('pomeranians', 'goldfish'):
         return sue_informations[types] > value
     return sue_informations[types] == value
-
 
 def part_2(input):
     sues = _parse(input)
