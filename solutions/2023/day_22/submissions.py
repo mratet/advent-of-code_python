@@ -105,21 +105,6 @@ def part_2(lines):
         if not_safe[i]:
             ans += dfs(i + 1, support)
 
-    # for brick in bricks:
-    #     supports_lost = {brick}
-    #     todo = list(supporting_bricks.get(brick, []))
-    #
-    #     while todo:
-    #         b = todo.pop()
-    #         if b in supports_lost:
-    #             continue
-    #
-    #         if all(supporting in supports_lost
-    #                for supporting in supported_by.get(b, [])):
-    #             answer += 1
-    #             supports_lost.add(b)
-    #
-    #             todo.extend(supporting_bricks.get(b, []))
     return ans
 # END OF SOLUTION
 
@@ -134,7 +119,6 @@ def dfs(start, graph):
         for neighboor in graph[node]:
             if not visited[neighboor]:
                 q.append(neighboor)
-
 
     return sum(visited) - 1
 
