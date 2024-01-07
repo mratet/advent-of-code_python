@@ -53,8 +53,13 @@ def part_1(input):
     return len(synthesis)
 
 def part_2(input):
-    # To be implemented
-    return None
+    # One letters always change into 2 letters
+    # Rn, Ar always come in pair and can't be transform
+    # Y can't be transform and is surround by two carac
+    replacements, molecule = _parse(input)
+    tokens = re.findall(r"[A-Z][a-z]*", molecule)
+    return len(tokens) - 2 * tokens.count('Ar') - 2 * tokens.count('Y') - 1
+
 
 print(f'My answer is {part_1(input)}')
 print(f'My answer is {part_2(input)}')
