@@ -19,12 +19,14 @@ def _parse(input):
 
 def factory_history(stock, graph, part='part_2'):
     while True:
-        if all([len(v) <= 1 for v in stock.values()]): break
+        if all([len(v) <= 1 for v in stock.values()]):
+            break
 
         for k, v in dict(stock).items():
             if len(v) == 2:
                 m, M = min(v), max(v)
-                if m == 17 and M == 61 and part == 'part_1': return k
+                if m == 17 and M == 61 and part == 'part_1':
+                    return k
                 stock[graph[k][0]].append(M)
                 stock[graph[k][1]].append(m)
                 stock[k].clear()
