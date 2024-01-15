@@ -17,9 +17,12 @@ def solve(input, part='part_1'):
     while q:
         for _ in range(len(q)):
             x, y = q.popleft()
-            if (x, y) in visited: continue
+            if (x, y) in visited:
+                continue
             visited.add((x, y))
-            if part=='part_1' and (x, y) == (31, 39): return cnt
+
+            if part == 'part_1' and (x, y) == (31, 39):
+                return cnt
 
             for dx, dy in [(-1, 0), (1, 0), (0, 1), (0, -1)]:
                 nx, ny = x + dx, y + dy

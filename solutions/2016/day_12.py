@@ -13,19 +13,18 @@ def program_execution(registers, input):
             case 'inc':
                 c = args[0]
                 registers[c] = registers[c] + 1
-                line_index += 1
             case 'dec':
                 c = args[0]
                 registers[c] = registers[c] - 1
-                line_index += 1
             case 'cpy':
                 x, y = args[0], args[1]
                 registers[y] = registers[x] if x in 'abcd' else int(x)
-                line_index += 1
             case 'jnz':
                 x, y = args[0], args[1]
                 cond = registers[x] if x in 'abcd' else int(x)
                 line_index += int(y) if cond != 0 else 1
+                line_index -= 1
+        line_index += 1
 
     return registers
 
