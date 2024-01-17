@@ -5,8 +5,7 @@ input = get_data(day=17, year=2016)
 
 from hashlib import md5
 
-DIRECTIONS = ['U', 'D', 'L', 'R']
-U, D, L, R = (0, -1), (0, 1), (-1, 0), (1, 0)
+DIRECTIONS = (0, -1, 'U'), (0, 1, 'D'), (-1, 0, 'L'), (1, 0, 'R')
 
 
 def accessible_room(input, current_path):
@@ -26,10 +25,10 @@ def find_path(code, current_position, current_path):
 
     acc_room = accessible_room(code, current_path)
     x, y = current_position
-    for i, (dx, dy) in enumerate([U, D, L, R]):
+    for i, (dx, dy, dir) in enumerate(DIRECTIONS):
         nx, ny = x + dx, y + dy
         if 0 <= nx < 4 and 0 <= ny < 4 and acc_room[i]:
-            current_path.append(DIRECTIONS[i])
+            current_path.append(dir)
             find_path(code, (nx, ny), current_path)
             current_path.pop()
 
