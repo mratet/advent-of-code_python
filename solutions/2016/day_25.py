@@ -53,8 +53,8 @@ def program_execution(registers, input):
     return registers, sig
 
 def part_1(input):
-    # The program will print the inverse binary representation of N - 2572
+    # The program will print the inverse binary representation of N - b * c
     binary = '010101010101'
-    return int(binary[::-1], 2) - 2572
+    return int(binary[::-1], 2) - 4 * 643
 
 print(f'My answer is {part_1(input)}')
