@@ -30,9 +30,9 @@ def next_day(year_dir: Path) -> int:
         [
             0,  # included so that new years don't break without anything in them
             *[
-                int(x.parts[-1].split("_")[1])
+                int(m.group(0))
                 for x in year_dir.iterdir()
-                if x.is_dir() and re.search(r"day_\d+$", str(x))
+                for m in [re.search(r"\d+", x.parts[-1])] if m
             ],
         ]
     )
@@ -49,7 +49,7 @@ PARSER.add_argument(
     ),
     nargs="?",
 )
-PARSER.add_argument("--year", default=current_puzzle_year(), help="Puzzle year")
+PARSER.add_argument("--year", default="2020", help="Puzzle year")
 
 
 if __name__ == "__main__":
@@ -69,10 +69,10 @@ if __name__ == "__main__":
 
     command = f'aocd {day} {year} > {year_dir}/input.txt'
     os.system(command)
-    # command = f'aocd {day} {year} --example  > {year_dir}/test.txt'
+    command = f'aocd {day} {year} --example  > {year_dir}/test.txt'
     os.system(command)
 
     submission_path = Path(year_dir, f"solution.py")
-    shutil.copyfile('template_clean_solution.py', submission_path)
+    shutil.copyfile('template_submissions.py', submission_path)
 
 
