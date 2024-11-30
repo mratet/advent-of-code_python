@@ -49,7 +49,7 @@ PARSER.add_argument(
     ),
     nargs="?",
 )
-PARSER.add_argument("--year", default="2020", help="Puzzle year")
+PARSER.add_argument("--year", default="2024", help="Puzzle year")
 
 
 if __name__ == "__main__":

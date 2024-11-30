@@ -1,5 +1,5 @@
 from aocd import get_data, submit
-# input = get_data(day=1, year=2020).splitlines()
+# input = get_data(day=1, year=2024).splitlines()
 import re
 input = open(0).read()
 
@@ -41,5 +41,5 @@ else:
     input = input.splitlines()
     print(f'My answer is {part_1(input)}')
     print(f'My answer is {part_2(input)}')
-    # submit(part_1(input), part="a", day=1, year=2020)
-    # submit(part_2(input), part="b", day=1, year=2020)
+    # submit(part_1(input), part="a", day=1, year=2024)
+    # submit(part_2(input), part="b", day=1, year=2024)
