@@ -13,7 +13,7 @@ def part_1(lines):
 
 def part_2(lines):
     levels = [[int(l) for l in levels.split()] for levels in lines]
-    # combinations keep the order,
+    # combinations keeps the order,
     return sum([any(map(is_safe_level, combinations(level, len(level) - 1))) for level in levels])
 
 # END OF SOLUTION

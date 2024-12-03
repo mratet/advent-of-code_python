@@ -1,34 +1,14 @@
-from aocd import get_data, submit
-input = get_data(day=3, year=2024).splitlines()
+from aocd import get_data
+input = get_data(day=3, year=2024)
 import re
 
 # WRITE YOUR SOLUTION HERE
 def part_1(lines):
-    # print(lines)
-    cnt = 0
-    for exp in lines:
-        match = re.findall(r"mul\((\d+),(\d+)\)", exp)
-        for (x1, x2) in match:
-            cnt += int(x1) * int(x2)
-    return cnt
+    return sum([int(x1) * int(x2) for (x1, x2) in re.findall(r"mul\((\d{1,3}),(\d{1,3})\)", lines)])
 
 def part_2(lines):
-    cnt = 0
-    do = True
-    for exp in lines:
-        exp = exp.replace("don't()", "mul(0,0)").replace("do()", "mul(1,1)")
-        match = re.findall(r"mul\((\d+),(\d+)\)", exp)
-        for (x1, x2) in match:
-            if (x1, x2) == ('0', '0'):
-                do = False
-                continue
-            if (x1, x2) == ('1', '1'):
-                do = True
-                continue
-            if do:
-                cnt += int(x1) * int(x2)
-    return cnt
-
+    text = re.sub(r"don't\(\).*?(?:$|do\(\))", '', lines, flags=re.DOTALL)
+    return sum([int(x1) * int(x2) for (x1, x2) in re.findall(r"mul\((\d{1,3}),(\d{1,3})\)", text)])
 
 # END OF SOLUTION
 print(f'My answer is {part_1(input)}')
