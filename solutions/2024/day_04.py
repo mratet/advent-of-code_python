@@ -3,51 +3,22 @@ input = get_data(day=4, year=2024).splitlines()
 import itertools
 
 # WRITE YOUR SOLUTION HERE
-def dfs(graph, start):
-    password = 'XMAS'
-    i, j, main_dir = start
-    to_visit = [(i, j, 1, main_dir)]
-    sol = []
-    DIRECTIONS = list(itertools.product(range(-1, 2), repeat=2))
+DIRECTIONS = list(itertools.product(range(-1, 2), repeat=2))
 
-    while to_visit:
-        i, j, c, dir = to_visit.pop()
-        di, dj = DIRECTIONS[dir]
-        ni, nj = i + di, j + dj
-        if 0 <= ni < len(graph) and 0 <= nj < len(graph[0]) and graph[ni][nj] == password[c]:
-            if c == 3:
-                sol.append((ni, nj, main_dir))
-            else:
-                to_visit.append((ni, nj, c + 1, main_dir))
-    return sol
+def look_for_XMAS(graph, pos):
+    return [''.join([graph[pos[0] + n * di][pos[1] + n * dj] for n in range(4) if
+                     0 <= pos[0] + n * di < len(graph) and 0 <= pos[1] + n * dj < len(graph[0])]) for di, dj in
+            DIRECTIONS].count('XMAS')
 
 def part_1(lines):
-    cnt = 0
-    for i in range(len(lines)):
-        for j in range(len(lines[0])):
-            if lines[i][j] == 'X':
-                for d in range(9):
-                    cnt += len(dfs(lines, (i, j, d)))
-    return cnt
+    return sum([look_for_XMAS(lines, (i, j)) for i in range(len(lines)) for j in range(len(lines[0])) if lines[i][j] == 'X'])
 
-def chech_4_Xmas(graph, start):
-    i, j = start
-    diags = []
-    for (di, dj) in [(1, 1), (1, -1), (-1, -1), (-1, 1)]:
-        ni, nj = i + di, j + dj
-        if 0 <= ni < len(graph) and 0 <= nj < len(graph[0]):
-            diags.append(graph[ni][nj])
-
-    Xmas = ''.join(diags)
-    return (Xmas == 'MMSS' or Xmas == 'SMMS' or Xmas == 'SSMM' or Xmas == 'MSSM')
+def look_for_Xmas(graph, pos):
+    return ''.join([graph[pos[0] + di][pos[1] + dj] for (di, dj) in ((1, 1), (1, -1), (-1, -1), (-1, 1))]) in (
+    'MMSS', 'SMMS', 'SSMM', 'MSSM')
 
 def part_2(lines):
-    cnt = 0
-    for i in range(len(lines)):
-        for j in range(len(lines[0])):
-            if lines[i][j] == 'A':
-                cnt += chech_4_Xmas(lines, (i, j))
-    return cnt
+    return sum([look_for_Xmas(lines, (i, j)) for i in range(1, len(lines) - 1) for j in range(1, len(lines[0]) - 1) if lines[i][j] == 'A'])
 
 # END OF SOLUTION
 print(f'My answer is {part_1(input)}')
