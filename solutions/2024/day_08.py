@@ -14,24 +14,21 @@ def get_antenas(lines):
 
 def part_1(lines):
     antenas = get_antenas(lines)
-
     n, m = len(lines), len(lines[0])
     antinodes = set()
     for L in antenas.values():
         for l1, l2 in product(L, repeat=2):
             if l1 == l2: continue
             (x1, y1), (x2, y2) = l1, l2
-            c1, c2 = x1 - (x2 - x1), y1 - (y2 - y1)
-            if 0 <= c1 < n and 0 <= c2 < m:
-                antinodes.add((c1, c2))
-            c1, c2 = x2 + (x2 - x1), y2 + (y2 - y1)
-            if 0 <= c1 < n and 0 <= c2 < m:
-                antinodes.add((c1, c2))
+            dx, dy = x2 - x1, y2 - y1
+            c1, c2 = (x1 - dx, y1 - dy), (x2 + dx, y2 + dy)
+            for c in (c1, c2):
+                if 0 <= c[0] < n and 0 <= c[1] < m:
+                    antinodes.add(c)
     return len(antinodes)
 
 def part_2(lines):
     antenas = get_antenas(lines)
-
     n, m = len(lines), len(lines[0])
     antinodes = set()
     for L in antenas.values():
