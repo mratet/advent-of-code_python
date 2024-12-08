@@ -33,18 +33,12 @@ def part_2(lines):
     antinodes = set()
     for L in antenas.values():
         for l1, l2 in product(L, repeat=2):
-            if l1 == l2: continue
             (x1, y1), (x2, y2) = l1, l2
-            idx = 1
-            while 0 <= x1 - idx * (x2 - x1) < n and 0 <= y1 - idx * (y2 - y1) < m:
-                antinodes.add((x1 - idx * (x2 - x1), y1 - idx * (y2 - y1)))
-                idx += 1
-            idx = 1
-            while 0 <= x2 + idx * (x2 - x1) < n and 0 <= y2 + idx * (y2 - y1) < m:
-                antinodes.add((x2 + idx * (x2 - x1), y2 + idx * (y2 - y1)))
-                idx += 1
-        if len(L) > 1:
-            antinodes.update(set(L))
+            # I test the whole line
+            for idx in range(-50, 50):
+                c = (x1 + idx * (x2 - x1), y1 + idx * (y2 - y1))
+                if 0 <= c[0] < n and 0 <= c[1] < m:
+                    antinodes.add(c)
     return len(antinodes)
 
 # END OF SOLUTION
