@@ -6,50 +6,26 @@ import re
 def part_1(lines):
     X = 103
     Y = 101
-    robots = {}
+    tl = tr = bl = br = 0
     for i, line in enumerate(lines):
-        # x, y, vx, vy = map(int, re.findall(r'(?:[+\d].*\d|\d))', line))
-        pos, v = line.split()
-        x, y = pos[2:].split(',')
-        x = int(x)
-        y = int(y)
-        vx, vy = v[2:].split(',')
-        vx = int(vx)
-        vy = int(vy)
-        robots[i] = (y, x, vy, vx)
+        y, x, vy, vx = map(int, re.findall(r'-?\d+', line))
+        px, py = (x + 100 * vx) % X, (y + 100 * vy) % Y
 
-    for _ in range(100):
-        for i, (x, y, vx, vy) in robots.items():
-            robots[i] = ((x + vx) % X, (y + vy) % Y, vx, vy)
+        if px in range(X//2) and py in range(Y//2):
+            tl  += 1
+        elif px in range(X // 2 + 1, X) and py in range(Y // 2):
+            bl += 1
+        elif px in range(X // 2) and py in range(Y // 2 + 1, Y):
+            tr += 1
+        elif px in range(X // 2 + 1, X) and py in range(Y // 2 + 1, Y):
+            br += 1
+    return tl * bl * tr * br
 
-    quad_count = [0, 0, 0, 0]
-    for (x, y, vx, vy) in robots.values():
-        if x in range(X//2) and y in range(Y//2):
-            quad_count[0] += 1
-        elif x in range(X // 2 + 1, X) and y in range(Y // 2):
-            quad_count[1] += 1
-        elif x in range(X // 2) and y in range(Y // 2 + 1, Y):
-            quad_count[2] += 1
-        elif x in range(X // 2 + 1, X) and y in range(Y // 2 + 1, Y):
-            quad_count[3] += 1
-
-    score = 1
-    for c in quad_count:
-        score *= c
-    return score
-
-def print_grid(X, Y, robots):
+def print_grid(X, Y, curr_pos):
     line = ''
     for x in range(X):
         for y in range(Y):
-            c = 0
-            for (xr, yr, vx, vy) in robots.values():
-                if xr == x and yr == y:
-                    c += 1
-            if c:
-                line += str(c)
-            else:
-                line += '.'
+            line += '1' if (x, y) in curr_pos else '.'
         print(line)
         line = ''
     return
@@ -57,7 +33,7 @@ def print_grid(X, Y, robots):
 def probable_xmas_tree(curr_pos):
     c = 0
     for (x, y) in curr_pos:
-        if  (x - 1, y + 1) in curr_pos and (x +1, y - 1) in curr_pos:
+        if  (x - 1, y + 1) in curr_pos and (x + 1, y - 1) in curr_pos:
             c += 1
     return c > 30
 
@@ -66,15 +42,8 @@ def part_2(lines):
     Y = 101
     robots = {}
     for i, line in enumerate(lines):
-        # x, y, vx, vy = map(int, re.findall(r'(?:[+\d].*\d|\d))', line))
-        pos, v = line.split()
-        x, y = pos[2:].split(',')
-        x = int(x)
-        y = int(y)
-        vx, vy = v[2:].split(',')
-        vx = int(vx)
-        vy = int(vy)
-        robots[i] = (y, x, vy, vx)
+        y, x, vy, vx = map(int, re.findall(r'-?\d+', line))
+        robots[i] = (x, y, vx, vy)
 
     for j in range(100000):
         curr_pos = set()
@@ -83,7 +52,7 @@ def part_2(lines):
             (cx, cy, _, _) = robots[i]
             curr_pos.add((cx, cy))
         if probable_xmas_tree(curr_pos):
-            print_grid(X, Y, robots)
+            # print_grid(X, Y, curr_pos)
             return j + 1
 
 # END OF SOLUTION
