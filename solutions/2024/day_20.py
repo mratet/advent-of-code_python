@@ -36,9 +36,9 @@ def solve(lines, part):
     for node in start_pos:
         cheats = generateManhattanPoint(*node, cheat_time)
         for point in cheats:
-            if point in dist and dist[point] < dist[node]:
-                gain = dist[node] - dist[point] - (abs(point[0] - node[0]) + abs(point[1] - node[1]))
-                scores.append(gain)
+            dist_point = abs(point[0] - node[0]) + abs(point[1] - node[1])
+            if point in dist and dist[point] + dist_point < dist[node]:
+                scores.append(dist[node] - dist[point] - dist_point)
     return sum(c >= 100 for c in scores)
 
 def part_1(lines):

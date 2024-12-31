@@ -1,8 +1,6 @@
-# from aocd import get_data, submit
-# input = get_data(day=23, year=2024).splitlines()
-from collections import defaultdict
-from itertools import combinations
-input = open('input.txt').read()
+from aocd import get_data, submit
+input = get_data(day=24, year=2024)
+
 from operator import and_, or_, xor
 from collections import deque
 from graphviz import Digraph
@@ -69,12 +67,11 @@ def part_2(lines):
         dot.edge(module.ri, gate_node)
         dot.node(module.output, module.output, shape="circle", style="filled", fillcolor="lightblue")
         dot.edge(gate_node, module.output)
-    # Afficher le graphe
     # dot.render("complex_circuit_with_gates", format="png", cleanup=True)  # Sauvegarder en PNG
     # dot.view()
     # swap gates
     # nqk - z07
-    # fgt - pcp (au niveau de z17)
+    # fgt - pcp (near z17)
     # fpq - z24
     # srn - z32
     return ','.join(sorted(['z07', 'nqk', 'z32', 'srn', 'z24', 'fpq', 'fgt', 'pcp']))
