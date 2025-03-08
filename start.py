@@ -49,7 +49,7 @@ PARSER.add_argument(
     ),
     nargs="?",
 )
-PARSER.add_argument("--year", default="2024", help="Puzzle year")
+PARSER.add_argument("--year", default="2019", help="Puzzle year")
 
 
 if __name__ == "__main__":
@@ -73,6 +73,6 @@ if __name__ == "__main__":
     os.system(command)
 
     submission_path = Path(year_dir, f"solution.py")
-    shutil.copyfile('template_submissions.py', submission_path)
+    shutil.copyfile('template_submissions_2019.py', submission_path)
 
 
