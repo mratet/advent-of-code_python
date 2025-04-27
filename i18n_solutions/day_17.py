@@ -50,16 +50,17 @@ class Block:
         res = defaultdict(list)
         other_rows = other._rows[::-1]
         for i, j in itertools.product(range(n1), range(n2)):
-            res[i + j].append(self._rows[i] + other_rows[j])
+            # Depends on how blocks were divided for the puzzle
+            if (i + j + 1) % MAGIC_NUMBER == 0:
+                res[i + j].append(self._rows[i] + other_rows[j])
         return res
 
     def match(self, other):
         convolved = self.convolve(other)
         for k, c_block in convolved.items():
-            if len(c_block) >= MAGIC_NUMBER:
-                d_block = Block("\n".join(c_block))
-                if not d_block.has_replacement_in_junction():
-                    return k
+            d_block = Block("\n".join(c_block))
+            if not d_block.has_replacement_in_junction():
+                return k
         return 0
 
 
@@ -95,8 +96,7 @@ def build_columns(blocks_dict: Dict[int, Block], first_col_ids: List[int]):
         right_block_ids = []
         for block_id in block_ids:
             k = block.match(blocks_dict[block_id])
-            # Depends on how blocks were divided for the puzzle
-            if (k + 1) % MAGIC_NUMBER == 0:
+            if k > 0:
                 right_block_ids.append((k, block_id))
         sorted_ids = [id for (_, id) in sorted(right_block_ids, key=lambda x: x[0])]
         new_block = build_column_block([blocks_dict[id] for id in sorted_ids])
@@ -109,10 +109,9 @@ def main(input_file):
     input_blocks = open(input_file).read().split("\n\n")
     blocks_dict = {i: Block(block) for i, block in enumerate(input_blocks)}
 
-    top_left_corner, bottom_left_corner, left_edges = identify_relevant_blocks(blocks_dict)
-
+    top_left_corner, bot_left_corner, left_edges = identify_relevant_blocks(blocks_dict)
     for left_edge_candidates in itertools.permutations(left_edges):
-        first_col = [top_left_corner, *left_edge_candidates, bottom_left_corner]
+        first_col = [top_left_corner, *left_edge_candidates, bot_left_corner]
         try:
             column_blocks = build_columns(blocks_dict, first_col)
             final_block = build_row_block(column_blocks)
@@ -124,4 +123,5 @@ def main(input_file):
     return None
 
 
+# Remove the last trailing line from puzzle_input to main it works
 print(main("input.txt"))
