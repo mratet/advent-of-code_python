@@ -1,4 +1,5 @@
-import re, math
+import re
+import math
 
 lines = open("input.txt").read().splitlines()
 

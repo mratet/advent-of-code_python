@@ -1,10 +1,10 @@
-import itertools, re, collections
 from aocd import get_data
 
 input = get_data(day=7, year=2015).splitlines()
 
 # Solution from r-sreeram
-import functools, operator as op
+import functools
+import operator as op
 
 OPS = {
     "AND": op.and_,

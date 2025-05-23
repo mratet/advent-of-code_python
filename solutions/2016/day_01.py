@@ -1,4 +1,3 @@
-import itertools, re, collections
 from aocd import get_data
 
 input = get_data(day=1, year=2016).split(", ")

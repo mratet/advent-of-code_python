@@ -1,7 +1,9 @@
 from aocd import get_data
 
 input = get_data(day=13, year=2015).splitlines()
-import re, collections, itertools
+import re
+import collections
+import itertools
 
 
 def _parse(input):

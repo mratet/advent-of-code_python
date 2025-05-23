@@ -1,4 +1,4 @@
-from aocd import get_data, submit
+from aocd import get_data
 
 input = get_data(day=25, year=2024).split("\n\n")
 from itertools import product

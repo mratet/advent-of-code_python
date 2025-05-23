@@ -1,6 +1,4 @@
 import re
-import math
-from functools import total_ordering
 
 
 def parse_nums(line, negatives=True):

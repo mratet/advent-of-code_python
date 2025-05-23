@@ -1,4 +1,4 @@
-import itertools, re, collections
+import collections
 from aocd import get_data
 
 input = int(get_data(day=13, year=2016))

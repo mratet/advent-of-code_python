@@ -1,4 +1,5 @@
-import itertools, re, collections, math
+import itertools
+import math
 from aocd import get_data
 
 input = get_data(day=21, year=2015).splitlines()

@@ -1,4 +1,4 @@
-from aocd import get_data, submit
+from aocd import get_data
 
 input = get_data(day=2, year=2021).splitlines()
 

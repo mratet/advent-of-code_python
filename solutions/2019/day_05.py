@@ -1,4 +1,4 @@
-from aocd import get_data, submit
+from aocd import get_data
 
 aoc_input = get_data(day=5, year=2019)
 from intcode import run_program, read_program, deque

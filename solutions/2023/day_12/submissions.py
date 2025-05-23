@@ -1,4 +1,3 @@
-import itertools
 from functools import cache
 
 lines = open("input.txt").read().splitlines()

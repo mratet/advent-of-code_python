@@ -1,7 +1,7 @@
 from functools import reduce
 from operator import xor
 
-from aocd import get_data, submit
+from aocd import get_data
 
 input = get_data(day=14, year=2017).splitlines()
 

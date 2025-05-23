@@ -1,4 +1,4 @@
-from aocd import get_data, submit
+from aocd import get_data
 from collections import deque
 
 aoc_input = get_data(day=7, year=2019)

@@ -1,6 +1,6 @@
 import re
 
-from aocd import get_data, submit
+from aocd import get_data
 
 aoc_input = get_data(day=12, year=2019).splitlines()
 import numpy as np

@@ -74,5 +74,5 @@ if __name__ == "__main__":
     command = f"aocd {day} {year} --example  > {year_dir}/test.txt"
     os.system(command)
 
-    submission_path = Path(year_dir, f"solution.py")
+    submission_path = Path(year_dir, "solution.py")
     shutil.copyfile("template_submissions_2021.py", submission_path)

@@ -1,4 +1,5 @@
-import itertools, re
+import itertools
+import re
 
 from aocd import get_data
 

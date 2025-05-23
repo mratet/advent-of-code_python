@@ -1,6 +1,6 @@
 from collections import defaultdict
 
-from aocd import get_data, submit
+from aocd import get_data
 
 aoc_input = get_data(day=20, year=2019).splitlines()
 from heapq import heappop, heappush
