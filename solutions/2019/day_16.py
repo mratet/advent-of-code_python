@@ -1,6 +1,9 @@
 from aocd import get_data, submit
+
 aoc_input = get_data(day=16, year=2019)
 import numpy as np
+
+
 # WRITE YOUR SOLUTION HERE
 def build_fft(N):
     fft = np.zeros((N, N), dtype=int)
@@ -8,8 +11,9 @@ def build_fft(N):
     for i in range(N):
         pattern = [val for val in base_pattern for _ in range(i + 1)]
         pattern = np.tile(pattern, (N // len(pattern)) + 1)
-        fft[i, :] = pattern[1:N + 1]
+        fft[i, :] = pattern[1 : N + 1]
     return fft
+
 
 def part_1(lines):
     signal = np.array([int(s) for s in str(lines)])
@@ -17,7 +21,8 @@ def part_1(lines):
     n_phase = 100
     for _ in range(n_phase):
         signal = abs(signal @ fft.T) % 10
-    return ''.join([str(n) for n in signal[:8]])
+    return "".join([str(n) for n in signal[:8]])
+
 
 def part_2(lines):
     for i in range(5, 25, 5):
@@ -25,7 +30,7 @@ def part_2(lines):
         print()
     return
 
-# END OF SOLUTION
-print(f'My answer is {part_1(aoc_input)}')
-print(f'My answer is {part_2(aoc_input)}')
 
+# END OF SOLUTION
+print(f"My answer is {part_1(aoc_input)}")
+print(f"My answer is {part_2(aoc_input)}")

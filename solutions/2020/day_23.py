@@ -1,5 +1,7 @@
 from aocd import get_data
+
 input = get_data(day=23, year=2020)
+
 
 # WRITE YOUR SOLUTION HERE
 def get_next_turn(state, starting_pos):
@@ -22,16 +24,19 @@ def get_next_turn(state, starting_pos):
 
     return state, (state.index(current_cup) + 1) % N
 
+
 def get_state_slow_ver(state, N):
     current_pos = 0
     for i in range(N):
         state, current_pos = get_next_turn(state, current_pos)
     idx = state.index(1)
-    return ''.join([str(n) for n in (state[1 + idx:] + state[:idx])])
+    return "".join([str(n) for n in (state[1 + idx :] + state[:idx])])
+
 
 def part_1(lines):
     init_state = [int(n) for n in lines]
     return get_state_slow_ver(init_state, 100)
+
 
 def next_turn(next, current_cup):
     N = len(next) - 1
@@ -55,15 +60,17 @@ def next_turn(next, current_cup):
 
     return next, next[current_cup]
 
+
 def get_state_fast_ver(init_state, N):
     current_cup = init_state[0]
     state = [0] * len(init_state)
-    for (i, j) in zip(init_state, init_state[1:]):
+    for i, j in zip(init_state, init_state[1:]):
         state[i] = j
 
     for _ in range(N):
         state, current_cup = next_turn(state, current_cup)
     return state
+
 
 def part_2(lines):
     state_size = 1000000 + 1
@@ -73,7 +80,7 @@ def part_2(lines):
     state = get_state_fast_ver(init_state, 10000000)
     return state[1] * state[state[1]]
 
-# END OF SOLUTION
-print(f'My answer is {part_1(input)}')
-print(f'My answer is {part_2(input)}')
 
+# END OF SOLUTION
+print(f"My answer is {part_1(input)}")
+print(f"My answer is {part_2(input)}")

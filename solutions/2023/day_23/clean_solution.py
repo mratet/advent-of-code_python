@@ -1,4 +1,5 @@
 from aocd import get_data
+
 input = get_data(day=23, year=2023).splitlines()
 
 # WRITE YOUR SOLUTION HERE
@@ -9,6 +10,8 @@ dirs = {
     ">": [(0, 1)],
     ".": [(-1, 0), (1, 0), (0, -1), (0, 1)],
 }
+
+
 def _parse(grid):
     start = (0, grid[0].index("."))
     end = (len(grid) - 1, grid[-1].index("."))
@@ -21,11 +24,16 @@ def _parse(grid):
                 continue
             neighbors = 0
             for nr, nc in [(r - 1, c), (r + 1, c), (r, c - 1), (r, c + 1)]:
-                if 0 <= nr < len(grid) and 0 <= nc < len(grid[0]) and grid[nr][nc] != "#":
+                if (
+                    0 <= nr < len(grid)
+                    and 0 <= nc < len(grid[0])
+                    and grid[nr][nc] != "#"
+                ):
                     neighbors += 1
             if neighbors >= 3:
                 points.append((r, c))
     return start, end, points
+
 
 def graph_construction(points, grid, part):
     graph = {pt: {} for pt in points}
@@ -40,12 +48,21 @@ def graph_construction(points, grid, part):
                 graph[(sr, sc)][(r, c)] = n
                 continue
 
-            direction = dirs[grid[r][c]] if part == 'part_1' else [(-1, 0), (0, 1), (1, 0), (0, -1)]
+            direction = (
+                dirs[grid[r][c]]
+                if part == "part_1"
+                else [(-1, 0), (0, 1), (1, 0), (0, -1)]
+            )
 
             for dr, dc in direction:
                 nr = r + dr
                 nc = c + dc
-                if 0 <= nr < len(grid) and 0 <= nc < len(grid[0]) and grid[nr][nc] != "#" and (nr, nc) not in seen:
+                if (
+                    0 <= nr < len(grid)
+                    and 0 <= nc < len(grid[0])
+                    and grid[nr][nc] != "#"
+                    and (nr, nc) not in seen
+                ):
                     stack.append((n + 1, nr, nc))
                     seen.add((nr, nc))
     return graph
@@ -54,7 +71,7 @@ def graph_construction(points, grid, part):
 def part_1(input):
     # taken from hyper-neutrino
     start, end, points = _parse(input)
-    graph = graph_construction(points, input, 'part_1')
+    graph = graph_construction(points, input, "part_1")
 
     seen = set()
 
@@ -77,7 +94,7 @@ def part_1(input):
 
 def part_2(input):
     start, end, points = _parse(input)
-    graph = graph_construction(points, input, 'part_2')
+    graph = graph_construction(points, input, "part_2")
 
     seen = set()
 
@@ -96,8 +113,10 @@ def part_2(input):
         return m
 
     return dfs(start)
+
+
 # END OF SOLUTION
 
 
-print(f'My answer is {part_1(input)}')
-print(f'My answer is {part_2(input)}')
+print(f"My answer is {part_1(input)}")
+print(f"My answer is {part_2(input)}")

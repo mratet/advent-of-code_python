@@ -1,5 +1,4 @@
-
-lines = open('input.txt').read().splitlines()
+lines = open("input.txt").read().splitlines()
 
 # WRITE YOUR SOLUTION HERE
 
@@ -13,15 +12,15 @@ def galaxie_distance(g1, g2, row_expands, col_expands, expand):
     row_expansion = len([1 for y in row_expands if y_min < y < y_max])
     col_expansion = len([1 for x in col_expands if x_min < x < x_max])
 
-    return abs(x_max - x_min + (expand - 1) * row_expansion) + abs(y_max - y_min + (expand - 1) * col_expansion)
+    return abs(x_max - x_min + (expand - 1) * row_expansion) + abs(
+        y_max - y_min + (expand - 1) * col_expansion
+    )
 
 
 def part_1(lines):
-
-    galaxies = [(x, y)
-                for y, line in enumerate(lines)
-                for x, c in enumerate(line)
-                if c == "#"]
+    galaxies = [
+        (x, y) for y, line in enumerate(lines) for x, c in enumerate(line) if c == "#"
+    ]
 
     n, m = len(lines), len(lines[0])
     empty_row = list(set(range(m)) - set([g[1] for g in galaxies]))
@@ -37,12 +36,11 @@ def part_1(lines):
 
     return ans // 2
 
-def part_2(lines):
 
-    galaxies = [(x, y)
-                for y, line in enumerate(lines)
-                for x, c in enumerate(line)
-                if c == "#"]
+def part_2(lines):
+    galaxies = [
+        (x, y) for y, line in enumerate(lines) for x, c in enumerate(line) if c == "#"
+    ]
 
     n, m = len(lines), len(lines[0])
     empty_row = list(set(range(m)) - set([g[1] for g in galaxies]))
@@ -57,20 +55,22 @@ def part_2(lines):
             ans += galaxie_distance(gi, gj, empty_row, empty_col, expansion)
 
     return ans // 2
+
+
 # END OF SOLUTION
 
 
-test_input = open('input-test.txt').read().splitlines()
+test_input = open("input-test.txt").read().splitlines()
 test_lines = []
 for i, line in enumerate(test_input[3:]):
-    if line[0] == '-':
+    if line[0] == "-":
         break
     test_lines.append(line)
 solution = test_input[i + 4]
 
-print(f'My answer on test set for the first problem is {part_1(test_lines)}')
+print(f"My answer on test set for the first problem is {part_1(test_lines)}")
 print(solution)
-print(f'My answer is {part_1(lines)}')
+print(f"My answer is {part_1(lines)}")
 
-print(f'My answer on test set for the second problem is {part_2(test_lines)}')
-print(f'My answer is {part_2(lines)}')
+print(f"My answer on test set for the second problem is {part_2(test_lines)}")
+print(f"My answer is {part_2(lines)}")

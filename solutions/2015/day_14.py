@@ -1,8 +1,13 @@
 from aocd import get_data
+
 input = get_data(day=14, year=2015).splitlines()
 
 import re
-pattern = re.compile(r"(\w+) can fly (\d+) km/s for (\d+) seconds, but then must rest for (\d+) seconds.")
+
+pattern = re.compile(
+    r"(\w+) can fly (\d+) km/s for (\d+) seconds, but then must rest for (\d+) seconds."
+)
+
 
 def compute_distances(time, input):
     distances = []
@@ -14,8 +19,11 @@ def compute_distances(time, input):
         distances.append(distance)
     return distances
 
+
 def part_1(input):
     return max(compute_distances(2503, input))
+
+
 def part_2(input):
     end_time = 2503
     scores = [0] * 10
@@ -26,5 +34,5 @@ def part_2(input):
     return max(scores)
 
 
-print(f'My answer is {part_1(input)}')
-print(f'My answer is {part_2(input)}')
+print(f"My answer is {part_1(input)}")
+print(f"My answer is {part_2(input)}")

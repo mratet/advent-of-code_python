@@ -1,29 +1,28 @@
-
-lines = open('input.txt').read().splitlines()
+lines = open("input.txt").read().splitlines()
 
 # WRITE YOUR SOLUTION HERE
 N, S, W, E = (0, -1), (0, 1), (-1, 0), (1, 0)
 dir_dict = {
-    'U': N,
-    'D': S,
-    'R': E,
-    'L': W,
+    "U": N,
+    "D": S,
+    "R": E,
+    "L": W,
 }
+
 
 def corner_identification(maze, pose):
     x, y = pose
-    N_symbol = (maze[y - 1][x] == '#')
-    S_symbol = (maze[y + 1][x] == '#')
-    E_symbol = (maze[y][x + 1] == '#')
-    W_symbol = (maze[y][x - 1] == '#')
+    N_symbol = maze[y - 1][x] == "#"
+    S_symbol = maze[y + 1][x] == "#"
+    E_symbol = maze[y][x + 1] == "#"
+    W_symbol = maze[y][x - 1] == "#"
 
     return (N_symbol and S_symbol) or (N_symbol and E_symbol) or (N_symbol and W_symbol)
 
 
-
 def part_1(lines):
     n, m = 500, 500
-    plan = [['.' for _ in range(m)] for _ in range(n)]
+    plan = [["." for _ in range(m)] for _ in range(n)]
     visited = set()
     pt = (250, 250)
     for line in lines:
@@ -31,7 +30,7 @@ def part_1(lines):
         for _ in range(int(distance)):
             x, y = pt
             next_dir = dir_dict[direction]
-            plan[y][x] = '#'
+            plan[y][x] = "#"
             visited.add((x, y))
             pt = (x + next_dir[0], y + next_dir[1])
 
@@ -51,17 +50,19 @@ def part_1(lines):
 
 
 second_dir_dict = {
-    '0': E,
-    '1': N,
-    '2': W,
-    '3': S,
+    "0": E,
+    "1": N,
+    "2": W,
+    "3": S,
 }
+
 
 def shoelace_area(points):
     area = 0
     for i in range(len(points) - 1):
         area += points[i][0] * points[i + 1][1] - points[i + 1][0] * points[i][1]
     return area // 2
+
 
 def part_2(lines):
     point = (0, 0)
@@ -78,20 +79,22 @@ def part_2(lines):
     area = shoelace_area(points)
 
     return abs(area) + perimeter // 2 + 1
+
+
 # END OF SOLUTION
 
 
-test_input = open('input-test.txt').read().splitlines()
+test_input = open("input-test.txt").read().splitlines()
 test_lines = []
 for i, line in enumerate(test_input[3:]):
-    if line[0] == '-':
+    if line[0] == "-":
         break
     test_lines.append(line)
 solution = test_input[i + 4]
 
-print(f'My answer on test set for the first problem is {part_1(test_lines)}')
+print(f"My answer on test set for the first problem is {part_1(test_lines)}")
 print(solution)
-print(f'My answer is {part_1(lines)}')
+print(f"My answer is {part_1(lines)}")
 
-print(f'My answer on test set for the second problem is {part_2(test_lines)}')
-print(f'My answer is {part_2(lines)}')
+print(f"My answer on test set for the second problem is {part_2(test_lines)}")
+print(f"My answer is {part_2(lines)}")

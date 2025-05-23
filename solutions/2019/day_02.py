@@ -6,12 +6,14 @@ from intcode import run_program, read_program
 input = get_data(day=2, year=2019)
 # WRITE YOUR SOLUTION HERE
 
+
 def part_1(lines):
     intcode_program = read_program(lines)
     intcode_program[1] = 12
     intcode_program[2] = 2
     program, _ = run_program(intcode_program)
     return program[0]
+
 
 def part_2(lines):
     computer = read_program(lines)
@@ -23,7 +25,7 @@ def part_2(lines):
             if program[0] == 19690720:
                 return 100 * noun + verb
 
-# END OF SOLUTION
-print(f'My answer is {part_1(input)}') # 9706670
-print(f'My answer is {part_2(input)}') # 2552
 
+# END OF SOLUTION
+print(f"My answer is {part_1(input)}")  # 9706670
+print(f"My answer is {part_2(input)}")  # 2552

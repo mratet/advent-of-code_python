@@ -1,12 +1,15 @@
 from aocd import get_data
+
 input = get_data(day=19, year=2023).splitlines()
 
 # WRITE YOUR SOLUTION HERE
 from operator import lt, gt
+
 OPERATORS = {
-    '<': lt,
-    '>': gt,
+    "<": lt,
+    ">": gt,
 }
+
 
 class Conditional:
     def __init__(self, key, op, value, redirect):
@@ -19,10 +22,10 @@ class Conditional:
         return OPERATORS[self.op](part[self.key], self.value)
 
     def split(self, part):
-        if self.op == '<':
+        if self.op == "<":
             T = (part[self.key][0], min(part[self.key][1], self.value - 1))
             F = (max(self.value, part[self.key][0]), part[self.key][1])
-        elif self.op == '>':
+        elif self.op == ">":
             F = (part[self.key][0], min(part[self.key][1], self.value))
             T = (max(self.value + 1, part[self.key][0]), part[self.key][1])
         else:
@@ -42,16 +45,16 @@ class Conditional:
 
         return (t_part, f_part)
 
+
 class Workflow:
     def __init__(self, description):
-        self.name, description = description[:-1].split('{')
-        step_data = description.split(',')
+        self.name, description = description[:-1].split("{")
+        step_data = description.split(",")
         self.steps = []
         for data in step_data[:-1]:
-            (key, op, *value), redirect = data.split(':')
+            (key, op, *value), redirect = data.split(":")
             self.steps.append(Conditional(key, op, int("".join(value)), redirect))
         self.redirect = step_data[-1]
-
 
     def apply(self, part):
         for step in self.steps:
@@ -74,9 +77,9 @@ class Workflow:
         return total
 
     def send(self, part, redirect, workflows):
-        if redirect == 'R':
+        if redirect == "R":
             return 0
-        if redirect == 'A':
+        if redirect == "A":
             total = 1
             for rs, re in part.values():
                 total *= re - rs + 1
@@ -84,29 +87,30 @@ class Workflow:
         return workflows[redirect].count(part, workflows)
 
 
-
 def isAccepted(part, workflows):
-    ID = 'in'
+    ID = "in"
 
-    while ID not in ['R', 'A']:
+    while ID not in ["R", "A"]:
         wf = workflows[ID]
         ID = wf.apply(part)
-    return ID == 'A'
+    return ID == "A"
+
 
 def parseParts(lines):
     parts = []
     for line in lines:
-        segments = line[1:-1].split(',')
+        segments = line[1:-1].split(",")
         parts.append(
             {
-                'x': int(segments[0].split('=')[-1]),
-                'm': int(segments[1].split('=')[-1]),
-                'a': int(segments[2].split('=')[-1]),
-                's': int(segments[3].split('=')[-1]),
+                "x": int(segments[0].split("=")[-1]),
+                "m": int(segments[1].split("=")[-1]),
+                "a": int(segments[2].split("=")[-1]),
+                "s": int(segments[3].split("=")[-1]),
             }
         )
 
     return parts
+
 
 def parseWorkflows(lines):
     workflows = dict()
@@ -117,13 +121,16 @@ def parseWorkflows(lines):
 
     return workflows
 
+
 def _parse(lines):
-    empty_line = lines.index('')
+    empty_line = lines.index("")
 
     workflows = parseWorkflows(lines[:empty_line])
-    parts = parseParts(lines[empty_line + 1:])
+    parts = parseParts(lines[empty_line + 1 :])
 
     return workflows, parts
+
+
 def part_1(input):
     workflows, parts = _parse(input)
 
@@ -134,11 +141,14 @@ def part_1(input):
 
     return total
 
+
 def part_2(input):
     workflows, _ = _parse(input)
-    start = {k: (1, 4000) for k in 'xmas'}
-    return workflows['in'].count(start, workflows)
+    start = {k: (1, 4000) for k in "xmas"}
+    return workflows["in"].count(start, workflows)
+
+
 # END OF SOLUTION
 
-print(f'My answer is {part_1(input)}')
-print(f'My answer is {part_2(input)}')
+print(f"My answer is {part_1(input)}")
+print(f"My answer is {part_2(input)}")

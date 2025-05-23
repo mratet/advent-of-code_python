@@ -1,9 +1,11 @@
 from aocd import get_data, submit
 from collections import deque
+
 aoc_input = get_data(day=7, year=2019)
 from intcode import read_program, run_program
 from itertools import permutations
 # WRITE YOUR SOLUTION HERE
+
 
 def part_1(lines):
     memory = read_program(lines)
@@ -18,6 +20,7 @@ def part_1(lines):
             _, out_buff = run_program(program, in_buff)
         tab.append(out_buff[0])
     return max(tab)
+
 
 def part_2(lines):
     return
@@ -34,7 +37,7 @@ def part_2(lines):
     #     tab.append(out_buff[0])
     # return max(tab)
 
-# END OF SOLUTION
-print(f'My answer is {part_1(aoc_input)}') # 13848
-print(f'My answer is {part_2(aoc_input)}')
 
+# END OF SOLUTION
+print(f"My answer is {part_1(aoc_input)}")  # 13848
+print(f"My answer is {part_2(aoc_input)}")

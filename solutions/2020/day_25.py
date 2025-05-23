@@ -1,5 +1,7 @@
 from aocd import get_data, submit
+
 input = get_data(day=25, year=2020).splitlines()
+
 
 # WRITE YOUR SOLUTION HERE
 def handshake(subject_number, loop_size):
@@ -8,6 +10,7 @@ def handshake(subject_number, loop_size):
         value = (value * subject_number) % 20201227
     return value
 
+
 def research_loop_size(public_key):
     value = 1
     i = 0
@@ -15,6 +18,7 @@ def research_loop_size(public_key):
         value = (value * 7) % 20201227
         i += 1
     return i
+
 
 def part_1(lines):
     card_public_key, door_public_key = int(lines[0]), int(lines[1])
@@ -26,9 +30,11 @@ def part_1(lines):
 
     return encryption_key
 
+
 def part_2(lines):
     return
 
+
 # END OF SOLUTION
-print(f'My answer is {part_1(input)}')
-print(f'My answer is {part_2(input)}')
+print(f"My answer is {part_1(input)}")
+print(f"My answer is {part_2(input)}")

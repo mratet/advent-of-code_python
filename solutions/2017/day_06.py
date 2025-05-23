@@ -1,5 +1,8 @@
 from aocd import get_data, submit
+
 input = get_data(day=6, year=2017)
+
+
 # WRITE YOUR SOLUTION HERE
 def cycle(memory):
     idx = memory.index(max(memory))
@@ -10,6 +13,7 @@ def cycle(memory):
         idx += 1
         space -= 1
     return memory
+
 
 def simulate_all_cycles(memory):
     seen = {tuple(memory): 0}
@@ -29,12 +33,13 @@ def part_1(lines):
     cnt, _ = simulate_all_cycles(memory)
     return cnt
 
+
 def part_2(lines):
     memory = [int(n) for n in lines.split()]
     cnt, last_seen = simulate_all_cycles(memory)
     return cnt - last_seen
 
-# END OF SOLUTION
-print(f'My answer is {part_1(input)}')
-print(f'My answer is {part_2(input)}')
 
+# END OF SOLUTION
+print(f"My answer is {part_1(input)}")
+print(f"My answer is {part_2(input)}")

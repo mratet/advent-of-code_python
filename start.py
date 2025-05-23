@@ -32,10 +32,12 @@ def next_day(year_dir: Path) -> int:
             *[
                 int(m.group(0))
                 for x in year_dir.iterdir()
-                for m in [re.search(r"\d+", x.parts[-1])] if m
+                for m in [re.search(r"\d+", x.parts[-1])]
+                if m
             ],
         ]
     )
+
 
 PARSER = argparse.ArgumentParser(
     prog="./start", description="Scaffold a new Advent of Code solution"
@@ -49,7 +51,7 @@ PARSER.add_argument(
     ),
     nargs="?",
 )
-PARSER.add_argument("--year", default="2019", help="Puzzle year")
+PARSER.add_argument("--year", default="2021", help="Puzzle year")
 
 
 if __name__ == "__main__":
@@ -67,12 +69,10 @@ if __name__ == "__main__":
     if not 1 <= day <= 25:
         PARSER.error(f"day {day} is not in range [1,25]")
 
-    command = f'aocd {day} {year} > {year_dir}/input.txt'
+    command = f"aocd {day} {year} > {year_dir}/input.txt"
     os.system(command)
-    command = f'aocd {day} {year} --example  > {year_dir}/test.txt'
+    command = f"aocd {day} {year} --example  > {year_dir}/test.txt"
     os.system(command)
 
     submission_path = Path(year_dir, f"solution.py")
-    shutil.copyfile('template_submissions_2019.py', submission_path)
-
-
+    shutil.copyfile("template_submissions_2021.py", submission_path)

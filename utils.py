@@ -4,16 +4,18 @@ from functools import total_ordering
 
 
 def parse_nums(line, negatives=True):
-    num_re = r'-?\d+' if negatives else r'\d+'
+    num_re = r"-?\d+" if negatives else r"\d+"
     return [int(n) for n in re.findall(num_re, line)]
+
 
 def factors(n):
     """Returns the factors of n."""
     return sorted(
-        x for tup in (
-            [i, n // i] for i in range(1, int(n ** 0.5) + 1)
-            if n % i == 0)
-        for x in tup)
+        x
+        for tup in ([i, n // i] for i in range(1, int(n**0.5) + 1) if n % i == 0)
+        for x in tup
+    )
+
 
 def _eratosthenes(n):
     """http://stackoverflow.com/a/3941967/239076"""

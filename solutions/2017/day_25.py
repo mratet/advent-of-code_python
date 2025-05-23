@@ -1,7 +1,9 @@
 from aocd import get_data, submit
+
 input = get_data(day=25, year=2017)
 import re
 # WRITE YOUR SOLUTION HERE
+
 
 def parse_turing_machine(input_text):
     ### LLM parsing
@@ -20,7 +22,9 @@ def parse_turing_machine(input_text):
             turing_machine["states"][state] = {}
 
         elif line.startswith("If the current value is"):
-            current_value = int(re.search(r"If the current value is (\d):", line).group(1))
+            current_value = int(
+                re.search(r"If the current value is (\d):", line).group(1)
+            )
             turing_machine["states"][state][current_value] = {}
 
         elif line.startswith("- Write the value"):
@@ -45,15 +49,18 @@ def part_1(lines):
     cursor = len(tape) // 2
     state = turing_machine["initial_state"]
     for _ in range(turing_machine["checksum_after"]):
-        action = turing_machine['states'][state][tape[cursor]]
-        tape[cursor] = action['write']
-        cursor += action['move']
-        state = action['next_state']
+        action = turing_machine["states"][state][tape[cursor]]
+        tape[cursor] = action["write"]
+        cursor += action["move"]
+        state = action["next_state"]
 
     return sum(tape)
 
+
 def part_2(lines):
     return
+
+
 # END OF SOLUTION
-print(f'My answer is {part_1(input)}')
-print(f'My answer is {part_2(input)}')
+print(f"My answer is {part_1(input)}")
+print(f"My answer is {part_2(input)}")

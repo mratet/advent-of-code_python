@@ -1,5 +1,7 @@
 from aocd import get_data, submit
+
 input = get_data(day=19, year=2020)
+
 
 # WRITE YOUR SOLUTION HERE
 def parse_input(data):
@@ -14,6 +16,7 @@ def parse_input(data):
             rules[int(key)] = [list(map(int, option.split())) for option in options]
 
     return rules, (messages_part.splitlines())
+
 
 def match_rule(rules, rule_id, input_str, position):
     rule = rules[rule_id]
@@ -35,13 +38,16 @@ def match_rule(rules, rule_id, input_str, position):
 
     return possible_positions
 
+
 def match(rules, input_str):
     positions = match_rule(rules, 0, input_str, 0)
     return len(input_str) in positions
 
+
 def part_1(lines):
     rules, messages = parse_input(lines)
     return sum([match(rules, message) for message in messages])
+
 
 def part_2(lines):
     rules, messages = parse_input(lines)
@@ -49,7 +55,7 @@ def part_2(lines):
     rules[11] = [[42, 31], [42, 11, 31]]
     return sum([match(rules, message) for message in messages])
 
-# END OF SOLUTION
-print(f'My answer is {part_1(input)}')
-print(f'My answer is {part_2(input)}')
 
+# END OF SOLUTION
+print(f"My answer is {part_1(input)}")
+print(f"My answer is {part_2(input)}")

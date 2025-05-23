@@ -1,21 +1,23 @@
 import itertools, re, collections, functools
 from aocd import get_data
+
 input = get_data(day=11, year=2016).splitlines()
 
 
-'''
+"""
 The parsing is good but the batracking part as to be corrected !!
-'''
+"""
+
 
 def _parse_input(input):
     state = [[] for _ in range(4)]
     for i, line in enumerate(input):
-        line = line.replace('and', '')
-        line = line.replace('-compatible', ' ')
-        line = line.split(' a ')
-        state[i].append('empty')
+        line = line.replace("and", "")
+        line = line.replace("-compatible", " ")
+        line = line.split(" a ")
+        state[i].append("empty")
         for word in line[1:]:
-            c = ''
+            c = ""
             for w in word.split():
                 c += w[0].upper()
                 if len(c) == 1:
@@ -27,13 +29,14 @@ def _parse_input(input):
 def verify_explosion(stage):
     for floor in stage:
         for module in floor:
-            if module[-1] == 'M' and module[:2] + 'G' not in floor:
-                if any([mod[-1] == 'G' for mod in floor]):
+            if module[-1] == "M" and module[:2] + "G" not in floor:
+                if any([mod[-1] == "G" for mod in floor]):
                     return False
     return True
 
+
 def encode_state(state):
-    c = ''
+    c = ""
     for i, floor in enumerate(state):
         floor = sorted(floor)
         c += str(i) + str(floor)
@@ -56,22 +59,26 @@ def solve(state, elevator_pos, cnt):
     if not verify_explosion(state):
         return
 
-
     l_floor, u_floor = max(elevator_pos - 1, 0), min(elevator_pos + 1, 3)
-    for modules, floor in itertools.product(itertools.product(state[elevator_pos], state[elevator_pos]), (l_floor, u_floor)):
-        if modules[0] == modules[1]: continue
+    for modules, floor in itertools.product(
+        itertools.product(state[elevator_pos], state[elevator_pos]), (l_floor, u_floor)
+    ):
+        if modules[0] == modules[1]:
+            continue
         if floor == elevator_pos:
             continue
 
         for m in modules:
-            if m == 'empty': continue
+            if m == "empty":
+                continue
             state[elevator_pos].remove(m)
             state[floor].append(m)
 
         solve(state, floor, cnt + 1)
 
         for m in modules:
-            if m == 'empty': continue
+            if m == "empty":
+                continue
             state[floor].remove(m)
             state[elevator_pos].append(m)
 
@@ -79,8 +86,6 @@ def solve(state, elevator_pos, cnt):
 starting_state = _parse_input(input)
 states = set()
 print(solve(starting_state, 0, 0))
-
-
 
 
 # print(f'My answer is {part_1(input)}')

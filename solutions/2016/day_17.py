@@ -5,13 +5,13 @@ input = get_data(day=17, year=2016)
 
 from hashlib import md5
 
-DIRECTIONS = (0, -1, 'U'), (0, 1, 'D'), (-1, 0, 'L'), (1, 0, 'R')
+DIRECTIONS = (0, -1, "U"), (0, 1, "D"), (-1, 0, "L"), (1, 0, "R")
 
 
 def accessible_room(input, current_path):
-    code = input + ''.join(current_path)
+    code = input + "".join(current_path)
     my_hash = md5(code.encode()).hexdigest()
-    state = [c in 'bcdef' for c in my_hash[:4]]
+    state = [c in "bcdef" for c in my_hash[:4]]
     return state
 
 
@@ -20,7 +20,7 @@ path = []
 
 def find_path(code, current_position, current_path):
     if current_position == (3, 3):
-        path.append(''.join(current_path))
+        path.append("".join(current_path))
         return
 
     acc_room = accessible_room(code, current_path)
@@ -44,5 +44,5 @@ def part_2(code):
     return max(map(len, path))
 
 
-print(f'My answer is {part_1(input)}')
-print(f'My answer is {part_2(input)}')
+print(f"My answer is {part_1(input)}")
+print(f"My answer is {part_2(input)}")

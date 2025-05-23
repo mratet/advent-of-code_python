@@ -1,10 +1,13 @@
 from aocd import get_data
-input = get_data(day=6, year=2020).split('\n\n')
+
+input = get_data(day=6, year=2020).split("\n\n")
 from string import ascii_lowercase
+
 
 # WRITE YOUR SOLUTION HERE
 def part_1(lines):
-    return sum([len(set(line.replace('\n', ''))) for line in lines])
+    return sum([len(set(line.replace("\n", ""))) for line in lines])
+
 
 def part_2(lines):
     cnt = 0
@@ -15,6 +18,7 @@ def part_2(lines):
         cnt += len(form)
     return cnt
 
+
 # END OF SOLUTION
-print(f'My answer is {part_1(input)}')
-print(f'My answer is {part_2(input)}')
+print(f"My answer is {part_1(input)}")
+print(f"My answer is {part_2(input)}")

@@ -1,6 +1,8 @@
 import itertools, re, collections
 from aocd import get_data
+
 input = get_data(day=25, year=2015)
+
 
 def get_coord(r, c):
     # (1, n) -> n (n + 1) / 2
@@ -10,8 +12,9 @@ def get_coord(r, c):
     start_c = 1 + N * (N - 1) // 2
     return start_c + c - 1
 
+
 def part_1(input):
-    pattern = r'(\d+)+'
+    pattern = r"(\d+)+"
     matchs = re.findall(pattern, input)
     r, c = int(matchs[0]), int(matchs[1])
     n = get_coord(r, c)
@@ -23,4 +26,4 @@ def part_1(input):
     return state
 
 
-print(f'My answer is {part_1(input)}')
+print(f"My answer is {part_1(input)}")

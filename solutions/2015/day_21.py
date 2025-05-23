@@ -1,14 +1,17 @@
 import itertools, re, collections, math
 from aocd import get_data
+
 input = get_data(day=21, year=2015).splitlines()
 
+
 def fight_result(my_stat, boss_stat):
-    boss_health, my_health = boss_stat['hp'], my_stat['hp']
+    boss_health, my_health = boss_stat["hp"], my_stat["hp"]
     my_damage = max(1, my_stat["damage"] - boss_stat["armor"])
     boss_damage = max(1, boss_stat["damage"] - my_stat["armor"])
     a = math.ceil(my_health / boss_damage)
     b = math.ceil(boss_health / my_damage)
     return a >= b
+
 
 def get_game_data(data):
     # Taken from nitekat1124 because shop wasn't include into input data
@@ -49,7 +52,9 @@ def get_game_data(data):
     }
 
     rings_combinations = list(itertools.combinations(rings.values(), 2))
-    equipments = list(itertools.product(weapons.values(), armors.values(), rings_combinations))
+    equipments = list(
+        itertools.product(weapons.values(), armors.values(), rings_combinations)
+    )
 
     return player, boss, equipments
 
@@ -61,13 +66,16 @@ def part_1(input):
     for equipment in equipments:
         Weapon, Armor, (r1, r2) = equipment
         total_cost = Weapon["cost"] + Armor["cost"] + r1["cost"] + r2["cost"]
-        player['damage'] = Weapon['damage'] + Armor['damage'] + r1["damage"] + r2["damage"]
-        player['armor'] = Weapon['armor'] + Armor['armor'] + r1["armor"] + r2["armor"]
+        player["damage"] = (
+            Weapon["damage"] + Armor["damage"] + r1["damage"] + r2["damage"]
+        )
+        player["armor"] = Weapon["armor"] + Armor["armor"] + r1["armor"] + r2["armor"]
 
         if fight_result(player, boss):
             costs.append(total_cost)
 
     return min(costs)
+
 
 def part_2(input):
     player, boss, equipments = get_game_data(input)
@@ -76,8 +84,10 @@ def part_2(input):
     for equipment in equipments:
         Weapon, Armor, (r1, r2) = equipment
         total_cost = Weapon["cost"] + Armor["cost"] + r1["cost"] + r2["cost"]
-        player['damage'] = Weapon['damage'] + Armor['damage'] + r1["damage"] + r2["damage"]
-        player['armor'] = Weapon['armor'] + Armor['armor'] + r1["armor"] + r2["armor"]
+        player["damage"] = (
+            Weapon["damage"] + Armor["damage"] + r1["damage"] + r2["damage"]
+        )
+        player["armor"] = Weapon["armor"] + Armor["armor"] + r1["armor"] + r2["armor"]
 
         if not fight_result(player, boss):
             costs.append(total_cost)
@@ -85,5 +95,5 @@ def part_2(input):
     return max(costs)
 
 
-print(f'My answer is {part_1(input)}')
-print(f'My answer is {part_2(input)}')
+print(f"My answer is {part_1(input)}")
+print(f"My answer is {part_2(input)}")

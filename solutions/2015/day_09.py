@@ -1,7 +1,10 @@
 from aocd import get_data
+
 input = get_data(day=9, year=2015).splitlines()
 import itertools
 import collections
+
+
 def _parse(lines):
     graph = collections.defaultdict(dict)
     for line in lines:
@@ -9,6 +12,7 @@ def _parse(lines):
         graph[start][end] = int(distance)
         graph[end][start] = int(distance)
     return graph
+
 
 def part_1(input):
     weights = _parse(input)
@@ -31,5 +35,6 @@ def part_2(input):
 
     return longest_route
 
-print(f'My answer is {part_1(input)}')
-print(f'My answer is {part_2(input)}')
+
+print(f"My answer is {part_1(input)}")
+print(f"My answer is {part_2(input)}")

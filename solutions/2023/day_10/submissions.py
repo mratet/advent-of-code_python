@@ -1,10 +1,12 @@
-
-lines = open('input.txt').read().splitlines()
+lines = open("input.txt").read().splitlines()
 
 # WRITE YOUR SOLUTION HERE
 
 next_move_allowed = {
-    "S": [(1, 0), (0, 1)], # [(0, 1), (0, -1), (1, 0), (-1, 0)] we use a F to debug here
+    "S": [
+        (1, 0),
+        (0, 1),
+    ],  # [(0, 1), (0, -1), (1, 0), (-1, 0)] we use a F to debug here
     "|": [(0, 1), (0, -1)],
     "-": [(-1, 0), (1, 0)],
     "J": [(-1, 0), (0, -1)],
@@ -13,15 +15,11 @@ next_move_allowed = {
     "L": [(0, -1), (1, 0)],
 }
 
+
 def part_1(lines):
+    maze = {(x, y): c for y, line in enumerate(lines) for x, c in enumerate(line)}
 
-    maze = {
-        (x, y): c
-        for y, line in enumerate(lines)
-        for x, c in enumerate(line)
-    }
-
-    s_co = next(co for co, v in maze.items() if v == 'S')
+    s_co = next(co for co, v in maze.items() if v == "S")
     q = [s_co]
     visited = set()
 
@@ -41,14 +39,9 @@ def part_1(lines):
 
 
 def part_2(lines):
+    maze = {(x, y): c for y, line in enumerate(lines) for x, c in enumerate(line)}
 
-    maze = {
-        (x, y): c
-        for y, line in enumerate(lines)
-        for x, c in enumerate(line)
-    }
-
-    s_co = next(co for co, v in maze.items() if v == 'S')
+    s_co = next(co for co, v in maze.items() if v == "S")
     q = [s_co]
     visited = set()
 
@@ -81,22 +74,20 @@ def part_2(lines):
     return area
 
 
-
-
 # END OF SOLUTION
 
 
-test_input = open('input-test.txt').read().splitlines()
+test_input = open("input-test.txt").read().splitlines()
 test_lines = []
 for i, line in enumerate(test_input[3:]):
-    if line[0] == '-':
+    if line[0] == "-":
         break
     test_lines.append(line)
 solution = test_input[i + 4]
 
-print(f'My answer on test set for the first problem is {part_1(test_lines)}')
+print(f"My answer on test set for the first problem is {part_1(test_lines)}")
 print(solution)
-print(f'My answer is {part_1(lines)}')
+print(f"My answer is {part_1(lines)}")
 
-print(f'My answer on test set for the second problem is {part_2(test_lines)}')
-print(f'My answer is {part_2(lines)}')
+print(f"My answer on test set for the second problem is {part_2(test_lines)}")
+print(f"My answer is {part_2(lines)}")

@@ -1,7 +1,9 @@
 from aocd import get_data, submit
+
 input = get_data(day=9, year=2017)
 
 # WRITE YOUR SOLUTION HERE
+
 
 def stream_processing(stream):
     score = 0
@@ -34,14 +36,17 @@ def stream_processing(stream):
 
     return score, garbage_size
 
+
 def part_1(lines):
     score, _ = stream_processing(lines)
     return score
+
 
 def part_2(lines):
     _, garbage_size = stream_processing(lines)
     return garbage_size
 
+
 # END OF SOLUTION
-print(f'My answer is {part_1(input)}')
-print(f'My answer is {part_2(input)}')
+print(f"My answer is {part_1(input)}")
+print(f"My answer is {part_2(input)}")

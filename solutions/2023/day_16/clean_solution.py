@@ -1,4 +1,5 @@
 from aocd import get_data
+
 input = get_data(day=16, year=2023).splitlines()
 
 # WRITE YOUR SOLUTION HERE
@@ -8,12 +9,12 @@ next_direction = {
     ".": {S: [S], N: [N], W: [W], E: [E]},
     "|": {S: [S], N: [N], W: [S, N], E: [S, N]},
     "-": {W: [W], E: [E], N: [E, W], S: [E, W]},
-    '\\': {E: [S], W: [N], S: [E], N: [W]},
-    "/": {E: [N], W: [S], S: [W], N: [E]}
+    "\\": {E: [S], W: [N], S: [E], N: [W]},
+    "/": {E: [N], W: [S], S: [W], N: [E]},
 }
 
-def solve(contraption, start):
 
+def solve(contraption, start):
     n, m = len(contraption), len(contraption[0])
     q = [start]
     visited = set()
@@ -34,7 +35,6 @@ def solve(contraption, start):
 
 
 def part_1(contraption):
-
     return solve(contraption, ((0, 0), E))
 
 
@@ -46,8 +46,10 @@ def part_2(contraption):
     south_start = max([solve(contraption, ((j, n - 1), N)) for j in range(m)])
 
     return max(west_start, east_start, north_start, south_start)
+
+
 # END OF SOLUTION
 
 
-print(f'My answer is {part_1(input)}')
-print(f'My answer is {part_2(input)}')
+print(f"My answer is {part_1(input)}")
+print(f"My answer is {part_2(input)}")

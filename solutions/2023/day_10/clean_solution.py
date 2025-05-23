@@ -1,33 +1,29 @@
 from aocd import get_data
+
 input = get_data(day=10, year=2023).splitlines()
 
 # WRITE YOUR SOLUTION HERE
 N, S, W, E = (0, -1), (0, 1), (-1, 0), (1, 0)
 
 next_move_allowed = {
-    "S": [S, E], # [(0, 1), (0, -1), (1, 0), (-1, 0)] we use a F to debug here
+    "S": [S, E],  # [(0, 1), (0, -1), (1, 0), (-1, 0)] we use a F to debug here
     "|": [S, N],
     "-": [W, E],
     "J": [W, N],
     "F": [S, E],
     "7": [S, W],
-    "L": [E, N]
+    "L": [E, N],
 }
 
 
 def _parse(input):
-
-    maze = {
-        (x, y): c
-        for y, line in enumerate(input)
-        for x, c in enumerate(line)
-    }
-    s_co = next(co for co, v in maze.items() if v == 'S')
+    maze = {(x, y): c for y, line in enumerate(input) for x, c in enumerate(line)}
+    s_co = next(co for co, v in maze.items() if v == "S")
 
     return maze, s_co
 
-def dfs(maze, start):
 
+def dfs(maze, start):
     q = [start]
     visited = set()
 
@@ -45,8 +41,8 @@ def dfs(maze, start):
 
     return visited
 
-def part_1(lines):
 
+def part_1(lines):
     maze, s_co = _parse(lines)
     visited = dfs(maze, s_co)
 
@@ -54,7 +50,6 @@ def part_1(lines):
 
 
 def part_2(lines):
-
     maze, s_co = _parse(lines)
     visited = dfs(maze, s_co)
 
@@ -72,8 +67,10 @@ def part_2(lines):
                 area += 1
 
     return area
+
+
 # END OF SOLUTION
 
 
-print(f'My answer is {part_1(input)}')
-print(f'My answer is {part_2(input)}')
+print(f"My answer is {part_1(input)}")
+print(f"My answer is {part_2(input)}")

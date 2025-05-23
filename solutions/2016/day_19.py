@@ -1,6 +1,8 @@
 import itertools, re, collections, math
 from aocd import get_data
+
 input = int(get_data(day=19, year=2016))
+
 
 def recursive_part_1(N):
     elfs = list(range(1, N + 1))
@@ -10,6 +12,7 @@ def recursive_part_1(N):
             elfs[i % n] = 0
         elfs = [elt for elt in elfs if elt != 0]
     return elfs[0]
+
 
 def recursive_part_2(tab):
     # Used to print first 100 values to find a pattern
@@ -36,5 +39,5 @@ def part_1(N):
     return 1 + 2 * (N - n)
 
 
-print(f'My answer is {part_1(input)}')
-print(f'My answer is {part_2(input)}')
+print(f"My answer is {part_1(input)}")
+print(f"My answer is {part_2(input)}")

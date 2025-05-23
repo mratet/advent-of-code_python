@@ -1,12 +1,15 @@
 import re
 
 from aocd import get_data, submit
+
 aoc_input = get_data(day=12, year=2019).splitlines()
 import numpy as np
 from math import lcm
+
+
 # WRITE YOUR SOLUTION HERE
 def part_1(lines):
-    extract_numb = lambda l: map(int, re.findall(r'-?\d+', l))
+    extract_numb = lambda l: map(int, re.findall(r"-?\d+", l))
     pos = np.array([list(extract_numb(l)) for l in lines])
     vel = np.zeros_like(pos)
     T = 1000
@@ -16,8 +19,9 @@ def part_1(lines):
         pos += vel
     return (np.sum(abs(pos), axis=1) * np.sum(abs(vel), axis=1)).sum()
 
+
 def part_2(lines):
-    extract_numb = lambda l: map(int, re.findall(r'-?\d+', l))
+    extract_numb = lambda l: map(int, re.findall(r"-?\d+", l))
     pos = np.array([list(extract_numb(l)) for l in lines])
     vel = np.zeros_like(pos)
     start_stats = np.vstack((pos, vel))
@@ -35,7 +39,8 @@ def part_2(lines):
                 repetition_time[x] = T
         T += 1
     return lcm(*repetition_time)
-# END OF SOLUTION
-print(f'My answer is {part_1(aoc_input)}')
-print(f'My answer is {part_2(aoc_input)}')
 
+
+# END OF SOLUTION
+print(f"My answer is {part_1(aoc_input)}")
+print(f"My answer is {part_2(aoc_input)}")

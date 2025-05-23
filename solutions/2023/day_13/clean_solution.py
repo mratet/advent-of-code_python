@@ -1,5 +1,7 @@
 from aocd import get_data
+
 input = get_data(day=13, year=2023).splitlines()
+
 
 # WRITE YOUR SOLUTION HERE
 def check_mirrors(tab, mismatched):
@@ -20,20 +22,27 @@ def check_mirrors(tab, mismatched):
 
     return 0
 
+
 def _parse(input):
-    #can be optimize using [....splitlines() for block in input.split('\n\n')]
+    # can be optimize using [....splitlines() for block in input.split('\n\n')]
     patterns, pattern = [], []
 
     for line in input:
         if not line:
-            cols = [''.join([pattern[i][j] for i in range(len(pattern))]) for j in range(len(pattern[0]))]
+            cols = [
+                "".join([pattern[i][j] for i in range(len(pattern))])
+                for j in range(len(pattern[0]))
+            ]
             patterns.append((pattern, cols))
             pattern = []
         else:
             pattern.append(line)
 
     if pattern:
-        cols = [''.join([pattern[i][j] for i in range(len(pattern))]) for j in range(len(pattern[0]))]
+        cols = [
+            "".join([pattern[i][j] for i in range(len(pattern))])
+            for j in range(len(pattern[0]))
+        ]
         patterns.append((pattern, cols))
 
     return patterns
@@ -54,8 +63,9 @@ def part_2(lines):
 
     return hor_reflec * 100 + vert_reflec
 
+
 # END OF SOLUTION
 
 
-print(f'My answer is {part_1(input)}')
-print(f'My answer is {part_2(input)}')
+print(f"My answer is {part_1(input)}")
+print(f"My answer is {part_2(input)}")

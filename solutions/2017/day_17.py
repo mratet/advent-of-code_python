@@ -1,5 +1,7 @@
 from aocd import get_data, submit
+
 input = get_data(day=17, year=2017)
+
 
 # WRITE YOUR SOLUTION HERE
 def part_1(lines):
@@ -11,6 +13,7 @@ def part_1(lines):
         tab.insert(idx, i)
     return tab[tab.index(2017) + 1]
 
+
 def part_2(lines):
     N = int(lines)
     idx = 0
@@ -20,6 +23,8 @@ def part_2(lines):
         if idx == 1:
             val = i
     return val
+
+
 # END OF SOLUTION
-print(f'My answer is {part_1(input)}')
-print(f'My answer is {part_2(input)}')
+print(f"My answer is {part_1(input)}")
+print(f"My answer is {part_2(input)}")

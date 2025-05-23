@@ -1,8 +1,10 @@
 from aocd import get_data, submit
+
 input = get_data(day=11, year=2024)
 from functools import lru_cache
 from math import log
 from collections import Counter, defaultdict
+
 
 # WRITE YOUR SOLUTION HERE
 def naive_approach(stones, n):
@@ -22,6 +24,7 @@ def naive_approach(stones, n):
         stones = new_stones
     return len(stones)
 
+
 def dict_approach(stones_dict, n):
     stones_dict = Counter(stones_dict)
     for _ in range(n):
@@ -40,6 +43,7 @@ def dict_approach(stones_dict, n):
         stones_dict = new_stones.copy()
     return sum(stones_dict.values())
 
+
 @lru_cache(maxsize=None)
 def get_stone_size(stone, i):
     if i == 0:
@@ -49,9 +53,12 @@ def get_stone_size(stone, i):
     cnt_bits = int(log(stone, 10)) + 1
     if cnt_bits % 2 == 0:
         middle = 10 ** (cnt_bits // 2)
-        return get_stone_size(stone // middle, i - 1) + get_stone_size(stone % middle, i - 1)
+        return get_stone_size(stone // middle, i - 1) + get_stone_size(
+            stone % middle, i - 1
+        )
     else:
         return get_stone_size(stone * 2024, i - 1)
+
 
 def part_1(lines):
     stones = [int(s) for s in lines.split()]
@@ -59,11 +66,13 @@ def part_1(lines):
     return dict_approach(stones, 25)
     # return sum([get_stone_size(x, 25) for x in stones])
 
+
 def part_2(lines):
     stones = [int(s) for s in lines.split()]
     return dict_approach(stones, 75)
     # return sum([get_stone_size(x, 75) for x in stones])
 
+
 # END OF SOLUTION
-print(f'My answer is {part_1(input)}')
-print(f'My answer is {part_2(input)}')
+print(f"My answer is {part_1(input)}")
+print(f"My answer is {part_2(input)}")

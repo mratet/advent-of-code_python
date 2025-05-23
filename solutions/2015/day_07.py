@@ -1,11 +1,19 @@
 import itertools, re, collections
 from aocd import get_data
+
 input = get_data(day=7, year=2015).splitlines()
 
 # Solution from r-sreeram
 import functools, operator as op
 
-OPS = {"AND": op.and_, "OR": op.or_, "LSHIFT": op.lshift, "RSHIFT": op.rshift, "NOT": op.inv, "X": lambda x: x}
+OPS = {
+    "AND": op.and_,
+    "OR": op.or_,
+    "LSHIFT": op.lshift,
+    "RSHIFT": op.rshift,
+    "NOT": op.inv,
+    "X": lambda x: x,
+}
 
 wires = {}
 for line in input:

@@ -1,6 +1,8 @@
 import itertools, re, collections
 from aocd import get_data
+
 input = get_data(day=21, year=2016).splitlines()
+
 
 def scrambling(instructions, password, reverse=False):
     password = list(password)
@@ -14,45 +16,49 @@ def scrambling(instructions, password, reverse=False):
         instrc = line.split()
 
         match instrc[0]:
-            case 'swap':
+            case "swap":
                 X, Y = instrc[2], instrc[-1]
-                if instrc[1] == 'position':
+                if instrc[1] == "position":
                     X, Y = int(X), int(Y)
                     password[X], password[Y] = password[Y], password[X]
                 else:
                     i, j = password.index(X), password.index(Y)
                     password[i], password[j] = password[j], password[i]
 
-            case 'rotate':
-                if instrc[1] == 'based':
+            case "rotate":
+                if instrc[1] == "based":
                     n = password.index(instrc[-1])
                     X = position_shift[n]
                 else:
-                    n = 1 if instrc[1] == 'left' else -1
-                    if reverse: n *= -1
+                    n = 1 if instrc[1] == "left" else -1
+                    if reverse:
+                        n *= -1
                     X = n * int(instrc[2])
                 password = password[X:] + password[:X]
 
-            case 'reverse':
+            case "reverse":
                 X, Y = int(instrc[2]), int(instrc[-1])
-                password = password[:X] + password[X: Y + 1][::-1] + password[Y + 1:]
+                password = password[:X] + password[X : Y + 1][::-1] + password[Y + 1 :]
 
-            case 'move':
+            case "move":
                 X, Y = int(instrc[2]), int(instrc[-1])
-                if reverse: X, Y = Y, X
+                if reverse:
+                    X, Y = Y, X
                 c = password.pop(X)
                 password = password[:Y] + [c] + password[Y:]
 
-    return ''.join(password)
+    return "".join(password)
 
 
 def part_1(input):
-    password = 'abcdefgh'
+    password = "abcdefgh"
     return scrambling(input, password)
 
+
 def part_2(input):
-    reverse_pass = 'fbgdceah'
+    reverse_pass = "fbgdceah"
     return scrambling(input, reverse_pass, reverse=True)
 
-print(f'My answer is {part_1(input)}')
-print(f'My answer is {part_2(input)}')
+
+print(f"My answer is {part_1(input)}")
+print(f"My answer is {part_2(input)}")

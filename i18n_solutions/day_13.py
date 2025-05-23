@@ -19,7 +19,7 @@ def remove_bom(bytes_word):
     BOMS = (b"\xef\xbb\xbf", b"\xfe\xff", b"\xff\xfe")
     for BOM in BOMS:
         if bytes_word.startswith(BOM):
-            return bytes_word[len(BOM):]
+            return bytes_word[len(BOM) :]
     return bytes_word
 
 

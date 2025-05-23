@@ -1,21 +1,23 @@
 from aocd import get_data
+
 input = get_data(day=22, year=2023).splitlines()
 
 # WRITE YOUR SOLUTION HERE
 from collections import deque
 
+
 def _parse(input):
     bricks = []
     for line in input:
-        start, end = line.split('~')
-        start = [int(c) for c in start.split(',')]
-        end = [int(c) for c in end.split(',')]
+        start, end = line.split("~")
+        start = [int(c) for c in start.split(",")]
+        end = [int(c) for c in end.split(",")]
         bricks.append([start, end])
 
     return bricks
 
-def support_graph(bricks):
 
+def support_graph(bricks):
     len_basis = 10
     basis = {(x, y): (0, -1) for x in range(len_basis) for y in range(len_basis)}
 
@@ -29,23 +31,29 @@ def support_graph(bricks):
         elif x_s == x_e:
             z_max = max([basis[(x_e, y)][0] for y in range(y_s, y_e + 1)])
             for y in range(y_s, y_e + 1):
-                if basis[(x_e, y)][0] == z_max and basis[(x_e, y)][1] not in is_supported_by[i + 1] :
+                if (
+                    basis[(x_e, y)][0] == z_max
+                    and basis[(x_e, y)][1] not in is_supported_by[i + 1]
+                ):
                     is_supported_by[i + 1].append(basis[(x_e, y)][1])
                 basis[(x_e, y)] = (z_max + 1, i)
 
         elif y_s == y_e:
             z_max = max([basis[(x, y_e)][0] for x in range(x_s, x_e + 1)])
             for x in range(x_s, x_e + 1):
-                if basis[(x, y_e)][0] == z_max and basis[(x, y_e)][1] not in is_supported_by[i + 1]:
+                if (
+                    basis[(x, y_e)][0] == z_max
+                    and basis[(x, y_e)][1] not in is_supported_by[i + 1]
+                ):
                     is_supported_by[i + 1].append(basis[(x, y_e)][1])
                 basis[(x, y_e)] = (z_max + 1, i)
         else:
-            print('There are square in the input !')
+            print("There are square in the input !")
 
     return is_supported_by
 
-def part_1(lines):
 
+def part_1(lines):
     bricks = _parse(lines)
     bricks.sort(key=lambda x: x[0][2])
 
@@ -74,8 +82,9 @@ def dfs(start, graph):
                 q.append(neighboor)
 
     return len(visited)
-def part_2(input):
 
+
+def part_2(input):
     bricks = _parse(input)
     bricks.sort(key=lambda x: x[0][2])
 
@@ -101,8 +110,10 @@ def part_2(input):
     print(dfs(0, support))
 
     return ans
+
+
 # END OF SOLUTION
 
 
-print(f'My answer is {part_1(input)}')
-print(f'My answer is {part_2(input)}')
+print(f"My answer is {part_1(input)}")
+print(f"My answer is {part_2(input)}")

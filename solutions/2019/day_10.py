@@ -1,23 +1,28 @@
 from collections import defaultdict
 
 from aocd import get_data, submit
+
 aoc_input = get_data(day=10, year=2019).splitlines()
+
+
 # WRITE YOUR SOLUTION HERE
 def get_asteroids(lines):
     asteroids = []
     for y, line in enumerate(lines):
         for x, symb in enumerate(line):
-            if symb == '#':
+            if symb == "#":
                 asteroids.append((x, y))
     return asteroids
+
 
 def build_best_asteroid_detection(asteroids):
     UP, RIGHT, DOWN, LEFT = 0, 1, 2, 3
     max_detection = 0
-    for (xa, ya) in asteroids:
+    for xa, ya in asteroids:
         detection_dict = defaultdict(list)
-        for (x, y) in asteroids:
-            if (x, y) == (xa, ya): continue
+        for x, y in asteroids:
+            if (x, y) == (xa, ya):
+                continue
             if x == xa:
                 detection_dict[(UP if ya > y else DOWN, 0)].append((x, y))
             else:
@@ -30,14 +35,18 @@ def build_best_asteroid_detection(asteroids):
             base_astro = (x, y)
 
     for k in astro_visu:
-        astro_visu[k].sort(key=lambda a: abs(a[0] - base_astro[0]) + abs(a[1] - base_astro[1]))
+        astro_visu[k].sort(
+            key=lambda a: abs(a[0] - base_astro[0]) + abs(a[1] - base_astro[1])
+        )
 
     return astro_visu
+
 
 def part_1(lines):
     asteroids = get_asteroids(lines)
     astro_visu = build_best_asteroid_detection(asteroids)
     return len(astro_visu)
+
 
 def part_2(lines):
     asteroids = get_asteroids(lines)
@@ -55,7 +64,7 @@ def part_2(lines):
             else:
                 destruction_order.remove(k)
 
-# END OF SOLUTION
-print(f'My answer is {part_1(aoc_input)}')
-print(f'My answer is {part_2(aoc_input)}')
 
+# END OF SOLUTION
+print(f"My answer is {part_1(aoc_input)}")
+print(f"My answer is {part_2(aoc_input)}")

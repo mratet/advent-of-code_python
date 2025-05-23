@@ -255,7 +255,7 @@ class PipeGame:
                 self.term.clear_eol + self.term.bold(f"Score: {self.compute_score()}"),
                 end="",
                 flush=True,
-                )
+            )
 
     def move_cursor(self, dx: int, dy: int):
         x, y = self.cursor

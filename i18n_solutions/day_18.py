@@ -72,6 +72,7 @@ def compute_mirror(calculation):
 def remove_BiDi_characters(p):
     return "".join((x for x in p if (x.isdigit() or x in "+-*/()")))
 
+
 sum_differences = 0
 for calculation in input_rows:
     rex_val = round(eval(remove_BiDi_characters(calculation)))

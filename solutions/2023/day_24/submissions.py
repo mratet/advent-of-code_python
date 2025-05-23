@@ -1,10 +1,11 @@
 import itertools
 
-lines = open('input.txt').read().splitlines()
+lines = open("input.txt").read().splitlines()
 
 # WRITE YOUR SOLUTION HERE
 import numpy as np
 from scipy.optimize import minimize
+
 
 def find_intersection_2d(a1, a2):
     p1, v1 = a1[0:2], a1[3:5]
@@ -27,15 +28,17 @@ def find_intersection_2d(a1, a2):
         # Singular system
         return -1, 0, 0
 
+
 def _parse(input):
     asteroids = []
     for line in input:
-        pos, spd = line.split('@')
-        pos = [int(c) for c in pos.split(',')]
-        spd = [int(c) for c in spd.split(',')]
+        pos, spd = line.split("@")
+        pos = [int(c) for c in pos.split(",")]
+        spd = [int(c) for c in spd.split(",")]
         asteroids.append(pos + spd)
     asteroids = np.array(asteroids)
     return asteroids
+
 
 def part_1(lines):
     asteroids = _parse(lines)
@@ -48,15 +51,20 @@ def part_1(lines):
     for i in range(n):
         for j in range(i + 1, n):
             s, t, intersection = find_intersection_2d(asteroids[i], asteroids[j])
-            if s >= 0 and t >= 0 and min_val <= intersection[0][0] <= max_val and min_val <= intersection[0][1] <= max_val:
+            if (
+                s >= 0
+                and t >= 0
+                and min_val <= intersection[0][0] <= max_val
+                and min_val <= intersection[0][1] <= max_val
+            ):
                 ans += 1
     return ans
+
 
 def part_2(lines):
     asteroids = _parse(lines)
 
     def shortest_distance(x):
-
         p1, v1 = x[:3], x[3:]
         distance = 0
 
@@ -84,20 +92,22 @@ def part_2(lines):
     print(result)
 
     return 0
+
+
 # END OF SOLUTION
 
 
-test_input = open('input-test.txt').read().splitlines()
+test_input = open("input-test.txt").read().splitlines()
 test_lines = []
 for i, line in enumerate(test_input[3:]):
-    if line[0] == '-':
+    if line[0] == "-":
         break
     test_lines.append(line)
 solution = test_input[i + 4]
 
-print(f'My answer on test set for the first problem is {part_1(test_lines)}')
+print(f"My answer on test set for the first problem is {part_1(test_lines)}")
 print(solution)
 # print(f'My answer is {part_1(lines)}')
 
-print(f'My answer on test set for the second problem is {part_2(test_lines)}')
+print(f"My answer on test set for the second problem is {part_2(test_lines)}")
 # print(f'My answer is {part_2(lines)}')

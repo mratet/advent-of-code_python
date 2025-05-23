@@ -1,16 +1,19 @@
 import itertools, re, collections
 from aocd import get_data
+
 input = get_data(day=20, year=2016).splitlines()
 
 R = [0, 4294967295]
 
+
 def _parse(input):
     intervals = []
     for line in input:
-        s, e = line.split('-')
+        s, e = line.split("-")
         intervals.append([int(s), int(e)])
 
     return intervals
+
 
 def merge_intervals(intervals):
     intervals.sort()
@@ -24,9 +27,11 @@ def merge_intervals(intervals):
             res.append([start, end])
     return res
 
+
 def part_1(input):
     intervals = _parse(input)
     return merge_intervals(intervals)[0][1] + 1
+
 
 def part_2(input):
     intervals = _parse(input)
@@ -34,5 +39,6 @@ def part_2(input):
     cnt = sum([s2 - e1 - 1 for (_, e1), (s2, _) in zip(intervals, intervals[1:])])
     return cnt
 
-print(f'My answer is {part_1(input)}')
-print(f'My answer is {part_2(input)}')
+
+print(f"My answer is {part_1(input)}")
+print(f"My answer is {part_2(input)}")
