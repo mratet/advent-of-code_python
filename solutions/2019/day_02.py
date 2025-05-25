@@ -1,4 +1,3 @@
-
 from aocd import get_data
 from intcode import run_program, read_program
 

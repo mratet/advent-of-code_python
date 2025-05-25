@@ -1,4 +1,3 @@
-
 # input = get_data(day=1, year=2024).splitlines()
 import re
 

@@ -1,4 +1,3 @@
-
 from aocd import get_data
 
 input = get_data(day=10, year=2024).splitlines()
