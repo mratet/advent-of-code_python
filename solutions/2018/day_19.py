@@ -4,8 +4,8 @@ input = get_data(day=19, year=2018).splitlines()
 
 
 def apply_instruction(instr, regs):
-    opname, *i = instr.split()
-    a, b, c = map(int, i)
+    opname, *instr_regs = instr.split()
+    a, b, c = map(int, instr_regs)
     result = regs.copy()
     match opname:
         case "addr":
