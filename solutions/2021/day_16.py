@@ -25,6 +25,7 @@ def read_value(current_i):
 
 
 def decode_packet(current_i):
+    ### Voir probleme 8 2018
     current_i, packet_version, type_id = parse_header(current_i)
     if type_id == 4:
         current_i, value = read_value(current_i)
