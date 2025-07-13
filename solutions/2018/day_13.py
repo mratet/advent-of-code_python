@@ -37,7 +37,7 @@ class Cart:
         self.update_sort_index()
 
     def update_sort_index(self):
-        self.sort_index = (self.x, self.y)
+        self.sort_index = (self.y, self.x)
 
     def turn_at_intersection(self):
         if self.next_turn == 0:
