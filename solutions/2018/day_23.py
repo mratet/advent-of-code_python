@@ -17,7 +17,8 @@ def part_1(lines):
     nanobots = parse_input(lines)
     max_nanobot = max(nanobots, key=lambda x: x[3])
     return sum(
-        manhattan_distance(max_nanobot, nanobot) <= max_nanobot[3] for nanobot in nanobots
+        manhattan_distance(max_nanobot, nanobot) <= max_nanobot[3]
+        for nanobot in nanobots
     )
 
 

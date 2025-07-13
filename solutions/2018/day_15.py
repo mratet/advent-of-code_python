@@ -44,11 +44,14 @@ class Unit:
     type: str
     attack_power: int = 3
     hit_points: int = 200
-    is_alive: bool = True
 
     @property
     def position(self):
         return (self.x, self.y)
+
+    @property
+    def is_alive(self) -> bool:
+        return self.hit_points > 0
 
     def __post_init__(self):
         self.update_sort_index()
@@ -81,8 +84,6 @@ class Unit:
             targets_in_range, key=lambda unit: (unit.hit_points, unit.y, unit.x)
         )
         unit_attacked.hit_points -= self.attack_power
-        if unit_attacked.hit_points <= 0:
-            unit_attacked.is_alive = False
 
     def adjacent_target(self, targets):
         return any(t.position in self.get_neighbors() for t in targets)
