@@ -5,6 +5,8 @@ from aocd import get_data
 aoc_input = get_data(day=20, year=2019).splitlines()
 from heapq import heappop, heappush
 
+DIRS = [(0, 1), (1, 0), (0, -1), (-1, 0)]
+
 
 # WRITE YOUR SOLUTION HERE
 def dijkstra(graph, source=0, target=None):
@@ -29,7 +31,7 @@ def dijkstra(graph, source=0, target=None):
     return dist, prec
 
 
-def part_1(lines):
+def _parse_input(lines):
     min_x, max_x, min_y, max_y = 1e9, 0, 1e9, 0
     dots = []
     door = {}
@@ -46,10 +48,13 @@ def part_1(lines):
                 max_y = max(y, max_y)
             else:
                 door[(x, y)] = symb
+    return door, dots, (min_x, max_x, min_y, max_y)
 
+
+def compute_shortcuts(door, dots, extreme_coords):
     shortcuts = defaultdict(dict)
+    min_x, max_x, min_y, max_y = extreme_coords
     for (x, y), symb in door.items():
-        DIRS = [(0, 1), (1, 0), (0, -1), (-1, 0)]
         for i, (dx, dy) in enumerate(DIRS):
             nx, ny = x + dx, y + dy
             if (nx, ny) in dots:
@@ -67,24 +72,43 @@ def part_1(lines):
                         else "outer"
                     )
                     shortcuts[shortcut_txt][side] = (nx, ny)
+    return start, end, shortcuts
+
+
+def build_graph(door, dots, extreme_coords, part="part_1"):
+    start, end, shortcuts = compute_shortcuts(door, dots, extreme_coords)
+
+    start = (0, *start)
+    end = (0, *end)
+    DEPTH = 1 if part == "part_1" else 30
+    teleportation_on = part == "part_2"
 
     graph = defaultdict(list)
-    for x, y in dots:
-        for dx, dy in DIRS:
-            nx, ny = x + dx, y + dy
-            if (nx, ny) in dots:
-                graph[(x, y)].append((nx, ny))
+    for depth in range(DEPTH):
+        for x, y in dots:
+            for dx, dy in DIRS:
+                nx, ny = x + dx, y + dy
+                if (nx, ny) in dots:
+                    graph[(depth, x, y)].append((depth, nx, ny))
+        for d in shortcuts.values():
+            graph[(depth, *d["inner"])].append((depth + teleportation_on, *d["outer"]))
+            graph[(depth + teleportation_on, *d["outer"])].append((depth, *d["inner"]))
+    return start, end, graph
 
-    for d in shortcuts.values():
-        graph[d["inner"]].append(d["outer"])
-        graph[d["outer"]].append(d["inner"])
 
+def part_1(lines):
+    door, dots, extreme_coords = _parse_input(lines)
+    start, end, graph = build_graph(door, dots, extreme_coords, "part_1")
     dist, prec = dijkstra(graph, start, end)
     return dist[end]
 
 
 def part_2(lines):
-    return
+    # To get faster results, you might need to modify dijkstra instead of precomputing a huge graph
+    door, dots, extreme_coords = _parse_input(lines)
+    start, end, graph = build_graph(door, dots, extreme_coords, "part_2")
+    dist, prec = dijkstra(graph, start, end)
+    return dist[end]
 
 
 # END OF SOLUTION
