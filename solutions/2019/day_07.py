@@ -1,43 +1,42 @@
 from aocd import get_data
-from collections import deque
+from intcode import IntcodeComputer
+from itertools import permutations
 
 aoc_input = get_data(day=7, year=2019)
-from intcode import read_program, run_program
-from itertools import permutations
+
+
 # WRITE YOUR SOLUTION HERE
-
-
 def part_1(lines):
-    memory = read_program(lines)
     tab = []
     for perm in permutations(range(5)):
-        program = memory[:]
-        in_buff = deque([perm[0], 0])
-        _, out_buff = run_program(program, in_buff)
-        for p in perm[1:]:
-            program = memory[:]
-            in_buff = deque([p, out_buff[0]])
-            _, out_buff = run_program(program, in_buff)
-        tab.append(out_buff[0])
+        output_signal = 0
+        for p in perm:
+            pc = IntcodeComputer(lines)
+            [output_signal] = pc.run([p, output_signal])
+        tab.append(output_signal)
     return max(tab)
 
 
 def part_2(lines):
-    return
-    # memory = read_program(lines)
-    # tab = []
-    # for perm in permutations(range(5, 10)):
-    #     program = memory[:]
-    #     in_buff = deque([perm[0], 0])
-    #     _, out_buff = run_program(program, in_buff)
-    #     for p in perm[1:]:
-    #         program = memory[:]
-    #         in_buff = deque([p, out_buff[0]])
-    #         _, out_buff = run_program(program, in_buff)
-    #     tab.append(out_buff[0])
-    # return max(tab)
+    tab = []
+    for perm in permutations(range(5, 10)):
+        amplifiers = [IntcodeComputer(lines) for _ in range(5)]
+        for p, amplifier in zip(perm, amplifiers):
+            amplifier.input_buffer.append(p)
+
+        cnt = 0
+        output_signal = 0
+        while True:
+            output_buffer = amplifiers[cnt % 5].run([output_signal])
+            if output_buffer:
+                output_signal = output_buffer[0]
+            if not output_buffer and (cnt % 5) == 4:
+                break
+            cnt += 1
+        tab.append(output_signal)
+    return max(tab)
 
 
 # END OF SOLUTION
-print(f"My answer is {part_1(aoc_input)}")  # 13848
+print(f"My answer is {part_1(aoc_input)}")
 print(f"My answer is {part_2(aoc_input)}")

@@ -1,29 +1,28 @@
 from aocd import get_data
-from intcode import run_program, read_program
+from intcode import IntcodeComputer
 
 input = get_data(day=2, year=2019)
+
+
 # WRITE YOUR SOLUTION HERE
-
-
 def part_1(lines):
-    intcode_program = read_program(lines)
-    intcode_program[1] = 12
-    intcode_program[2] = 2
-    program, _ = run_program(intcode_program)
-    return program[0]
+    pc = IntcodeComputer(lines)
+    pc.memory[1], pc.memory[2] = 12, 2
+    pc.run()
+    return pc.memory[0]
 
 
 def part_2(lines):
-    computer = read_program(lines)
     for noun in range(100):
         for verb in range(100):
-            program = computer[:]
-            program[1], program[2] = noun, verb
-            program, _ = run_program(program)
-            if program[0] == 19690720:
+            pc = IntcodeComputer(lines)
+            pc.memory[1], pc.memory[2] = noun, verb
+            pc.run()
+            if pc.memory[0] == 19690720:
                 return 100 * noun + verb
 
 
 # END OF SOLUTION
-print(f"My answer is {part_1(input)}")  # 9706670
-print(f"My answer is {part_2(input)}")  # 2552
+
+print(f"My answer is {part_1(input)}")
+print(f"My answer is {part_2(input)}")
