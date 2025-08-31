@@ -31,7 +31,7 @@ class IntcodeComputer:
         self.output_buffer = deque([])
         self.rel_base = 0
         self.ip = 0
-        self.hasted = False # useful for day_13
+        self.hasted = False  # useful for day_13
 
     def send_output_buffer(self):
         output = list(self.output_buffer)

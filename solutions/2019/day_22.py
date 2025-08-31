@@ -16,7 +16,7 @@ def get_instructions(lines):
     return instr
 
 
-def shuffle_deck(deck, instr):
+def manual_shuffling(deck, instr):
     for inst, n in instr:
         match inst:
             case "new":
@@ -36,52 +36,51 @@ def shuffle_deck(deck, instr):
 
 
 def part_1(lines):
-    instr = get_instructions(lines)
-    deck = shuffle_deck(list(range(10007)), instr)
+    instructions = get_instructions(lines)
+    deck = manual_shuffling(list(range(10007)), instructions)
     return deck.index(2019)
 
+def get_linear_params(instr):
+    a, b = 1, 0
+    for inst, n in instr:
+        match inst:
+            case "new":
+                a, b = -a, -b - 1
+            case "cut":
+                b -= n
+            case "inc":
+                a, b = a * n, b * n
+    return a, b
 
-def compute_cycle(val, mapping):
-    cycle = []
-    while val not in cycle:
-        cycle.append(val)
-        val = mapping[val]
-    return cycle
+
+def get_position(x, a, b, deck_size, shuffle_count):
+    Ma = pow(a, shuffle_count, deck_size)
+    Mb = b * (Ma - 1) * pow(a - 1, -1, deck_size)
+    return (Ma * x + Mb) % deck_size
 
 
-def decompose_deck_shuffling(mapping):
-    deck_composition = set(mapping)
-    cycles = []
-    while deck_composition:
-        p = deck_composition.pop()
-        cycle = compute_cycle(p, mapping)
-        cycles.append(cycle)
-        deck_composition -= set(cycle)
-    return cycles
+def get_card(x, a, b, deck_size, shuffle_count):
+    Ma = pow(a, shuffle_count, deck_size)
+    Ma_inv = pow(Ma, -1, deck_size)
+    Mb = b * (Ma - 1) * pow(a - 1, -1, deck_size)
+    return (Ma_inv * (x - Mb)) % deck_size
 
 
 def part_2(lines):
-    instr = get_instructions(lines)
-    prime_list = (10007, 10009, 10037, 10039, 10061, 10067, 10069, 10079)
-    for P in prime_list:
-        init_deck = list(range(P))
-        mapping = [0] * P
-        hist = [0] * P
-        for i, val in enumerate(shuffle_deck(init_deck, instr)):
-            mapping[val] = i
+    DECK_SIZE = 119315717514047
+    SHUFFLE_COUNT = 101741582076661
 
-        cycles = decompose_deck_shuffling(mapping)
-        for c in cycles:
-            print(c)
-        print()
-    # k = 9437 # 2 The deck seems to create 2 unif cycle
-    # for _ in range(1000000):
-    #     k = mapping[k]
-    #     hist[k] += 1
-    # print(hist)
-    return mapping[2019]
+    instructions = get_instructions(lines)
+    a, b = get_linear_params(instructions)
+    return get_card(
+        2020,
+        a % DECK_SIZE,
+        b % DECK_SIZE,
+        DECK_SIZE,
+        SHUFFLE_COUNT,
+    )
 
 
 # END OF SOLUTION
-# print(f'My answer is {part_1(aoc_input)}')
+print(f"My answer is {part_1(aoc_input)}")
 print(f"My answer is {part_2(aoc_input)}")

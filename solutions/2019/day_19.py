@@ -31,7 +31,9 @@ def part_2(lines):
             x += 1
 
         pc = IntcodeComputer(lines)
-        [state] = pc.run([x + square_size - 1, y - (square_size - 1)])  # TOP_RIGHT_CORNER
+        [state] = pc.run(
+            [x + square_size - 1, y - (square_size - 1)]
+        )  # TOP_RIGHT_CORNER
         if state:
             return x * 10000 + y - (square_size - 1)  # TOP_LEFT_CORNER
         y += 1

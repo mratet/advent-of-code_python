@@ -14,7 +14,7 @@ def part_1(lines, wanna_play=False):
     print(MAP_FROM_ASCII(buffer))
 
     while True:
-        buffer = pc.run(MAP_TO_ASCII(f'{input()}\n'))
+        buffer = pc.run(MAP_TO_ASCII(f"{input()}\n"))
         print(MAP_FROM_ASCII(buffer))
 
 
