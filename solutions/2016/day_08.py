@@ -1,10 +1,10 @@
 import re
+
+import numpy as np
+from advent_of_code_ocr import convert_array_6
 from aocd import get_data
 
 input = get_data(day=8, year=2016).splitlines()
-
-import numpy as np
-from PIL import Image
 
 
 def _parse(input):
@@ -44,9 +44,7 @@ def part_1(input):
 def part_2(input):
     instructions = _parse(input)
     screen = generate_screen(instructions)
-    image = Image.fromarray(screen * 255)
-    image.show()
-    return
+    return convert_array_6(screen, fill_pixel=1, empty_pixel=0)
 
 
 print(f"My answer is {part_1(input)}")

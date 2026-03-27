@@ -27,12 +27,9 @@ def render_ascii(points):
     grid = [["." for _ in range(width)] for _ in range(height)]
 
     for x, y in points:
-        gx = x - min_x
-        gy = y - min_y
-        grid[gy][gx] = "#"
-
-    for row in grid:
-        print("".join(row))
+        grid[y - min_y][x - min_x] = "#"
+    # TODO : Add convert_10 when aoc_ocr will be updated
+    print("\n".join("".join(row) for row in grid))
 
 
 def compute_positions(points, time):

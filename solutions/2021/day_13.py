@@ -1,7 +1,7 @@
 from aocd import get_data
 import re
 import numpy as np
-import matplotlib.pyplot as plt
+from advent_of_code_ocr import convert_array_6
 
 input = get_data(day=13, year=2021)
 
@@ -46,9 +46,7 @@ def part_1(lines):
 def part_2(lines):
     coords, operations = parse_input(lines)
     manual_fold = fold_manual(coords, operations)
-    plt.imshow(manual_fold[-1], cmap="binary")
-    plt.show()
-    return None
+    return convert_array_6(manual_fold[-1], fill_pixel=True, empty_pixel=False)
 
 
 # END OF SOLUTION

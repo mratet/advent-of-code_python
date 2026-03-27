@@ -1,6 +1,6 @@
 from aocd import get_data
 import numpy as np
-from matplotlib import pyplot as plt
+from advent_of_code_ocr import convert_array_6
 
 input = get_data(day=10, year=2022).splitlines()
 
@@ -30,9 +30,7 @@ def part_2(lines):
     screen = np.array(
         [1 if abs((i % W) - x) <= 1 else 0 for i, x in enumerate(state)]
     ).reshape(H, W)
-    plt.imshow(screen, cmap="binary")
-    # plt.show()
-    return None
+    return convert_array_6(screen, fill_pixel=1, empty_pixel=0)
 
 
 # END OF SOLUTION

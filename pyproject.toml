@@ -5,6 +5,7 @@ description = "Add your description here"
 requires-python = ">=3.12"
 dependencies = [
     "advent-of-code-data>=2.1.0",
+    "advent-of-code-ocr>=1.1.0",
     "blessed>=1.21.0",
     "browser-cookie3>=0.20.1",
     "disjoint-set>=0.8.0",
