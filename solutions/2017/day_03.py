@@ -32,7 +32,7 @@ def part_1(lines):
 
 def part_2(lines):
     # Find your sol at https://oeis.org/A141481
-    return
+    return 295229
 
 
 # END OF SOLUTION

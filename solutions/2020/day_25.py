@@ -30,11 +30,5 @@ def part_1(lines):
 
     return encryption_key
 
-
-def part_2(lines):
-    return
-
-
 # END OF SOLUTION
 print(f"My answer is {part_1(input)}")
-print(f"My answer is {part_2(input)}")

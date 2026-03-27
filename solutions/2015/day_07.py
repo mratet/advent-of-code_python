@@ -31,7 +31,12 @@ def solve(w):
     return wires[w][0](*[solve(arg) for arg in wires[w][1:]]) & 0xFFFF
 
 
-print(part1 := solve("a"))
+part1 = solve("a")
 wires["b"] = (OPS["X"], part1)
 solve.cache_clear()
-print(solve("a"))
+part2 = solve("a")
+
+########################################
+
+print(f"My answer is {part1}")
+print(f"My answer is {part2}")

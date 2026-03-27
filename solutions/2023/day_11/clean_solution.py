@@ -47,7 +47,7 @@ def part_1(lines):
 
 def part_2(lines):
     galaxies, empty_row, empty_col = _parse(lines)
-    return (
+    return int(
         sum(
             [
                 galaxie_distance(gi, gj, empty_row, empty_col, 1e6)

@@ -25,8 +25,8 @@ def part_2(lines):
         ("eyr", lambda x: 2020 <= int(x) <= 2030),
         (
             "hgt",
-            lambda x: (x.endwith("cm") and 150 <= int(x[:-2]) <= 193)
-            or (x.endwith("in") and 59 <= int(x[:-2]) <= 76),
+            lambda x: (x.endswith("cm") and 150 <= int(x[:-2]) <= 193)
+            or (x.endswith("in") and 59 <= int(x[:-2]) <= 76),
         ),
         ("hcl", lambda x: re.fullmatch(r"#[0-9a-f]{6}", x)),
         ("ecl", lambda x: x in ("amb", "blu", "brn", "gry", "grn", "hzl", "oth")),

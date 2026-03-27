@@ -94,7 +94,7 @@ def part_1(input):
 def part_2(input):
     # Solution taken from hyper-neutrino
     # You need to explore the graph to understand the solution
-    # weel explainded there at 1:15:00 https://www.youtube.com/watch?v=C5wYxR6ZAPM
+    # well explained there at 1:15:00 https://www.youtube.com/watch?v=C5wYxR6ZAPM
     broadcast, modules = _parse(input)
 
     (feed,) = [name for name, module in modules.items() if "rx" in module.outputs]
@@ -123,8 +123,7 @@ def part_2(input):
                     assert presses == seen[origin] * cycle_lenghts[origin]
 
                 if all(seen.values()):
-                    print(math.lcm(*cycle_lenghts.values()))
-                    exit()
+                    return math.lcm(*cycle_lenghts.values())
 
             if module.type == "%":
                 if pulse == "lo":
