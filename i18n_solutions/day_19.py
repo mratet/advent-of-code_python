@@ -1,14 +1,11 @@
+import os
 import shutil
 import urllib.request
-from pathlib import Path
-import os
-
-
-from itertools import chain
 from collections import defaultdict
-from datetime import datetime, timezone
+from datetime import UTC, datetime
+from itertools import chain
+from pathlib import Path
 from zoneinfo import ZoneInfo, reset_tzpath
-
 
 input_rows = open("input.txt").read().splitlines()
 
@@ -46,11 +43,7 @@ for tz_version in ["2018c", "2018g", "2021b", "2023d"]:
     reset_tzpath(to=[(Path(tz_version).resolve())])
     for row in input_rows:
         date_str, region = row.split("; ")
-        dt = (
-            datetime.fromisoformat(date_str)
-            .replace(tzinfo=ZoneInfo(region))
-            .astimezone(timezone.utc)
-        )
+        dt = datetime.fromisoformat(date_str).replace(tzinfo=ZoneInfo(region)).astimezone(UTC)
         station_detections[region].add(dt)
 clean_files()
 

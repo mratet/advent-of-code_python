@@ -1,6 +1,5 @@
 from itertools import groupby
 
-
 input_rows = open("input.txt").read().splitlines()
 
 
@@ -15,9 +14,7 @@ def compute_levels(calculations):
             levels.append(embedding_level + embedding_level % 2)
             continue
 
-        if char == RLI_MARKER and left_to_right:
-            embedding_level += 1
-        elif char == LRI_MARKER and not left_to_right:
+        if (char == RLI_MARKER and left_to_right) or (char == LRI_MARKER and not left_to_right):
             embedding_level += 1
         elif char == PDI_MARKER:
             embedding_level -= 1
@@ -31,16 +28,14 @@ def remove_lonely_max(nums):
 
     for i in range(len(nums)):
         if nums[i] == max_val:
-            has_max_neighbor = (i > 0 and nums[i - 1] == max_val) or (
-                i < len(nums) - 1 and nums[i + 1] == max_val
-            )
+            has_max_neighbor = (i > 0 and nums[i - 1] == max_val) or (i < len(nums) - 1 and nums[i + 1] == max_val)
             if not has_max_neighbor:
                 result[i] -= 1
     return result
 
 
 def find_longest_segments(levels):
-    result = {level: (0, 0) for level in set(levels)}
+    result = dict.fromkeys(set(levels), (0, 0))
     position = 0
     for level, group in groupby(levels):
         length_group = len(list(group))
@@ -56,9 +51,7 @@ def compute_mirror(calculation):
     while max(levels) > 0:
         levels = remove_lonely_max(levels)
         segments = find_longest_segments(levels)
-        idx, n = segments[
-            next(key for key in sorted(segments, reverse=True) if segments[key][1] > 1)
-        ]
+        idx, n = segments[next(key for key in sorted(segments, reverse=True) if segments[key][1] > 1)]
         calculation[idx : idx + n] = reversed(calculation[idx : idx + n])
         for j in range(idx, idx + n):
             levels[j] -= 1
@@ -70,7 +63,7 @@ def compute_mirror(calculation):
 
 
 def remove_BiDi_characters(p):
-    return "".join((x for x in p if (x.isdigit() or x in "+-*/()")))
+    return "".join(x for x in p if (x.isdigit() or x in "+-*/()"))
 
 
 sum_differences = 0

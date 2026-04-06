@@ -1,8 +1,9 @@
+from collections import defaultdict
+from itertools import product
+
 from aocd import get_data
 
 input = get_data(day=8, year=2024).splitlines()
-from collections import defaultdict
-from itertools import product
 
 
 # WRITE YOUR SOLUTION HERE

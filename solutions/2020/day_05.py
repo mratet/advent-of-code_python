@@ -15,9 +15,7 @@ def part_1(lines):
 
 
 def part_2(lines):
-    empty_seat = set(range(127 * 8 + 7)) - set(
-        compute_seat_position(line) for line in lines
-    )
+    empty_seat = set(range(127 * 8 + 7)) - {compute_seat_position(line) for line in lines}
     for seat in empty_seat:
         if (seat + 1 not in empty_seat) and (seat - 1 not in empty_seat):
             return seat

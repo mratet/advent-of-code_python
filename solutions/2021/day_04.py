@@ -10,7 +10,7 @@ class Grid:
 
     def check_bingo(self, nums):
         return any(all(n in nums for n in row) for row in self.grid) or any(
-            all(n in nums for n in col) for col in zip(*self.grid)
+            all(n in nums for n in col) for col in zip(*self.grid, strict=False)
         )
 
     def compute_score(self, nums):
@@ -32,9 +32,7 @@ def compute_grid_scores(numbers, bingo_grids):
             bingo_grid = bingo_grids[grid_id]
             if bingo_grid.check_bingo(current_markers):
                 grid_ids.remove(grid_id)
-                grid_scores.append(
-                    bingo_grid.compute_score(current_markers) * numbers[turn - 1]
-                )
+                grid_scores.append(bingo_grid.compute_score(current_markers) * numbers[turn - 1])
     return grid_scores
 
 

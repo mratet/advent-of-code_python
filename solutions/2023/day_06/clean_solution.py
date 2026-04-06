@@ -1,9 +1,9 @@
+# WRITE YOUR SOLUTION HERE
+from math import ceil, floor, prod
+
 from aocd import get_data
 
 input = get_data(day=6, year=2023).splitlines()
-
-# WRITE YOUR SOLUTION HERE
-from math import ceil, floor, prod
 
 
 def nb_records(time, distance):
@@ -37,9 +37,7 @@ def _parse(input, part):
 
 def part_1(input):
     times, distances = _parse(input, "part_1")
-    return prod(
-        [nb_records(time, distance) for time, distance in zip(times, distances)]
-    )
+    return prod([nb_records(time, distance) for time, distance in zip(times, distances, strict=False)])
 
 
 def part_2(lines):

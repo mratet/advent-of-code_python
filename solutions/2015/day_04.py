@@ -1,8 +1,8 @@
+from hashlib import md5
+
 from aocd import get_data
 
 input = get_data(day=4, year=2015)
-
-from hashlib import md5
 
 
 def match_md5(input, match):

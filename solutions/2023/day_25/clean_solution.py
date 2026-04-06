@@ -50,13 +50,15 @@ def dfs(graph, start):
 
 def part_1(lines):
     graph = _parse(lines)
-    save_graph(graph)
+    # save_graph(graph)
     cut_edges(graph, CUTS)
     n = len(graph)
     m = dfs(graph, "ddp")
     p = dfs(graph, "stz")
     assert n == m + p
     return m * p
+
+
 # END OF SOLUTION
 
 

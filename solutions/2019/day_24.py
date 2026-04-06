@@ -1,5 +1,6 @@
-from aocd import get_data
 from itertools import product
+
+from aocd import get_data
 
 aoc_input = get_data(day=24, year=2019).splitlines()
 

@@ -1,42 +1,30 @@
 from collections import Counter
+from itertools import product
 
 from aocd import get_data
-from itertools import product
 
 input = get_data(day=18, year=2018)
 
 
 def parse_input(text: str) -> dict:
-    return {
-        (x, y): char
-        for y, line in enumerate(text.strip().splitlines())
-        for x, char in enumerate(line)
-    }
+    return {(x, y): char for y, line in enumerate(text.strip().splitlines()) for x, char in enumerate(line)}
 
 
 def get_adjacent_positions(x: int, y: int) -> set:
-    return {
-        (x + dx, y + dy)
-        for dx, dy in product((-1, 0, 1), repeat=2)
-        if not (dx == 0 and dy == 0)
-    }
+    return {(x + dx, y + dy) for dx, dy in product((-1, 0, 1), repeat=2) if not (dx == 0 and dy == 0)}
 
 
 def evolve(lumber: dict) -> dict:
     new_lumber = {}
     for point, tile in lumber.items():
-        neighbors = Counter(
-            lumber.get(pos, ".") for pos in get_adjacent_positions(*point)
-        )
+        neighbors = Counter(lumber.get(pos, ".") for pos in get_adjacent_positions(*point))
 
         if tile == ".":
             new_lumber[point] = "|" if neighbors["|"] >= 3 else "."
         elif tile == "|":
             new_lumber[point] = "#" if neighbors["#"] >= 3 else "|"
         elif tile == "#":
-            new_lumber[point] = (
-                "#" if neighbors["#"] >= 1 and neighbors["|"] >= 1 else "."
-            )
+            new_lumber[point] = "#" if neighbors["#"] >= 1 and neighbors["|"] >= 1 else "."
     return new_lumber
 
 

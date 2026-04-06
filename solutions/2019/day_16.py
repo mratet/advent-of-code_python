@@ -1,5 +1,5 @@
-from aocd import get_data
 import numpy as np
+from aocd import get_data
 
 aoc_input = get_data(day=16, year=2019)
 

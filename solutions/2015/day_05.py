@@ -1,8 +1,8 @@
+import re
+
 from aocd import get_data
 
 input = get_data(day=5, year=2015).splitlines()
-
-import re
 
 
 def nice_string_part1(str):

@@ -1,3 +1,5 @@
+import itertools
+
 from aocd import get_data
 
 input = get_data(day=14, year=2022).splitlines()
@@ -7,7 +9,7 @@ def parse_input(lines):
     rocks = set()
     for line in lines:
         points = [tuple(map(int, coord.split(","))) for coord in line.split(" -> ")]
-        for (x1, y1), (x2, y2) in zip(points, points[1:]):
+        for (x1, y1), (x2, y2) in itertools.pairwise(points):
             if x1 == x2:  # Vertical segment
                 for y in range(min(y1, y2), max(y1, y2) + 1):
                     rocks.add((x1, y))

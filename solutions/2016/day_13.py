@@ -1,4 +1,5 @@
 import collections
+
 from aocd import get_data
 
 input = int(get_data(day=13, year=2016))
@@ -30,7 +31,7 @@ def solve(input, part="part_1"):
             for dx, dy in [(-1, 0), (1, 0), (0, 1), (0, -1)]:
                 nx, ny = x + dx, y + dy
 
-                if 0 <= nx and 0 <= ny and not is_a_wall((nx, ny), input):
+                if nx >= 0 and ny >= 0 and not is_a_wall((nx, ny), input):
                     q.append((nx, ny))
         cnt += 1
         if part == "part_2" and cnt == 51:

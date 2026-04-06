@@ -1,7 +1,7 @@
+import numpy as np
 from aocd import get_data
 
 input = get_data(day=21, year=2017).splitlines()
-import numpy as np
 
 
 # WRITE YOUR SOLUTION HERE
@@ -33,13 +33,9 @@ def get_mapping(lines):
     mapping = {}
     for row in lines:
         in_pat, out_pat = row.split(" => ")
-        in_pat = np.array(
-            [[char == "#" for char in line] for line in in_pat.strip().split("/")]
-        )
-        out_pat = np.array(
-            [[char == "#" for char in line] for line in out_pat.strip().split("/")]
-        )
-        for k in range(3):
+        in_pat = np.array([[char == "#" for char in line] for line in in_pat.strip().split("/")])
+        out_pat = np.array([[char == "#" for char in line] for line in out_pat.strip().split("/")])
+        for _k in range(3):
             mapping[in_pat.tobytes()] = out_pat
             mapping[np.fliplr(in_pat).tobytes()] = out_pat
             in_pat = np.rot90(in_pat)

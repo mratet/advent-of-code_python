@@ -1,5 +1,6 @@
-from aocd import get_data
 from collections import defaultdict
+
+from aocd import get_data
 
 input = get_data(day=8, year=2021).splitlines()
 

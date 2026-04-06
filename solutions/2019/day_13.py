@@ -1,10 +1,9 @@
 import time
-
-from aocd import get_data
-from intcode import IntcodeComputer
 from itertools import batched
 
+from aocd import get_data
 from blessed import Terminal
+from intcode import IntcodeComputer
 
 aoc_input = get_data(day=13, year=2019)
 
@@ -37,10 +36,10 @@ class IntcodeGUI:
 
         # Initial drawing of the grid if it exists, otherwise it will be drawn by update_tile
         if self.grid:
-            self.min_x = min(k[0] for k in self.grid.keys())
-            self.max_x = max(k[0] for k in self.grid.keys())
-            self.min_y = min(k[1] for k in self.grid.keys())
-            self.max_y = max(k[1] for k in self.grid.keys())
+            self.min_x = min(k[0] for k in self.grid)
+            self.max_x = max(k[0] for k in self.grid)
+            self.min_y = min(k[1] for k in self.grid)
+            self.max_y = max(k[1] for k in self.grid)
 
             tile_map = {0: " ", 1: "█", 2: "▒", 3: self.term.bold_blue("_"), 4: "●"}
 

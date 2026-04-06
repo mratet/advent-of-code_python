@@ -2,10 +2,11 @@ from aocd import get_data
 
 input = get_data(day=7, year=2025).splitlines()
 
+
 # WRITE YOUR SOLUTION HERE
 def solve(lines, *, is_part_1: bool):
-    splitters = [[j for j, c in enumerate(line) if c == '^'] for i, line in enumerate(lines) if i % 2 == 0]
-    start_beam = lines[0].index('S')
+    splitters = [[j for j, c in enumerate(line) if c == "^"] for i, line in enumerate(lines) if i % 2 == 0]
+    start_beam = lines[0].index("S")
     cache = {}
 
     def count(beam, split_idx):
@@ -25,11 +26,14 @@ def solve(lines, *, is_part_1: bool):
 
     return count(start_beam, 1)
 
+
 def part_1(lines):
-    return solve(lines, is_part_1=True) # count splitters
+    return solve(lines, is_part_1=True)  # count splitters
+
 
 def part_2(lines):
-    return solve(lines, is_part_1=False) # count paths
+    return solve(lines, is_part_1=False)  # count paths
+
 
 # END OF SOLUTION
 print(f"My answer is {part_1(input)}")

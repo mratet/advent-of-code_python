@@ -1,8 +1,9 @@
+import re
+
+import numpy as np
 from aocd import get_data
 
 input = get_data(day=20, year=2017).splitlines()
-import re
-import numpy as np
 
 
 # WRITE YOUR SOLUTION HERE
@@ -24,9 +25,7 @@ def part_2(lines):
     for _ in range(1000):
         vel += acc
         pos += vel
-        _, inverse_idx, cnts = np.unique(
-            pos, axis=0, return_inverse=True, return_counts=True
-        )
+        _, inverse_idx, cnts = np.unique(pos, axis=0, return_inverse=True, return_counts=True)
         mask = cnts[inverse_idx] == 1
         if mask.any():
             pos = pos[mask]

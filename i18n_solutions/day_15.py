@@ -1,7 +1,6 @@
 from collections import defaultdict
-from datetime import datetime, timezone, timedelta, time
+from datetime import UTC, datetime, time, timedelta
 from zoneinfo import ZoneInfo
-
 
 input_blocks = open("input.txt").read().split("\n\n")
 
@@ -11,9 +10,7 @@ def parse_line(line):
     return {
         "name": parts[0].split(" in ")[-1] if "in" in parts[0] else parts[0],
         "timezone": parts[1],
-        "holidays": [
-            datetime.strptime(hd, "%d %B %Y").date() for hd in parts[2].split(";")
-        ],
+        "holidays": [datetime.strptime(hd, "%d %B %Y").date() for hd in parts[2].split(";")],
     }
 
 
@@ -21,7 +18,7 @@ support_offices, customer_companies = input_blocks
 support_offices = [parse_line(line) for line in support_offices.splitlines()]
 customer_companies = [parse_line(line) for line in customer_companies.splitlines()]
 
-base_dt = datetime(2022, 1, 1, tzinfo=timezone.utc)
+base_dt = datetime(2022, 1, 1, tzinfo=UTC)
 complete_year = [base_dt + timedelta(hours=0.5 * i) for i in range(365 * 24 * 2)]
 
 working_dts = set()

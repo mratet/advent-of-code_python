@@ -1,9 +1,9 @@
+import json
+import re
+
 from aocd import get_data
 
 input = get_data(day=12, year=2015)
-
-import re
-import json
 
 
 def part_1(input):

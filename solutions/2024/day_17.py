@@ -66,15 +66,12 @@ def part_1(lines):
 def part_2(lines):
     registers, instructions = _parse(lines)
     registers["A"] = 190384615275535
-    assert run_program(registers, instructions) == ",".join(
-        [str(n) for n in instructions]
-    )
+    assert run_program(registers, instructions) == ",".join([str(n) for n in instructions])
     return 190384615275535
     # instructions_test = [0, 3, 5, 4, 3, 0]
     # 117440 = int('0o034530, 8) * 8
     # '0o34530 = oct(117440 // 8)
     ##### To clean in the future
-    n = 4
     # for i in range(8 ** n, 8 ** (n + 1), 8):
     for i in range(int("0o5322353727230000", 8), int("0o5322353777700000", 8)):
         registers["A"] = i

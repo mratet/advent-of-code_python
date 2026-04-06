@@ -1,5 +1,6 @@
-from aocd import get_data
 from math import prod
+
+from aocd import get_data
 
 input = get_data(day=16, year=2021)
 
@@ -51,18 +52,14 @@ def decode_packet(bitstream, current_i):
             current_i += 15
             subpackets_end = current_i + packet_length
             while current_i < subpackets_end:
-                current_i, sum_child_ver, child_val = decode_packet(
-                    bitstream, current_i
-                )
+                current_i, sum_child_ver, child_val = decode_packet(bitstream, current_i)
                 version_sum += sum_child_ver
                 child_values.append(child_val)
         else:
             nb_packet = int(bitstream[current_i : current_i + 11], 2)
             current_i += 11
             for _ in range(nb_packet):
-                current_i, sum_child_ver, child_val = decode_packet(
-                    bitstream, current_i
-                )
+                current_i, sum_child_ver, child_val = decode_packet(bitstream, current_i)
                 version_sum += sum_child_ver
                 child_values.append(child_val)
 

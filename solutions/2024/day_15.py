@@ -19,12 +19,7 @@ def possible_move(mapping, x, y, dx, dy):
 
 def part_1(lines):
     grid = [list(l) for l in lines[0].split()]
-    [(px, py)] = [
-        (x, y)
-        for x in range(len(grid))
-        for y in range(len(grid[0]))
-        if grid[x][y] == "@"
-    ]
+    [(px, py)] = [(x, y) for x in range(len(grid)) for y in range(len(grid[0])) if grid[x][y] == "@"]
     moves = lines[1]
 
     for line in moves.split("\n"):
@@ -37,14 +32,7 @@ def part_1(lines):
                 py += dy
                 new_grid[px][py] = "@"
                 grid = new_grid
-    return sum(
-        [
-            100 * x + y
-            for x in range(len(grid))
-            for y in range(len(grid[0]))
-            if grid[x][y] == "O"
-        ]
-    )
+    return sum([100 * x + y for x in range(len(grid)) for y in range(len(grid[0])) if grid[x][y] == "O"])
 
 
 def find_block_to_move(grid, x, y, dx, dy):
@@ -73,20 +61,10 @@ def find_block_to_move(grid, x, y, dx, dy):
 
 def part_2(lines):
     grid = [
-        list(
-            row.replace("#", "##")
-            .replace("O", "[]")
-            .replace(".", "..")
-            .replace("@", "@.")
-        )
+        list(row.replace("#", "##").replace("O", "[]").replace(".", "..").replace("@", "@."))
         for row in lines[0].split()
     ]
-    [(px, py)] = [
-        (x, y)
-        for x in range(len(grid))
-        for y in range(len(grid[0]))
-        if grid[x][y] == "@"
-    ]
+    [(px, py)] = [(x, y) for x in range(len(grid)) for y in range(len(grid[0])) if grid[x][y] == "@"]
     moves = lines[1]
 
     for line in moves.split("\n"):
@@ -109,14 +87,7 @@ def part_2(lines):
             px, py = px + dx, py + dy
             grid[px][py] = "@"
 
-    return sum(
-        [
-            100 * x + y
-            for x in range(len(grid))
-            for y in range(len(grid[0]))
-            if grid[x][y] == "["
-        ]
-    )
+    return sum([100 * x + y for x in range(len(grid)) for y in range(len(grid[0])) if grid[x][y] == "["])
 
 
 # END OF SOLUTION

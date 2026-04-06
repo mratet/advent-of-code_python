@@ -1,8 +1,8 @@
+import itertools
+
 from aocd import get_data
 
 input = get_data(day=10, year=2015)
-
-import itertools
 
 
 def next_step(sequence):

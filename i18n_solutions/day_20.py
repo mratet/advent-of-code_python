@@ -26,9 +26,7 @@ def decode_utf8_extended(byte_stream):
 
 
 def codepoint_to_bytes(input_codepoints, bits_per_codepoint):
-    bin_stream = "".join(
-        [bin(codepoint)[2:].zfill(bits_per_codepoint) for codepoint in input_codepoints]
-    )
+    bin_stream = "".join([bin(codepoint)[2:].zfill(bits_per_codepoint) for codepoint in input_codepoints])
     return bytes([int(bin_stream[i : i + 8], 2) for i in range(0, len(bin_stream), 8)])
 
 

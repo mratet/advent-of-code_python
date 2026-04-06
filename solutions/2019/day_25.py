@@ -1,5 +1,5 @@
 from aocd import get_data
-from intcode import IntcodeComputer, MAP_TO_ASCII, MAP_FROM_ASCII
+from intcode import MAP_FROM_ASCII, MAP_TO_ASCII, IntcodeComputer
 
 aoc_input = get_data(day=25, year=2019)
 

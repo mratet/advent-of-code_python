@@ -14,9 +14,7 @@ def rotation_step(lengths):
         if l > len(L):
             continue
         if current_pos + l < len(L):
-            L[current_pos : current_pos + l] = list(
-                reversed(L[current_pos : current_pos + l])
-            )
+            L[current_pos : current_pos + l] = list(reversed(L[current_pos : current_pos + l]))
         else:
             l1, r1 = current_pos, len(L)
             l2, r2 = 0, l - (len(L) - current_pos)
@@ -46,21 +44,21 @@ def part_1(lines):
     return ans
 
 
+def dfs(node, squares, visited):
+    visited.add(node)
+    for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+        nx, ny = node[0] + dx, node[1] + dy
+        if (nx, ny) in squares and (nx, ny) not in visited:
+            dfs((nx, ny), squares, visited)
+
+
 def compute_connected_components(squares):
     nodes = set(squares)
     connected_components = []
     while nodes:
         visited = set()
-
-        def dfs(node):
-            visited.add(node)
-            for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
-                nx, ny = node[0] + dx, node[1] + dy
-                if (nx, ny) in squares and (nx, ny) not in visited:
-                    dfs((nx, ny))
-
         N = nodes.pop()
-        dfs(N)
+        dfs(N, squares, visited)
         connected_components.append(visited)
         nodes = nodes - visited
     return connected_components

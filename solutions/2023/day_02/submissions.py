@@ -1,4 +1,4 @@
-lines = open("input.txt", "r").readlines()
+lines = open("input.txt").readlines()
 
 # WRITE YOUR SOLUTION HERE
 
@@ -7,7 +7,7 @@ def main(lines):
     m_values = {"red": 0, "green": 0, "blue": 0}
 
     ans = 0
-    for id, line in enumerate(lines):
+    for _id, line in enumerate(lines):
         games = line.split(":")[1][:-1].split(";")
         values = m_values.copy()
         for game_set in games:
@@ -25,11 +25,11 @@ def main(lines):
 
 test_input = open("input-test.txt").readlines()
 test_lines = []
-for i, line in enumerate(test_input[3:]):
+for line in test_input[3:]:
     if line[0] == "-":
         break
     test_lines.append(line)
-solution = test_input[i + 4]
+solution = test_input[len(test_lines) + 4]
 
 print(f"My answer on test set is {main(test_lines)}")
 print(solution)

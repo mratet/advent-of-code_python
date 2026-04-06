@@ -1,5 +1,6 @@
-from aocd import get_data
 from collections import deque
+
+from aocd import get_data
 
 input = get_data(day=6, year=2021)
 

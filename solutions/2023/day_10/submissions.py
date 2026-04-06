@@ -25,7 +25,7 @@ def part_1(lines):
 
     while q:
         x, y = q.pop()
-        current_car = maze.get((x, y))
+        current_car = maze[(x, y)]
         visited.add((x, y))
 
         for move in next_move_allowed[current_car]:
@@ -47,7 +47,7 @@ def part_2(lines):
 
     while q:
         x, y = q.pop()
-        current_car = maze.get((x, y))
+        current_car = maze[(x, y)]
         visited.add((x, y))
 
         for move in next_move_allowed[current_car]:
@@ -79,11 +79,11 @@ def part_2(lines):
 
 test_input = open("input-test.txt").read().splitlines()
 test_lines = []
-for i, line in enumerate(test_input[3:]):
+for line in test_input[3:]:
     if line[0] == "-":
         break
     test_lines.append(line)
-solution = test_input[i + 4]
+solution = test_input[len(test_lines) + 4]
 
 print(f"My answer on test set for the first problem is {part_1(test_lines)}")
 print(solution)

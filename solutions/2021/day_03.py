@@ -1,16 +1,15 @@
-from aocd import get_data
 from collections import Counter
+
+from aocd import get_data
 
 input = get_data(day=3, year=2021).splitlines()
 
 
 # WRITE YOUR SOLUTION HERE
 def part_1(lines):
-    transposed_bits = ["".join(seq) for seq in zip(*lines)]
+    transposed_bits = ["".join(seq) for seq in zip(*lines, strict=False)]
     N = len(transposed_bits)
-    gamma_rate = int(
-        "".join(Counter(bits).most_common(1)[0][0] for bits in transposed_bits), 2
-    )
+    gamma_rate = int("".join(Counter(bits).most_common(1)[0][0] for bits in transposed_bits), 2)
     return gamma_rate * (2**N - 1 - gamma_rate)
 
 
@@ -18,10 +17,7 @@ def part_2(lines):
     def filter_by_bit_criteria(candidates, position, keep_most_common):
         bit_counts = Counter(bit[position] for bit in candidates)
         ones, zeros = bit_counts["1"], bit_counts["0"]
-        if keep_most_common:
-            target_bit = "1" if ones >= zeros else "0"
-        else:
-            target_bit = "1" if ones < zeros else "0"
+        target_bit = ("1" if ones >= zeros else "0") if keep_most_common else ("1" if ones < zeros else "0")
         return [bit for bit in candidates if bit[position] == target_bit]
 
     def get_rating(keep_most_common):

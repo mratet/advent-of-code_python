@@ -30,5 +30,6 @@ def part_1(lines):
 
     return encryption_key
 
+
 # END OF SOLUTION
 print(f"My answer is {part_1(input)}")

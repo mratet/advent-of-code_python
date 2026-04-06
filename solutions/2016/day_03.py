@@ -9,17 +9,14 @@ def valid_triangle(val):
 
 
 def part_1(input):
-    return sum(
-        valid_triangle(val)
-        for val in [[int(x) for x in line.split()] for line in input]
-    )
+    return sum(valid_triangle(val) for val in [[int(x) for x in line.split()] for line in input])
 
 
 def part_2(input):
     t, n = 0, len(input)
     for i in range(0, n, 3):
         matrix = [map(int, line.split()) for line in input[i : (i + 3)]]
-        rows = list(zip(*matrix))
+        rows = list(zip(*matrix, strict=False))
         t += sum([valid_triangle(val) for val in rows])
     return t
 

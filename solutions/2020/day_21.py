@@ -1,7 +1,8 @@
+import re
+
 from aocd import get_data
 
 input = get_data(day=21, year=2020)
-import re
 
 
 # WRITE YOUR SOLUTION HERE
@@ -36,10 +37,7 @@ def get_candidates(recipes, allergens):
         S = set()
         for recipe in recipes:
             if allergen in recipe["allergens"]:
-                if not S:
-                    S = set(recipe["ingredients"])
-                else:
-                    S = S.intersection(recipe["ingredients"])
+                S = set(recipe["ingredients"]) if not S else S.intersection(recipe["ingredients"])
         candidates[allergen] = S
     return candidates
 
@@ -59,9 +57,7 @@ def part_1(lines):
     recipes, ingredients, allergens = parse_recipe(lines)
     candidates = get_candidates(recipes, allergens)
     mapping = get_mapping_dict(candidates)
-    return sum(
-        [len(set(recipe["ingredients"]) - set(mapping.values())) for recipe in recipes]
-    )
+    return sum([len(set(recipe["ingredients"]) - set(mapping.values())) for recipe in recipes])
 
 
 def part_2(lines):

@@ -1,7 +1,8 @@
+from itertools import product
+
 from aocd import get_data
 
 input = get_data(day=25, year=2024).split("\n\n")
-from itertools import product
 
 
 def part_1(input):
@@ -9,7 +10,7 @@ def part_1(input):
     pins = set()
 
     for schema in input:
-        grid = list(zip(*schema.splitlines()))
+        grid = list(zip(*schema.splitlines(), strict=False))
         if grid[0][0] == "#":  # pins
             pins.add(tuple([t.count("#") - 1 for t in grid]))
         else:  # keys
@@ -17,7 +18,7 @@ def part_1(input):
 
     ans = 0
     for key, pin in product(keys, pins):
-        ans += all([t1 + t2 < 6 for t1, t2 in zip(key, pin)])
+        ans += all(t1 + t2 < 6 for t1, t2 in zip(key, pin, strict=False))
     return ans
 
 

@@ -1,6 +1,7 @@
-from aocd import get_data
-from itertools import accumulate, cycle
 import re
+from itertools import accumulate, cycle
+
+from aocd import get_data
 
 input = get_data(day=1, year=2018)
 

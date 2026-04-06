@@ -24,11 +24,7 @@ def dfs(grid, start, end):
         node = to_visit.pop(0)
         for dx, dy in ((-1, 0), (1, 0), (0, -1), (0, 1)):
             neigh_node = (node[0] + dx, node[1] + dy)
-            if (
-                neigh_node in grid
-                and grid[neigh_node] <= grid[node] + 1
-                and neigh_node not in distance
-            ):
+            if neigh_node in grid and grid[neigh_node] <= grid[node] + 1 and neigh_node not in distance:
                 distance[neigh_node] = distance[node] + 1
                 to_visit.append(neigh_node)
     return distance.get(end, 1e9)

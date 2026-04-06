@@ -10,7 +10,7 @@ def evaluate(input):
 
     def pure_evaluation(data):
         cnt = int(data[0]) if data[0].isdigit() else ram[data[0]]
-        for exp, n in zip(data[1::2], data[2::2]):
+        for exp, n in zip(data[1::2], data[2::2], strict=False):
             val = int(n) if n.isdigit() else ram[n]
             if exp == "+":
                 cnt += val
@@ -70,9 +70,7 @@ def add_parentheses_around_plus(line):
 
 
 def part_2(lines):
-    return sum(
-        [evaluate(add_parentheses_around_plus(line.replace(" ", ""))) for line in lines]
-    )
+    return sum([evaluate(add_parentheses_around_plus(line.replace(" ", ""))) for line in lines])
 
 
 # END OF SOLUTION

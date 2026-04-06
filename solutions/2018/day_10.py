@@ -1,5 +1,6 @@
-from aocd import get_data
 import re
+
+from aocd import get_data
 
 input = get_data(day=10, year=2018).splitlines()
 
@@ -9,7 +10,7 @@ def parse_input(lines):
 
 
 def compute_area(points):
-    xs, ys = zip(*points)
+    xs, ys = zip(*points, strict=False)
     min_x, max_x = min(xs), max(xs)
     min_y, max_y = min(ys), max(ys)
     area = (max_x - min_x) * (max_y - min_y)
@@ -17,7 +18,7 @@ def compute_area(points):
 
 
 def render_ascii(points):
-    xs, ys = zip(*points)
+    xs, ys = zip(*points, strict=False)
     min_x, max_x = min(xs), max(xs)
     min_y, max_y = min(ys), max(ys)
 

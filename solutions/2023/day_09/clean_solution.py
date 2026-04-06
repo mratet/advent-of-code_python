@@ -1,3 +1,5 @@
+import itertools
+
 from aocd import get_data
 
 input = get_data(day=9, year=2023).splitlines()
@@ -5,7 +7,7 @@ input = get_data(day=9, year=2023).splitlines()
 
 # WRITE YOUR SOLUTION HERE
 def next_history_value(history):
-    diffs = [b - a for a, b in zip(history, history[1:])]
+    diffs = [b - a for a, b in itertools.pairwise(history)]
     return history[-1] + next_history_value(diffs) if history else 0
 
 

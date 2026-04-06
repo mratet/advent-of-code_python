@@ -1,7 +1,8 @@
+import re
+
 from aocd import get_data
 
 input = get_data(day=22, year=2020)
-import re
 
 
 # WRITE YOUR SOLUTION HERE
@@ -35,7 +36,7 @@ def part_1(lines):
 def recursive_combat(deck_1, deck_2):
     mem = set()
     while deck_1 and deck_2:
-        p1_mem, p2_mem = tuple([1] + deck_1), tuple([2] + deck_2)
+        p1_mem, p2_mem = (1, *deck_1), (2, *deck_2)
         if p1_mem in mem or p2_mem in mem:
             return (["Winner"], [])
         else:
@@ -46,7 +47,7 @@ def recursive_combat(deck_1, deck_2):
         win_condition = card1 > card2
         if card1 <= len(deck_1) and card2 <= len(deck_2):
             (d1, d2) = recursive_combat(deck_1[:card1], deck_2[:card2])
-            win_condition = True if d1 else False
+            win_condition = bool(d1)
 
         if win_condition:
             deck_1.extend([card1, card2])

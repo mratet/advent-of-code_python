@@ -1,4 +1,5 @@
 import collections
+
 from aocd import get_data
 
 input = get_data(day=4, year=2016).splitlines()
@@ -20,9 +21,7 @@ def solve(input, part="part_1"):
         ID, checksum = password.split("[")
 
         count = collections.Counter("".join(letters))
-        sorted_count = sorted(
-            count.items(), key=lambda x: (x[1], -ord(x[0])), reverse=True
-        )
+        sorted_count = sorted(count.items(), key=lambda x: (x[1], -ord(x[0])), reverse=True)
         most_freq_letters = "".join([x for (x, y) in sorted_count])
         if most_freq_letters.startswith(checksum[:-1]):
             t += int(ID)

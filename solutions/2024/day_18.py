@@ -1,17 +1,18 @@
+import re
+from collections import defaultdict
+from heapq import heappop, heappush
+
 from aocd import get_data
 
 input = get_data(day=18, year=2024).splitlines()
-from collections import defaultdict
-from heapq import heappush, heappop
-import re
 
 # WRITE YOUR SOLUTION HERE
 X, Y = 71, 71
 
 
 def dijkstra(graph, source, target=None):
-    prec = {k: None for k in graph}
-    black = {k: False for k in graph}
+    prec = dict.fromkeys(graph)
+    black = dict.fromkeys(graph, False)
     dist = {k: float("inf") for k in graph}
     dist[source] = 0
     heap = [(0, source)]

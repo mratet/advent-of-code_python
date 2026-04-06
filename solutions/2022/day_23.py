@@ -26,18 +26,12 @@ DIRS_PROPOSAL = [
 
 
 def parse_input(lines):
-    return [
-        (x, -y) for y, line in enumerate(lines) for x, c in enumerate(line) if c == "#"
-    ]
+    return [(x, -y) for y, line in enumerate(lines) for x, c in enumerate(line) if c == "#"]
 
 
 def is_surrounded(elve, directions, elf_positions):
     x, y = elve
-    return all(
-        (x + dx, y + dy) not in elf_positions
-        for dir in directions
-        for dx, dy in [DIRECTIONS[dir]]
-    )
+    return all((x + dx, y + dy) not in elf_positions for dir in directions for dx, dy in [DIRECTIONS[dir]])
 
 
 def propose_direction(elve, elf_positions, start_idx):
@@ -60,10 +54,7 @@ def simulate_round(elves, round_number):
         proposed_moves.append((elf[0] + dx, elf[1] + dy))
 
     move_counts = Counter(proposed_moves)
-    return [
-        elf if move_counts[move] > 1 else move
-        for elf, move in zip(elves, proposed_moves)
-    ]
+    return [elf if move_counts[move] > 1 else move for elf, move in zip(elves, proposed_moves, strict=False)]
 
 
 # WRITE YOUR SOLUTION HERE

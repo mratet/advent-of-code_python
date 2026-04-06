@@ -1,6 +1,7 @@
+import re
 from collections import defaultdict
 from datetime import datetime
-import re
+
 from aocd import get_data
 
 input_lines = get_data(day=4, year=2018).splitlines()
@@ -18,12 +19,14 @@ def parse_input(lines):
 def analyze_guard_sleep(records):
     guards = defaultdict(lambda: [0] * 60)
     current_guard = None
-    asleep_minute = None
+    asleep_minute = 0
 
     for timestamp, event in records:
         minute = timestamp.minute
         if "Guard" in event:
-            current_guard = int(re.search(r"#(\d+)", event).group(1))
+            m = re.search(r"#(\d+)", event)
+            assert m
+            current_guard = int(m.group(1))
         elif "falls asleep" in event:
             asleep_minute = minute
         elif "wakes up" in event:
@@ -45,11 +48,7 @@ def part_2(lines):
     records = parse_input(lines)
     guards = analyze_guard_sleep(records)
     most_frequent = max(
-        (
-            (gid, minute, count)
-            for gid, minutes in guards.items()
-            for minute, count in enumerate(minutes)
-        ),
+        ((gid, minute, count) for gid, minutes in guards.items() for minute, count in enumerate(minutes)),
         key=lambda x: x[2],
     )
     guard_id, best_minute, _ = most_frequent

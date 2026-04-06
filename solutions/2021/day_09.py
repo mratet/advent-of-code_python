@@ -1,5 +1,6 @@
-from aocd import get_data
 from math import prod
+
+from aocd import get_data
 
 NEIGHBOORS = [(-1, 0), (1, 0), (0, -1), (0, 1)]
 
@@ -16,11 +17,7 @@ def detect_low_points(grid):
     low_points = []
     for h in range(H):
         for w in range(W):
-            height_cand = [
-                grid[h + dh][w + dw]
-                for dh, dw in NEIGHBOORS
-                if 0 <= h + dh < H and 0 <= w + dw < W
-            ]
+            height_cand = [grid[h + dh][w + dw] for dh, dw in NEIGHBOORS if 0 <= h + dh < H and 0 <= w + dw < W]
             if all(neigh_height > grid[h][w] for neigh_height in height_cand):
                 low_points.append((h, w))
     return low_points

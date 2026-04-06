@@ -11,7 +11,7 @@ def dragon_curve(a):
 
 def checksum(s):
     while len(s) % 2 == 0:
-        s = [e1 == e2 for e1, e2 in zip(s[::2], s[1::2])]
+        s = [e1 == e2 for e1, e2 in zip(s[::2], s[1::2], strict=False)]
     return s
 
 

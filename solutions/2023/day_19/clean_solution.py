@@ -1,9 +1,9 @@
+# WRITE YOUR SOLUTION HERE
+from operator import gt, lt
+
 from aocd import get_data
 
 input = get_data(day=19, year=2023).splitlines()
-
-# WRITE YOUR SOLUTION HERE
-from operator import lt, gt
 
 OPERATORS = {
     "<": lt,
@@ -28,8 +28,6 @@ class Conditional:
         elif self.op == ">":
             F = (part[self.key][0], min(part[self.key][1], self.value))
             T = (max(self.value + 1, part[self.key][0]), part[self.key][1])
-        else:
-            assert False
 
         if T[0] <= T[1]:
             t_part = dict(part)
@@ -113,7 +111,7 @@ def parseParts(lines):
 
 
 def parseWorkflows(lines):
-    workflows = dict()
+    workflows = {}
 
     for line in lines:
         wf = Workflow(line)
@@ -144,7 +142,7 @@ def part_1(input):
 
 def part_2(input):
     workflows, _ = _parse(input)
-    start = {k: (1, 4000) for k in "xmas"}
+    start = dict.fromkeys("xmas", (1, 4000))
     return workflows["in"].count(start, workflows)
 
 

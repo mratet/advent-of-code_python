@@ -1,7 +1,6 @@
 from collections import defaultdict
 from datetime import datetime
 
-
 input_rows = open("input.txt").read().splitlines()
 
 

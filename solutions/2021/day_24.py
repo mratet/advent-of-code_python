@@ -1,5 +1,6 @@
-from aocd import get_data
 from itertools import product
+
+from aocd import get_data
 
 input = get_data(day=24, year=2021).splitlines()
 
@@ -47,7 +48,7 @@ def generate_constraints(lines):
     C = [int(line[-3:]) for line in lines[5::18]]
     C2 = [int(line[-2:]) for line in lines[15::18]]
     stack = []
-    for idx, (c1, c2) in enumerate(zip(C, C2)):
+    for idx, (c1, c2) in enumerate(zip(C, C2, strict=False)):
         if c1 > 0:
             stack.append((idx, c2))
         else:
@@ -60,7 +61,7 @@ def is_valid(combo, constraints):
     digits = [0] * 14
     targets = {target for target, _, _ in constraints}
     idx_free = sorted(set(range(14)) - targets)
-    for i, val in zip(idx_free, combo):
+    for i, val in zip(idx_free, combo, strict=False):
         digits[i] = val
 
     for target, source, delta in constraints:
@@ -74,11 +75,7 @@ def is_valid(combo, constraints):
 
 def generate_all_valid_numbers(constraints):
     domain = range(1, 10)
-    return [
-        number
-        for combo in product(domain, repeat=7)
-        if (number := is_valid(combo, constraints))
-    ]
+    return [number for combo in product(domain, repeat=7) if (number := is_valid(combo, constraints))]
 
 
 # WRITE YOUR SOLUTION HERE

@@ -1,10 +1,10 @@
+# WRITE YOUR SOLUTION HERE
+import math
+import re
+
 from aocd import get_data
 
 input = get_data(day=8, year=2023).splitlines()
-
-# WRITE YOUR SOLUTION HERE
-import re
-import math
 
 binary = {"L": 0, "R": 1}
 
@@ -24,9 +24,7 @@ def network_navigation(state, movements, network, part):
     while True:
         # We move either L/R and repeat the instruction until we verify our condition
         state = network[state][movements[i % len(movements)]]
-        if part == "part_1" and state == "ZZZ":
-            return i + 1
-        elif part == "part_2" and state[2] == "Z":
+        if (part == "part_1" and state == "ZZZ") or (part == "part_2" and state[2] == "Z"):
             return i + 1
 
         i += 1
@@ -41,11 +39,8 @@ def part_1(input):
 def part_2(input):
     movements, network = _parse(input)
 
-    starting_states = [source for source in network.keys() if source[2] == "A"]
-    tab = [
-        network_navigation(state, movements, network, "part_2")
-        for state in starting_states
-    ]
+    starting_states = [source for source in network if source[2] == "A"]
+    tab = [network_navigation(state, movements, network, "part_2") for state in starting_states]
 
     return math.lcm(*tab)
 

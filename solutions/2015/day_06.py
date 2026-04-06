@@ -1,15 +1,15 @@
+import re
+
+import numpy as np
 from aocd import get_data
 
 input = get_data(day=6, year=2015)
 
-import numpy as np
-import re
-
 
 def _parse(line):
-    op, x_min, y_min, x_max, y_max = re.search(
-        "(\w+) (\d+),(\d+) through (\d+),(\d+)", line
-    ).groups()
+    m = re.search(r"(\w+) (\d+),(\d+) through (\d+),(\d+)", line)
+    assert m
+    op, x_min, y_min, x_max, y_max = m.groups()
     return op, int(x_min), int(y_min), int(x_max) + 1, int(y_max) + 1
 
 

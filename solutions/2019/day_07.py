@@ -1,6 +1,7 @@
+from itertools import permutations
+
 from aocd import get_data
 from intcode import IntcodeComputer
-from itertools import permutations
 
 aoc_input = get_data(day=7, year=2019)
 
@@ -21,7 +22,7 @@ def part_2(lines):
     tab = []
     for perm in permutations(range(5, 10)):
         amplifiers = [IntcodeComputer(lines) for _ in range(5)]
-        for p, amplifier in zip(perm, amplifiers):
+        for p, amplifier in zip(perm, amplifiers, strict=False):
             amplifier.input_buffer.append(p)
 
         cnt = 0

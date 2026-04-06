@@ -1,8 +1,8 @@
-from functools import lru_cache
+import re
+from functools import cache
+from math import prod
 
 from aocd import get_data
-from math import prod
-import re
 
 MAX_ROBOTS = 10
 MAX_RESOURCES = 40
@@ -23,6 +23,7 @@ def parse_blueprints(text):
 
     for line in text.splitlines():
         match = blueprint_pattern.match(line)
+        assert match
         (
             blueprint_id,
             ore_cost,
@@ -47,7 +48,7 @@ def parse_blueprints(text):
 def simulate_blueprint(blueprint, max_minutes):
     max_geodes = 0
 
-    @lru_cache(maxsize=None)
+    @cache
     def simulate(minute, ore_r, clay_r, obs_r, geo_r, ore, clay, obs, geo):
         nonlocal max_geodes
 
@@ -115,9 +116,7 @@ def part_1(lines):
 
 def part_2(lines):
     blueprints = parse_blueprints(lines)
-    return prod(
-        simulate_blueprint(blueprint, max_minutes=32) for blueprint in blueprints[:3]
-    )
+    return prod(simulate_blueprint(blueprint, max_minutes=32) for blueprint in blueprints[:3])
 
 
 # END OF SOLUTION

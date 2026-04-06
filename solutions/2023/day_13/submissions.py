@@ -7,8 +7,8 @@ def check_mirrors(tab, mismatched):
     cnt = 0
 
     while index < n - 1:
-        while 0 <= index - i and index + i + 1 <= n - 1:
-            cnt += sum([x != y for x, y in zip(tab[index + 1 + i], tab[index - i])])
+        while index - i >= 0 and index + i + 1 <= n - 1:
+            cnt += sum([x != y for x, y in zip(tab[index + 1 + i], tab[index - i], strict=False)])
             i += 1
 
         if cnt == mismatched:
@@ -26,10 +26,7 @@ def part_1(lines):
     pattern = []
     for line in lines:
         if not line:
-            cols = [
-                "".join([pattern[i][j] for i in range(len(pattern))])
-                for j in range(len(pattern[0]))
-            ]
+            cols = ["".join([pattern[i][j] for i in range(len(pattern))]) for j in range(len(pattern[0]))]
             patterns.append((pattern, cols))
             pattern = []
         else:
@@ -37,10 +34,7 @@ def part_1(lines):
 
     # To add the last pattern if it has not been done before
     if pattern:
-        cols = [
-            "".join([pattern[i][j] for i in range(len(pattern))])
-            for j in range(len(pattern[0]))
-        ]
+        cols = ["".join([pattern[i][j] for i in range(len(pattern))]) for j in range(len(pattern[0]))]
         patterns.append((pattern, cols))
 
     hor_reflec, vert_reflec = 0, 0
@@ -56,10 +50,7 @@ def part_2(lines):
     pattern = []
     for line in lines:
         if not line:
-            cols = [
-                "".join([pattern[i][j] for i in range(len(pattern))])
-                for j in range(len(pattern[0]))
-            ]
+            cols = ["".join([pattern[i][j] for i in range(len(pattern))]) for j in range(len(pattern[0]))]
             patterns.append((pattern, cols))
             pattern = []
         else:
@@ -67,10 +58,7 @@ def part_2(lines):
 
     # To add the last pattern if it has not been done before
     if pattern:
-        cols = [
-            "".join([pattern[i][j] for i in range(len(pattern))])
-            for j in range(len(pattern[0]))
-        ]
+        cols = ["".join([pattern[i][j] for i in range(len(pattern))]) for j in range(len(pattern[0]))]
         patterns.append((pattern, cols))
 
     hor_reflec, vert_reflec = 0, 0
@@ -86,11 +74,11 @@ def part_2(lines):
 
 test_input = open("input-test.txt").read().splitlines()
 test_lines = []
-for i, line in enumerate(test_input[3:]):
+for line in test_input[3:]:
     if line and line[0] == "-":
         break
     test_lines.append(line)
-solution = test_input[i + 4]
+solution = test_input[len(test_lines) + 4]
 
 print(f"My answer on test set for the first problem is {part_1(test_lines)}")
 print(solution)

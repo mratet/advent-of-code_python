@@ -1,7 +1,7 @@
+import re
 from collections import namedtuple
 
 from aocd import get_data
-import re
 
 input = get_data(day=22, year=2022)
 FACE_SIZE = 50
@@ -79,9 +79,7 @@ def build_face_map(grid):
 
 
 def get_face_id(x, y, face_map, face_size=FACE_SIZE):
-    return face_map.get(
-        ((x // face_size), (y // face_size)), None
-    )  # None si hors des faces
+    return face_map.get(((x // face_size), (y // face_size)), None)  # None si hors des faces
 
 
 def get_real_coords(pos, face_map, face_size=FACE_SIZE):
@@ -119,20 +117,8 @@ def wrap_position(pos, dir_idx, part):
     sid = f"{fid}{direction.letter}"
 
     if part == "part_1":
-        x = (
-            FACE_SIZE - 1
-            if direction.letter == "L"
-            else 0
-            if direction.letter == "R"
-            else x
-        )
-        y = (
-            FACE_SIZE - 1
-            if direction.letter == "U"
-            else 0
-            if direction.letter == "D"
-            else y
-        )
+        x = FACE_SIZE - 1 if direction.letter == "L" else 0 if direction.letter == "R" else x
+        y = FACE_SIZE - 1 if direction.letter == "U" else 0 if direction.letter == "D" else y
     elif part == "part_2":
         match sid:
             case "1R":

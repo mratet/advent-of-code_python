@@ -1,5 +1,5 @@
-from collections import defaultdict, deque
 import heapq
+from collections import defaultdict
 
 from aocd import get_data
 

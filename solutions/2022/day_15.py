@@ -1,5 +1,6 @@
-from aocd import get_data
 import re
+
+from aocd import get_data
 
 input = get_data(day=15, year=2022).splitlines()
 

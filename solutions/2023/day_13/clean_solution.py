@@ -9,8 +9,8 @@ def check_mirrors(tab, mismatched):
     cnt = 0
 
     while index < n - 1:
-        while 0 <= index - i and index + i + 1 <= n - 1:
-            cnt += sum([x != y for x, y in zip(tab[index + 1 + i], tab[index - i])])
+        while index - i >= 0 and index + i + 1 <= n - 1:
+            cnt += sum([x != y for x, y in zip(tab[index + 1 + i], tab[index - i], strict=False)])
             i += 1
 
         if cnt == mismatched:
@@ -29,20 +29,14 @@ def _parse(input):
 
     for line in input:
         if not line:
-            cols = [
-                "".join([pattern[i][j] for i in range(len(pattern))])
-                for j in range(len(pattern[0]))
-            ]
+            cols = ["".join([pattern[i][j] for i in range(len(pattern))]) for j in range(len(pattern[0]))]
             patterns.append((pattern, cols))
             pattern = []
         else:
             pattern.append(line)
 
     if pattern:
-        cols = [
-            "".join([pattern[i][j] for i in range(len(pattern))])
-            for j in range(len(pattern[0]))
-        ]
+        cols = ["".join([pattern[i][j] for i in range(len(pattern))]) for j in range(len(pattern[0]))]
         patterns.append((pattern, cols))
 
     return patterns

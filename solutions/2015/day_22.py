@@ -1,8 +1,8 @@
+from copy import deepcopy
+
 from aocd import get_data
 
 input = get_data(day=22, year=2015).splitlines()
-
-from copy import deepcopy
 
 spells = {
     "missile": {
@@ -120,9 +120,7 @@ def play(player, boss, active_spells, spent_mana, player_turn=True, part2=False)
                         part2,
                     )
     else:
-        player_this_turn["hp"] -= max(
-            1, boss_this_turn["damage"] - player_this_turn["armor"]
-        )
+        player_this_turn["hp"] -= max(1, boss_this_turn["damage"] - player_this_turn["armor"])
         if player_this_turn["hp"] > 0:
             play(
                 player_this_turn,

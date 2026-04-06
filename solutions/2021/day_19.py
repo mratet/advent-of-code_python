@@ -2,7 +2,6 @@ import re
 from itertools import permutations, product
 
 import numpy as np
-
 from aocd import get_data
 
 input = get_data(day=19, year=2021).split("\n\n")
@@ -60,15 +59,10 @@ def find_matching(A, B):
 def solve(scanners_relative):
     ROTATIONS = generate_rotation_matrices()
     IDENTITY_MATRIX = np.identity(3, dtype=int)
-    IDENTITY_ROT_ID = next(
-        i for i, R in enumerate(ROTATIONS) if np.array_equal(R, IDENTITY_MATRIX)
-    )
+    IDENTITY_ROT_ID = next(i for i, R in enumerate(ROTATIONS) if np.array_equal(R, IDENTITY_MATRIX))
 
     scanners_absolute = {0: ([0, 0, 0], IDENTITY_ROT_ID)}  # 3 is the id for identity
-    distance_matrices = {
-        sid: compute_distance_between_beacons(s_data)
-        for sid, s_data in scanners_relative.items()
-    }
+    distance_matrices = {sid: compute_distance_between_beacons(s_data) for sid, s_data in scanners_relative.items()}
 
     queue = [0]
     processed_scanners = []
@@ -86,9 +80,7 @@ def solve(scanners_relative):
         for scanner_id, scanner in scanners_relative.items():
             if scanner_id == base_scanner_id:
                 continue
-            matching_pairs = find_matching(
-                base_dist_matrix, distance_matrices[scanner_id]
-            )
+            matching_pairs = find_matching(base_dist_matrix, distance_matrices[scanner_id])
             if len(matching_pairs) >= MIN_BEACON:
                 base_idx, idx = np.array(matching_pairs).T
                 s0, s1 = base_scanner[base_idx], scanner[idx]

@@ -1,9 +1,10 @@
 from collections import defaultdict
-from functools import lru_cache
+from functools import cache
 
 from aocd import get_data
 
 input = get_data(day=11, year=2025).splitlines()
+
 
 # WRITE YOUR SOLUTION HERE
 def build_graph(lines):
@@ -15,9 +16,9 @@ def build_graph(lines):
     graph_frozen = defaultdict(tuple, {k: tuple(v) for k, v in graph.items()})
     return graph_frozen
 
-def make_counter(graph):
 
-    @lru_cache(maxsize=None)
+def make_counter(graph):
+    @cache
     def count(u, target):
         if u == target:
             return 1
@@ -25,17 +26,20 @@ def make_counter(graph):
 
     return count
 
+
 def part_1(lines):
     graph = build_graph(lines)
     count = make_counter(graph)
-    return count('you', 'out')
+    return count("you", "out")
+
 
 def part_2(lines):
     graph = build_graph(lines)
     count = make_counter(graph)
-    svr_dac_fft_out = count('svr','dac') * count('dac','fft') * count('fft','out')
-    svr_fft_dac_out = count('svr','fft') * count('fft','dac') * count('dac','out')
+    svr_dac_fft_out = count("svr", "dac") * count("dac", "fft") * count("fft", "out")
+    svr_fft_dac_out = count("svr", "fft") * count("fft", "dac") * count("dac", "out")
     return svr_dac_fft_out + svr_fft_dac_out
+
 
 # END OF SOLUTION
 print(f"My answer is {part_1(input)}")

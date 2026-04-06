@@ -9,7 +9,7 @@ def part_1(lines):
     A = int(lines[0].split()[-1])
     B = int(lines[1].split()[-1])
     ans = 0
-    for i in range(N):
+    for _i in range(N):
         A = (A * 16807) % 2147483647
         B = (B * 48271) % 2147483647
         if (A - B) % 2**16 == 0:
@@ -29,7 +29,7 @@ def part_2(lines):
     A = int(lines[0].split()[-1])
     B = int(lines[1].split()[-1])
     ans = 0
-    for i in range(N):
+    for _i in range(N):
         A = get_next_value(A, 16807, 4)
         B = get_next_value(B, 48271, 8)
         assert A % 4 == 0 and B % 8 == 0

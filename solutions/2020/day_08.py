@@ -1,11 +1,10 @@
 from aocd import get_data
 
 input = get_data(day=8, year=2020).splitlines()
-from typing import List
 
 
 # WRITE YOUR SOLUTION HERE
-def compute_accumulator(lines: List[str]) -> int:
+def compute_accumulator(lines: list[str]) -> tuple[int, list, bool]:
     i = 0
     hist = {0}
     accumulator = 0

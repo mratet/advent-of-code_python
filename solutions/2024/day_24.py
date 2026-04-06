@@ -1,10 +1,10 @@
+from collections import deque
+from operator import and_, or_, xor
+
 from aocd import get_data
+from graphviz import Digraph
 
 input = get_data(day=24, year=2024)
-
-from operator import and_, or_, xor
-from collections import deque
-from graphviz import Digraph
 
 
 class Module:
@@ -54,7 +54,7 @@ def part_1(lines):
 
     ans = sorted([(k, v) for k, v in state.items() if k[0] == "z"], reverse=True)
     final_int = ""
-    for k, v in ans:
+    for _k, v in ans:
         final_int += str(v)
     return int(final_int, 2)
 

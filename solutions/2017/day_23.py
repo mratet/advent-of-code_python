@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 from aocd import get_data
 
 input = get_data(day=23, year=2017).splitlines()
@@ -21,9 +23,6 @@ def is_prime(n):
     return True
 
 
-from collections import defaultdict
-
-
 # WRITE YOUR SOLUTION HERE
 def part_1(lines):
     i = 0
@@ -41,9 +40,8 @@ def part_1(lines):
         elif op == "mul":
             registers[X] *= Y
             ans += 1
-        elif op == "jnz":
-            if type(X) == int or registers[X] != 0:
-                i += Y - 1
+        elif op == "jnz" and (isinstance(X, int) or registers[X] != 0):
+            i += Y - 1
         i += 1
     return ans
 

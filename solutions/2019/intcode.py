@@ -1,4 +1,5 @@
 from collections import deque
+from typing import ClassVar
 
 MAP_FROM_ASCII = lambda s: "".join(map(chr, s))
 MAP_TO_ASCII = lambda s: list(map(ord, s))
@@ -8,7 +9,7 @@ class IntcodeComputer:
     _LOAD = 0
     _WRITE = 1
 
-    _OPERATIONS = {
+    _OPERATIONS: ClassVar[dict] = {
         1: (_LOAD, _LOAD, _WRITE),
         2: (_LOAD, _LOAD, _WRITE),
         3: (_WRITE,),
@@ -26,7 +27,7 @@ class IntcodeComputer:
 
     def __init__(self, program_file):
         init_program = self.read_program(program_file)
-        self.memory = {i: m for i, m in enumerate(init_program)}
+        self.memory = dict(enumerate(init_program))
         self.input_buffer = deque([])
         self.output_buffer = deque([])
         self.rel_base = 0
@@ -62,12 +63,10 @@ class IntcodeComputer:
             operations = self._OPERATIONS[op]
             parameters = [self.memory[self.ip + 1 + i] for i in range(len(operations))]
             get_decomposition = lambda n, a: (n // 10**a) % 10
-            parameters_mode = [
-                get_decomposition(opcode, i + 2) for i in range(len(operations))
-            ]
+            parameters_mode = [get_decomposition(opcode, i + 2) for i in range(len(operations))]
             params = [
                 self.apply_mode(p, p_mode, operations[i])
-                for i, (p, p_mode) in enumerate(zip(parameters, parameters_mode))
+                for i, (p, p_mode) in enumerate(zip(parameters, parameters_mode, strict=False))
             ]
 
             if op == 1:

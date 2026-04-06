@@ -1,16 +1,15 @@
+import collections
+import itertools
+import re
+
 from aocd import get_data
 
 input = get_data(day=13, year=2015).splitlines()
-import re
-import collections
-import itertools
 
 
 def _parse(input):
     graph = collections.defaultdict(dict)
-    pattern = re.compile(
-        r"(\w+) would (gain|lose) (\d+) happiness units by sitting next to (\w+)\."
-    )
+    pattern = re.compile(r"(\w+) would (gain|lose) (\d+) happiness units by sitting next to (\w+)\.")
 
     for line in input:
         nom1, action, valeur, nom2 = pattern.findall(line)[0]
@@ -24,8 +23,7 @@ def compute_hapiness(graph):
     total_changed = []
     for arrangement in arrangements:
         changed = sum(
-            graph[v][arrangement[(i + 1) % n]] + graph[v][arrangement[i - 1]]
-            for i, v in enumerate(arrangement)
+            graph[v][arrangement[(i + 1) % n]] + graph[v][arrangement[i - 1]] for i, v in enumerate(arrangement)
         )
         total_changed.append(changed)
     return max(total_changed)

@@ -1,7 +1,7 @@
 from enum import Enum
+from heapq import heappop, heappush
 
 from aocd import get_data
-from heapq import heappop, heappush
 
 input = get_data(day=22, year=2018).splitlines()
 
@@ -31,9 +31,7 @@ def get_erosion_grid(X, Y, depth, target):
     erosion_grid = {}
     for x in range(X + 1):
         for y in range(Y + 1):
-            if (x, y) == (0, 0):
-                index_geologique = 0
-            elif (x, y) == target:
+            if (x, y) == (0, 0) or (x, y) == target:
                 index_geologique = 0
             elif y == 0:
                 index_geologique = x * 16807

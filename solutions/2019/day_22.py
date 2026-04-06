@@ -40,6 +40,7 @@ def part_1(lines):
     deck = manual_shuffling(list(range(10007)), instructions)
     return deck.index(2019)
 
+
 def get_linear_params(instr):
     a, b = 1, 0
     for inst, n in instr:

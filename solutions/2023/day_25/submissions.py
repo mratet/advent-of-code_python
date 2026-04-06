@@ -1,4 +1,5 @@
 import collections
+
 import graphviz
 
 lines = open("input.txt").read().splitlines()

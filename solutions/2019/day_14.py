@@ -1,6 +1,6 @@
 from collections import defaultdict
-
 from math import ceil
+
 from aocd import get_data
 
 aoc_input = get_data(day=14, year=2019).splitlines()

@@ -1,8 +1,9 @@
 import re
+from hashlib import md5
+
 from aocd import get_data
 
 input = get_data(day=14, year=2016)
-from hashlib import md5
 
 
 def extend_hash(hash):
@@ -16,11 +17,7 @@ def match_md5(input, part="part_1"):
     visited = {}
     while cnt < 64:
         new_input = input + str(i)
-        my_hash = (
-            extend_hash(new_input)
-            if part == "part_2"
-            else md5(new_input.encode()).hexdigest()
-        )
+        my_hash = extend_hash(new_input) if part == "part_2" else md5(new_input.encode()).hexdigest()
         match = re.search(r"(.)\1\1", my_hash)
         if match:
             c = match.group(1)
@@ -29,11 +26,7 @@ def match_md5(input, part="part_1"):
                 if temp_input in visited:
                     my_hash = visited[temp_input]
                 else:
-                    my_hash = (
-                        extend_hash(temp_input)
-                        if part == "part_2"
-                        else md5(temp_input.encode()).hexdigest()
-                    )
+                    my_hash = extend_hash(temp_input) if part == "part_2" else md5(temp_input.encode()).hexdigest()
                     visited[temp_input] = my_hash
 
                 if re.search(c * 5, my_hash):

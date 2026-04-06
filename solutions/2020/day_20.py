@@ -1,11 +1,11 @@
-from aocd import get_data
-
-input = get_data(day=20, year=2020)
-
+import re
 from collections import defaultdict
 from itertools import product
 from math import prod, sqrt
-import re
+
+from aocd import get_data
+
+input = get_data(day=20, year=2020)
 
 SEA_MONSTERS = ["                  # ", "#    ##    ##    ###", " #  #  #  #  #  #   "]
 
@@ -23,7 +23,7 @@ def parse_tiles(input):
 
 
 def rot_90(l):
-    return ["".join(reversed(x)) for x in zip(*l)]
+    return ["".join(reversed(x)) for x in zip(*l, strict=False)]
 
 
 def vertical_flip(l):
@@ -38,7 +38,7 @@ def get_all_image_variations(tile):
     var = {"0": tile, "0f": vertical_flip(tile)}
     for i in range(3):
         tile = rot_90(tile)
-        var.update({f"{str(i + 1)}": tile, f"{str(i + 1)}f": vertical_flip(tile)})
+        var.update({f"{i + 1!s}": tile, f"{i + 1!s}f": vertical_flip(tile)})
     return var
 
 
@@ -63,7 +63,7 @@ def complete_image(tiles, mapping, starting_tile):
 
     def backtrack(s):
         if s == n**2:
-            copy = [[c for c in row] for row in image]
+            copy = [list(row) for row in image]
             solution.append(copy)
             return
 
@@ -81,7 +81,7 @@ def complete_image(tiles, mapping, starting_tile):
         for next_id in mapping[ref_id]:
             if next_id in available_tiles:
                 for v_id, v_tile in tiles[next_id].items():
-                    if all([match_tiles(ref_tile, v_tile) for ref_tile in ref_tiles]):
+                    if all(match_tiles(ref_tile, v_tile) for ref_tile in ref_tiles):
                         image[i][j] = (next_id, v_id)
                         available_tiles.remove(next_id)
 
@@ -107,9 +107,7 @@ def count_sea_monsters(full_image):
                 for l in range(monster_size)
                 if SEA_MONSTERS[k][l] == "#"
             ]
-            monster_cnt += int(
-                monster_match.count("#") == "".join(SEA_MONSTERS).count("#")
-            )
+            monster_cnt += int(monster_match.count("#") == "".join(SEA_MONSTERS).count("#"))
 
     return monster_cnt
 
@@ -135,9 +133,7 @@ def get_adjacent_tiles(tiles):
     for t_id1, t_id2 in product(tiles, repeat=2):
         if t_id1 == t_id2:
             continue
-        for (mode_id1, v1), (mode_id2, v2) in product(
-            tiles[t_id1].items(), tiles[t_id2].items()
-        ):
+        for (_mode_id1, v1), (_mode_id2, v2) in product(tiles[t_id1].items(), tiles[t_id2].items()):
             if match_tiles(v1, v2):
                 mapping[t_id1].add(t_id2)
     return mapping
@@ -145,31 +141,20 @@ def get_adjacent_tiles(tiles):
 
 def part_1(lines):
     init_tiles = parse_tiles(lines)
-    tiles = {
-        tile_id: get_all_image_variations(tile)
-        for (tile_id, tile) in init_tiles.items()
-    }
+    tiles = {tile_id: get_all_image_variations(tile) for (tile_id, tile) in init_tiles.items()}
     mapping = get_adjacent_tiles(tiles)
-    return prod(
-        [tile_id for tile_id, neighbors in mapping.items() if len(neighbors) == 2]
-    )
+    return prod([tile_id for tile_id, neighbors in mapping.items() if len(neighbors) == 2])
 
 
 def part_2(lines):
     init_tiles = parse_tiles(lines)
-    tiles = {
-        tile_id: get_all_image_variations(tile)
-        for (tile_id, tile) in init_tiles.items()
-    }
+    tiles = {tile_id: get_all_image_variations(tile) for (tile_id, tile) in init_tiles.items()}
     borderless_tiles = {
-        tile_id: {mode: remove_border(tile) for mode, tile in tiles[tile_id].items()}
-        for tile_id in tiles
+        tile_id: {mode: remove_border(tile) for mode, tile in tiles[tile_id].items()} for tile_id in tiles
     }
 
     mapping = get_adjacent_tiles(tiles)
-    corner_tile = [
-        tile_id for tile_id, neighbors in mapping.items() if len(neighbors) == 2
-    ]
+    corner_tile = [tile_id for tile_id, neighbors in mapping.items() if len(neighbors) == 2]
 
     upper_left_corner = corner_tile[0]
     for mode in ["0", "0f", "1", "1f", "2", "2f", "3", "3f"]:
@@ -182,10 +167,7 @@ def part_2(lines):
         for tile in get_all_image_variations(full_image).values():
             c = count_sea_monsters(tile)
             if c:
-                return (
-                    sum([row.count("#") for row in full_image])
-                    - "".join(SEA_MONSTERS).count("#") * c
-                )
+                return sum([row.count("#") for row in full_image]) - "".join(SEA_MONSTERS).count("#") * c
 
 
 # END OF SOLUTION

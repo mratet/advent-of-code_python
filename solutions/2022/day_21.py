@@ -1,8 +1,8 @@
-from sympy import symbols, Eq, solve, sympify
 import operator
 import re
 
 from aocd import get_data
+from sympy import Eq, solve, symbols, sympify
 
 input = get_data(day=21, year=2022).splitlines()
 
@@ -22,7 +22,9 @@ def parse_input(lines):
         if stuff.isdigit():
             monkeys[monkey_name] = int(stuff)
         else:
-            v1, symbol, v2 = re.search(r"(\w+) ([+-/*]) (\w+)", stuff).groups()
+            m = re.search(r"(\w+) ([+-/*]) (\w+)", stuff)
+            assert m
+            v1, symbol, v2 = m.groups()
             monkeys[monkey_name] = (OPERATORS[symbol], v1, v2)
     return monkeys
 

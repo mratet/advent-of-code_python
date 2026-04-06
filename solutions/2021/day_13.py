@@ -1,7 +1,8 @@
-from aocd import get_data
 import re
+
 import numpy as np
 from advent_of_code_ocr import convert_array_6
+from aocd import get_data
 
 input = get_data(day=13, year=2021)
 
@@ -13,6 +14,7 @@ def parse_input(lines):
     operations = []
     for line in folds.splitlines():
         match = re.match(r"fold along ([xy])=(\d+)", line)
+        assert match
         axis, value = match.groups()
         operations.append((axis, int(value)))
     return coords, operations
@@ -23,7 +25,7 @@ def fold_manual(coords, operations):
     X = 2 * max(val for (axis, val) in operations if axis == "x") + 1
 
     grid = np.zeros((Y, X), dtype=bool)
-    x, y = zip(*coords)
+    x, y = zip(*coords, strict=False)
     grid[y, x] = True
 
     manual_fold = []

@@ -1,5 +1,6 @@
-from aocd import get_data
 from collections import Counter
+
+from aocd import get_data
 
 input_data = get_data(day=6, year=2018).splitlines()
 
@@ -34,9 +35,7 @@ def part_1(lines):
             all_tiles.append(closest_id)
 
     area_counts = Counter(all_tiles)
-    return max(
-        count for coord_id, count in area_counts.items() if coord_id not in edge_ids
-    )
+    return max(count for coord_id, count in area_counts.items() if coord_id not in edge_ids)
 
 
 def part_2(lines):

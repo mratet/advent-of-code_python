@@ -13,7 +13,7 @@ def part_1(lines):
 
 def part_2(lines):
     pairs = [(int(bus), -i) for i, bus in enumerate(lines[1].split(",")) if bus != "x"]
-    nm, am = zip(*pairs)
+    nm, am = zip(*pairs, strict=False)
     return crt(nm, am)
 
 

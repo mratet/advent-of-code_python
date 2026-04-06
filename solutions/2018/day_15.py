@@ -1,7 +1,8 @@
-from aocd import get_data
-from copy import deepcopy
 from collections import deque
+from copy import deepcopy
 from dataclasses import dataclass, field
+
+from aocd import get_data
 
 input = get_data(day=15, year=2018).splitlines()
 
@@ -80,9 +81,7 @@ class Unit:
         if not targets_in_range:
             return
 
-        unit_attacked = min(
-            targets_in_range, key=lambda unit: (unit.hit_points, unit.y, unit.x)
-        )
+        unit_attacked = min(targets_in_range, key=lambda unit: (unit.hit_points, unit.y, unit.x))
         unit_attacked.hit_points -= self.attack_power
 
     def adjacent_target(self, targets):
@@ -115,9 +114,7 @@ def simulate(walls, units, part="part_1"):
     while True:
         units.sort()
 
-        if part == "part_2" and any(
-            not unit.is_alive and unit.type == "E" for unit in units
-        ):
+        if part == "part_2" and any(not unit.is_alive and unit.type == "E" for unit in units):
             return -1
 
         for unit in units:
@@ -127,17 +124,12 @@ def simulate(walls, units, part="part_1"):
             blocked_cases = walls + [(u.x, u.y) for u in units if u.is_alive]
             targets = [u for u in units if u.is_alive and u.type != unit.type]
             if not targets:
-                allies_hp = [
-                    u.hit_points for u in units if u.is_alive and u.type == unit.type
-                ]
+                allies_hp = [u.hit_points for u in units if u.is_alive and u.type == unit.type]
                 return round * sum(allies_hp)
 
             if not unit.adjacent_target(targets):
                 targets_range = [
-                    neigh
-                    for target in targets
-                    for neigh in target.get_neighbors()
-                    if neigh not in blocked_cases
+                    neigh for target in targets for neigh in target.get_neighbors() if neigh not in blocked_cases
                 ]
                 if not targets_range:
                     continue

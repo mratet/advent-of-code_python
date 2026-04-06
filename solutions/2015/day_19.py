@@ -1,6 +1,7 @@
+import collections
 import itertools
 import re
-import collections
+
 from aocd import get_data
 
 input = get_data(day=19, year=2015).splitlines()
@@ -51,7 +52,7 @@ def part_1(input):
     synthesis = set()
     kmp = KMP()
 
-    for src in replacements.keys():
+    for src in replacements:
         indexes = kmp.search(molecule, src)
         for dest, i in itertools.product(replacements[src], indexes):
             new_molecule = molecule[:i] + dest + molecule[i + len(src) :]

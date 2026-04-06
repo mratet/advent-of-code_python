@@ -31,7 +31,7 @@ def solve(contraption, start):
             if 0 <= ny < n and 0 <= nx < m and ((nx, ny), new_dir) not in visited:
                 q.append(((nx, ny), new_dir))
 
-    return len(set((x, y) for (x, y), _ in visited))
+    return len({(x, y) for (x, y), _ in visited})
 
 
 def part_1(contraption):

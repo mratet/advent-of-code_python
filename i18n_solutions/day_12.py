@@ -1,9 +1,7 @@
 import math
-
-
-from unidecode import unidecode
 import unicodedata
 
+from unidecode import unidecode
 
 input_rows = open("input.txt").read().splitlines()
 

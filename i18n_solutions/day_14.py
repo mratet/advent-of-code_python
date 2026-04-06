@@ -1,9 +1,6 @@
 input_rows = open("input.txt").read().splitlines()
 
-NUMBERS = {
-    x: i + 1
-    for i, x in enumerate(("一", "二", "三", "四", "五", "六", "七", "八", "九", "十"))
-} | {  # noqa
+NUMBERS = {x: i + 1 for i, x in enumerate(("一", "二", "三", "四", "五", "六", "七", "八", "九", "十"))} | {
     "百": 100,
     "千": 1000,
 }

@@ -1,9 +1,6 @@
-from typing import List, Dict
-
-from functools import reduce
-
 import itertools
 from collections import defaultdict
+from functools import reduce
 
 # 4 on test_input, 8 on puzzle_input
 MAGIC_NUMBER = 8
@@ -26,15 +23,10 @@ class Block:
         return -1
 
     def decode_block(self) -> str:
-        return "\n".join(
-            bytes.fromhex(row).decode("utf-8", "replace") for row in self._rows
-        )
+        return "\n".join(bytes.fromhex(row).decode("utf-8", "replace") for row in self._rows)
 
     def has_replacement_in_junction(self):
-        for row in self._decoded_rows:
-            if REPLACEMENT_CHAR in row[3:-3]:
-                return True
-        return False
+        return any(REPLACEMENT_CHAR in row[3:-3] for row in self._decoded_rows)
 
     def merge_vertical(self, other: "Block") -> "Block":
         return Block(f"{self.raw_block}\n{other.raw_block}")
@@ -42,7 +34,7 @@ class Block:
     def merge_horizontal(self, other: "Block") -> "Block":
         if self.height != other.height:
             raise ValueError("Blocks must have same height for horizontal merge")
-        merged_rows = [p + q for p, q in zip(self._rows, other._rows)]
+        merged_rows = [p + q for p, q in zip(self._rows, other._rows, strict=False)]
         return Block("\n".join(merged_rows))
 
     def convolve(self, other: "Block") -> defaultdict[int, list[str]]:
@@ -77,17 +69,17 @@ def identify_relevant_blocks(blocks_dict: dict):
     return top_left_corner, bottom_left_corner, left_edges
 
 
-def build_column_block(col_blocks: List[Block]) -> Block:
+def build_column_block(col_blocks: list[Block]) -> Block:
     first_block = col_blocks.pop(0)
     return reduce(lambda x, y: x.merge_vertical(y), col_blocks, first_block)
 
 
-def build_row_block(row_blocks: List[Block]) -> Block:
+def build_row_block(row_blocks: list[Block]) -> Block:
     first_block = row_blocks.pop(0)
     return reduce(lambda x, y: x.merge_horizontal(y), row_blocks, first_block)
 
 
-def build_columns(blocks_dict: Dict[int, Block], first_col_ids: List[int]):
+def build_columns(blocks_dict: dict[int, Block], first_col_ids: list[int]):
     block_ids = set(blocks_dict) - set(first_col_ids)
     first_block = build_column_block([blocks_dict[id] for id in first_col_ids])
     column_blocks = [first_block]

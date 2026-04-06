@@ -1,5 +1,6 @@
+from collections import defaultdict, deque
+
 from aocd import get_data
-from collections import deque, defaultdict
 
 DIRECTIONS = {">": (1, 0), "<": (-1, 0), "v": (0, 1), "^": (0, -1)}
 MOVES = [(0, 0), (1, 0), (-1, 0), (0, 1), (0, -1)]
@@ -72,10 +73,9 @@ def build_graph(blizzard_states, cycle_length, start, end):
                     if (
                         (nx, ny) == start
                         or (nx, ny) == end
-                        or (1 <= nx < W - 1 and 1 <= ny < H - 1)
+                        or ((1 <= nx < W - 1 and 1 <= ny < H - 1) and (nx, ny) not in forbidden_next)
                     ):
-                        if (nx, ny) not in forbidden_next:
-                            graph[(x, y, t)].append((nx, ny, (t + 1) % cycle_length))
+                        graph[(x, y, t)].append((nx, ny, (t + 1) % cycle_length))
     return graph
 
 

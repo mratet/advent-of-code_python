@@ -7,7 +7,7 @@ input = get_data(day=9, year=2025).splitlines()
 
 # WRITE YOUR SOLUTION HERE
 def part_1(lines):
-    coords = [list(map(int, line.split(','))) for line in lines]
+    coords = [list(map(int, line.split(","))) for line in lines]
     dists = []
     for (i1, c1), (i2, c2) in product(enumerate(coords), repeat=2):
         if i1 == i2 or i1 > i2:
@@ -20,9 +20,9 @@ def part_1(lines):
 
 
 def part_2(lines):
-    coords = [list(map(int, line.split(','))) for line in lines]
+    coords = [list(map(int, line.split(","))) for line in lines]
     n = len(coords)
-    edges = [(coords[i], coords[(i+1) % n]) for i in range(n)]
+    edges = [(coords[i], coords[(i + 1) % n]) for i in range(n)]
 
     def is_inside_or_boundary(px, py):
         for (x1, y1), (x2, y2) in edges:
@@ -31,10 +31,7 @@ def part_2(lines):
             if x1 == x2 and px == x1 and min(y1, y2) <= py <= max(y1, y2):
                 return True
 
-        crossings = sum(
-            y1 == y2 and y1 > py and min(x1, x2) <= px < max(x1, x2)
-            for (x1, y1), (x2, y2) in edges
-        )
+        crossings = sum(y1 == y2 and y1 > py and min(x1, x2) <= px < max(x1, x2) for (x1, y1), (x2, y2) in edges)
         return crossings % 2 == 1
 
     xs = sorted({x for x, _ in coords})
@@ -46,11 +43,11 @@ def part_2(lines):
     prefix = [[0] * (W + 1) for _ in range(H + 1)]
     for j in range(H):
         for i in range(W):
-            prefix[j+1][i+1] = grid[j][i] + prefix[j][i+1] + prefix[j+1][i] - prefix[j][i]
+            prefix[j + 1][i + 1] = grid[j][i] + prefix[j][i + 1] + prefix[j + 1][i] - prefix[j][i]
 
     def rect_all_valid(gx1, gy1, gx2, gy2):
         total = (gx2 - gx1 + 1) * (gy2 - gy1 + 1)
-        filled = prefix[gy2+1][gx2+1] - prefix[gy1][gx2+1] - prefix[gy2+1][gx1] + prefix[gy1][gx1]
+        filled = prefix[gy2 + 1][gx2 + 1] - prefix[gy1][gx2 + 1] - prefix[gy2 + 1][gx1] + prefix[gy1][gx1]
         return filled == total
 
     best = 0
@@ -68,8 +65,7 @@ def part_2(lines):
 
     return best
 
+
 # END OF SOLUTION
 print(f"My answer is {part_1(input)}")
 print(f"My answer is {part_2(input)}")
-
-

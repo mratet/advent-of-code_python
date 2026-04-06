@@ -1,5 +1,6 @@
-from aocd import get_data
 from itertools import product
+
+from aocd import get_data
 
 input = get_data(day=20, year=2021).split("\n\n")
 
@@ -20,12 +21,7 @@ def get_next_grid(grid, enhancement_algorithm, global_symbol, step):
     y_range = range(-step - 1, 99 + step + 2)
     for x, y in product(x_range, y_range):
         bin_word = (
-            "".join(
-                [
-                    grid.get((x + dx, y + dy), global_symbol)
-                    for dx, dy in product((-1, 0, 1), repeat=2)
-                ]
-            )
+            "".join([grid.get((x + dx, y + dy), global_symbol) for dx, dy in product((-1, 0, 1), repeat=2)])
             .replace("#", "1")
             .replace(".", "0")
         )

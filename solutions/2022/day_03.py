@@ -1,15 +1,12 @@
-from aocd import get_data
 from string import ascii_lowercase
+
+from aocd import get_data
 
 input = get_data(day=3, year=2022).splitlines()
 
 
 def compute_priority(item_type):
-    return (
-        ascii_lowercase.index(item_type.lower())
-        + 1
-        + (26 if item_type.isupper() else 0)
-    )
+    return ascii_lowercase.index(item_type.lower()) + 1 + (26 if item_type.isupper() else 0)
 
 
 # WRITE YOUR SOLUTION HERE
@@ -24,7 +21,7 @@ def part_1(lines):
 
 def part_2(lines):
     priority = 0
-    for g1, g2, g3 in zip(lines[::3], lines[1::3], lines[2::3]):
+    for g1, g2, g3 in zip(lines[::3], lines[1::3], lines[2::3], strict=False):
         item_type = (set(g1) & set(g2) & set(g3)).pop()
         priority += compute_priority(item_type)
     return priority

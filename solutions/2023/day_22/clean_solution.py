@@ -1,8 +1,8 @@
+from collections import defaultdict, deque
+
 from aocd import get_data
 
 input = get_data(day=22, year=2023).splitlines()
-
-from collections import deque, defaultdict
 
 
 def parse_input(lines):
@@ -93,11 +93,7 @@ def part_2(input):
     is_supported_by = get_is_supported_by_dict(bricks)
     not_safe = get_unsafe_brick(is_supported_by)
     support = compute_support(is_supported_by)
-    return sum(
-        fallen_bricks(i, support, is_supported_by)
-        for i, not_safe_bool in enumerate(not_safe)
-        if not_safe_bool
-    )
+    return sum(fallen_bricks(i, support, is_supported_by) for i, not_safe_bool in enumerate(not_safe) if not_safe_bool)
 
 
 # END OF SOLUTION

@@ -1,10 +1,10 @@
 import re
+from math import lcm
 
+import numpy as np
 from aocd import get_data
 
 aoc_input = get_data(day=12, year=2019).splitlines()
-import numpy as np
-from math import lcm
 
 
 # WRITE YOUR SOLUTION HERE

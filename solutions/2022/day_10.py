@@ -1,6 +1,6 @@
-from aocd import get_data
 import numpy as np
 from advent_of_code_ocr import convert_array_6
+from aocd import get_data
 
 input = get_data(day=10, year=2022).splitlines()
 
@@ -27,10 +27,8 @@ def part_1(lines):
 def part_2(lines):
     W, H = 40, 6
     state = list(run_program(lines))[1:]  # Skip cycle 0
-    screen = np.array(
-        [1 if abs((i % W) - x) <= 1 else 0 for i, x in enumerate(state)]
-    ).reshape(H, W)
-    return convert_array_6(screen, fill_pixel=1, empty_pixel=0)
+    screen = np.array([1 if abs((i % W) - x) <= 1 else 0 for i, x in enumerate(state)]).reshape(H, W)
+    return convert_array_6(screen.tolist(), fill_pixel=1, empty_pixel=0)
 
 
 # END OF SOLUTION

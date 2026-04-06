@@ -1,12 +1,13 @@
-from aocd import get_data
-from itertools import combinations
 from collections import Counter
+from itertools import combinations
+
+from aocd import get_data
 
 input = get_data(day=2, year=2018).splitlines()
 
 
 def compare_box_ids(box1, box2):
-    diffs = [i for i, (c1, c2) in enumerate(zip(box1, box2)) if c1 != c2]
+    diffs = [i for i, (c1, c2) in enumerate(zip(box1, box2, strict=False)) if c1 != c2]
     if len(diffs) != 1:
         return ""
     i = diffs[0]

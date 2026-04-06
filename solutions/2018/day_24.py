@@ -1,9 +1,8 @@
-from typing import List
-from copy import deepcopy
 import re
+from copy import deepcopy
+from dataclasses import dataclass
 
 from aocd import get_data
-from dataclasses import dataclass
 
 input = get_data(day=24, year=2018)
 
@@ -16,8 +15,8 @@ class Units:
     attack_damage: int
     attack_type: str
     initiative: int
-    weaknesses: List[str]
-    immunities: List[str]
+    weaknesses: list[str]
+    immunities: list[str]
 
     def __hash__(self):
         return hash(
@@ -43,14 +42,10 @@ class Units:
     def compute_damage(self, target) -> int:
         if self.attack_type in target.immunities:
             return 0
-        return (
-            2 * self.effective_power
-            if self.attack_type in target.weaknesses
-            else self.effective_power
-        )
+        return 2 * self.effective_power if self.attack_type in target.weaknesses else self.effective_power
 
 
-def parse_army_input(text: str) -> List[Units]:
+def parse_army_input(text: str) -> list[Units]:
     groups = []
     current_army = None
     current_lines = []

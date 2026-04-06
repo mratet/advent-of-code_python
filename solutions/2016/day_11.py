@@ -53,17 +53,13 @@ def bfs(current_pairs_tuple):
                 if len(items_on_current_floor) < num_items_to_move:
                     continue
 
-                for combo in itertools.combinations(
-                    items_on_current_floor, num_items_to_move
-                ):
+                for combo in itertools.combinations(items_on_current_floor, num_items_to_move):
                     next_pairs = list(current_pairs_tuple)
 
                     for pair_idx, item_type in combo:
                         g_floor, c_floor = next_pairs[pair_idx]
                         next_pairs[pair_idx] = (
-                            (next_elevator_pos, c_floor)
-                            if item_type == "G"
-                            else (g_floor, next_elevator_pos)
+                            (next_elevator_pos, c_floor) if item_type == "G" else (g_floor, next_elevator_pos)
                         )
 
                     next_pairs.sort()
@@ -87,7 +83,7 @@ def part_1(input):
 
 def part_2(input):
     current_pairs_tuple = _parse_input(input)
-    return bfs(tuple([(0, 0), (0, 0)] + current_pairs_tuple))
+    return bfs(((0, 0), (0, 0), *current_pairs_tuple))
 
 
 print(f"My answer is {part_1(input)}")

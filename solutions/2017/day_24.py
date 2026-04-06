@@ -30,9 +30,7 @@ def compute_true_stat(W, path, d):
 
 def build_all_bridges(starting_wires, double_wires, wires):
     connected_wire = (
-        lambda a, b, free_slot: (a[1] == b[0] or a[1] == b[1])
-        if free_slot
-        else (a[0] == b[0] or a[0] == b[1])
+        lambda a, b, free_slot: (a[1] == b[0] or a[1] == b[1]) if free_slot else (a[0] == b[0] or a[0] == b[1])
     )
     visited = set()
     tab = []

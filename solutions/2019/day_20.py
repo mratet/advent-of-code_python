@@ -1,18 +1,18 @@
 from collections import defaultdict
+from heapq import heappop, heappush
 
 from aocd import get_data
 
 aoc_input = get_data(day=20, year=2019).splitlines()
-from heapq import heappop, heappush
 
 DIRS = [(0, 1), (1, 0), (0, -1), (-1, 0)]
 
 
 # WRITE YOUR SOLUTION HERE
 def dijkstra(graph, source=0, target=None):
-    n = len(graph)
-    prec = {k: None for k in graph}
-    black = {k: False for k in graph}
+    len(graph)
+    prec = dict.fromkeys(graph)
+    black = dict.fromkeys(graph, False)
     dist = {k: float("inf") for k in graph}
     dist[source] = 0
     heap = [(0, source)]
@@ -66,11 +66,7 @@ def compute_shortcuts(door, dots, extreme_coords):
                 elif shortcut_txt == "ZZ":
                     end = (nx, ny)
                 else:
-                    side = (
-                        "inner"
-                        if min_x <= x <= max_x and min_y <= y <= max_y
-                        else "outer"
-                    )
+                    side = "inner" if min_x <= x <= max_x and min_y <= y <= max_y else "outer"
                     shortcuts[shortcut_txt][side] = (nx, ny)
     return start, end, shortcuts
 

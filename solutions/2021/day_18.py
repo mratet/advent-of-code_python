@@ -1,9 +1,8 @@
 import itertools
+import math
+from functools import reduce
 
 from aocd import get_data
-import math
-import re
-from functools import reduce
 
 input = get_data(day=18, year=2021).splitlines()
 
@@ -100,10 +99,7 @@ def part_1(lines):
 
 def part_2(lines):
     fishs = [parse_snailfish_pair(l) for l in lines]
-    magnitudes = [
-        add_snailfish_pair(f1, f2).compute_magnitude()
-        for f1, f2 in itertools.product(fishs, repeat=2)
-    ]
+    magnitudes = [add_snailfish_pair(f1, f2).compute_magnitude() for f1, f2 in itertools.product(fishs, repeat=2)]
     return max(magnitudes)
 
 

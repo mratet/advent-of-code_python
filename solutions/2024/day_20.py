@@ -33,18 +33,8 @@ def dist_dfs(lines, S):
 
 def solve(lines, part):
     cheat_time = 2 if part == "part_1" else 20
-    S = [
-        (x, y)
-        for x in range(len(lines))
-        for y in range(len(lines[0]))
-        if lines[x][y] == "S"
-    ][0]
-    start_pos = [
-        (x, y)
-        for x in range(len(lines))
-        for y in range(len(lines[0]))
-        if lines[x][y] != "#"
-    ]
+    S = next((x, y) for x in range(len(lines)) for y in range(len(lines[0])) if lines[x][y] == "S")
+    start_pos = [(x, y) for x in range(len(lines)) for y in range(len(lines[0])) if lines[x][y] != "#"]
     dist = dist_dfs(lines, S)
     scores = []
     for node in start_pos:

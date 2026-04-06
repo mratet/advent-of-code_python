@@ -11,12 +11,11 @@ DIRS = [N, E, S, W]
 
 def print_registration_identifier(grid: dict):
     white = [pos for pos, color in grid.items() if color]
-    Xs, Ys = zip(*white)
+    Xs, Ys = zip(*white, strict=False)
     min_x, max_x = min(Xs), max(Xs)
     min_y, max_y = min(Ys), max(Ys)
     return "\n".join(
-        "".join("#" if (x, y) in white else "." for x in range(min_x, max_x + 1))
-        for y in range(max_y, min_y - 1, -1)
+        "".join("#" if (x, y) in white else "." for x in range(min_x, max_x + 1)) for y in range(max_y, min_y - 1, -1)
     )
 
 

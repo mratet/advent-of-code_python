@@ -6,6 +6,7 @@ requires-python = ">=3.12"
 dependencies = [
     "advent-of-code-data>=2.1.0",
     "advent-of-code-ocr>=1.1.0",
+    "bcrypt>=4.0.0",
     "blessed>=1.21.0",
     "browser-cookie3>=0.20.1",
     "disjoint-set>=0.8.0",
@@ -14,14 +15,45 @@ dependencies = [
     "numpy>=2.2.6",
     "scipy>=1.15.3",
     "sympy>=1.14.0",
+    "unidecode>=1.3.0",
 ]
 
 [dependency-groups]
 dev = [
+    "pre-commit>=4.5.1",
     "ruff>=0.11.11",
+    "ty>=0.0.26",
 ]
 
 [tool.uv.workspace]
 members = [
     "advent_of_code",
 ]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 120
+
+[tool.ruff.lint]
+select = [
+    "E",
+    "W",
+    "F",
+    "I",
+    "UP",
+    "B",
+    "SIM",
+    "C4",
+    "RUF",
+]
+ignore = [
+    "E731",   # lambda assignment (common pattern in AoC)
+    "E741",   # ambiguous variable name (short vars are common in AoC)
+]
+
+[tool.ruff.lint.per-file-ignores]
+"i18n_solutions/*" = ["E722", "SIM115", "SIM116", "RUF001", "RUF003"]
+"solutions/2023/*/submissions.py" = ["SIM115"]
+
+[tool.ty.environment]
+python-version = "3.12"

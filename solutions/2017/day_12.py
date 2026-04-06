@@ -1,9 +1,9 @@
+import re
 from collections import defaultdict
 
 from aocd import get_data
 
 input = get_data(day=12, year=2017).splitlines()
-import re
 
 
 # WRITE YOUR SOLUTION HERE
@@ -17,21 +17,20 @@ def build_graph(lines):
     return graph
 
 
+def dfs(node, graph, visited):
+    visited.add(node)
+    for n in graph[node]:
+        if n not in visited:
+            dfs(n, graph, visited)
+
+
 def compute_connected_components(graph):
     nodes = set(graph)
     connected_components = []
     while nodes:
         visited = set()
-
-        def dfs(node):
-            visited.add(node)
-            for n in graph[node]:
-                if n in visited:
-                    continue
-                dfs(n)
-
         N = nodes.pop()
-        dfs(N)
+        dfs(N, graph, visited)
         connected_components.append(visited)
         nodes = nodes - visited
     return connected_components

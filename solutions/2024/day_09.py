@@ -1,7 +1,8 @@
+import bisect
+
 from aocd import get_data
 
 input = get_data(day=9, year=2024)
-import bisect
 
 
 # WRITE YOUR SOLUTION HERE
@@ -27,13 +28,7 @@ def part_1(lines):
                 compact_disk_map[l],
             )
             r -= 1
-    return sum(
-        [
-            i * int(compact_disk_map[i])
-            for i in range(len(compact_disk_map))
-            if compact_disk_map[i] != "."
-        ]
-    )
+    return sum([i * int(compact_disk_map[i]) for i in range(len(compact_disk_map)) if compact_disk_map[i] != "."])
 
 
 def part_2(lines):

@@ -1,7 +1,8 @@
+import re
+
 from aocd import get_data
 
 input = get_data(day=13, year=2024).split("\n\n")
-import re
 
 
 # WRITE YOUR SOLUTION HERE

@@ -1,5 +1,5 @@
-import re
 import math
+import re
 
 lines = open("input.txt").read().splitlines()
 
@@ -30,7 +30,7 @@ def part_2(lines):
         source, target_l, target_r = re.findall(r"\b[A-Z]{3}\b", line)
         network[source] = (target_l, target_r)
 
-    starting_states = [source for source in network.keys() if source[2] == "A"]
+    starting_states = [source for source in network if source[2] == "A"]
     tab = []
     for starting_state in starting_states:
         i = 0
@@ -55,11 +55,11 @@ def part_2(lines):
 
 test_input = open("input-test.txt").read().splitlines()
 test_lines = []
-for i, line in enumerate(test_input[3:]):
+for line in test_input[3:]:
     if line and line[0] == "-":
         break
     test_lines.append(line)
-solution = test_input[i + 4]
+solution = test_input[len(test_lines) + 4]
 
 print(f"My answer on test set for the first problem is {part_1(test_lines)}")
 print(solution)

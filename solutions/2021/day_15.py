@@ -1,5 +1,5 @@
 from collections import defaultdict
-from heapq import heappush, heappop
+from heapq import heappop, heappush
 
 from aocd import get_data
 

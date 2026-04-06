@@ -8,7 +8,7 @@ def count_corner(lines, start):
     x, y = start
     side = 0
     for (dx1, dy1), (dx2, dy2) in zip(
-        [(1, 0), (0, -1), (-1, 0), (0, 1)], [(0, -1), (-1, 0), (0, 1), (1, 0)]
+        [(1, 0), (0, -1), (-1, 0), (0, 1)], [(0, -1), (-1, 0), (0, 1), (1, 0)], strict=False
     ):
         nx1, ny1 = x + dx1, y + dy1
         nx2, ny2 = x + dx2, y + dy2
@@ -19,11 +19,7 @@ def count_corner(lines, start):
         dxa = dx1 if dx1 else dx2
         dya = dy1 if dy1 else dy2
         nxa, nya = x + dxa, y + dya
-        if (
-            lines[nx1][ny1] == lines[x][y]
-            and lines[nx2][ny2] == lines[x][y]
-            and lines[nxa][nya] != lines[x][y]
-        ):
+        if lines[nx1][ny1] == lines[x][y] and lines[nx2][ny2] == lines[x][y] and lines[nxa][nya] != lines[x][y]:
             side += 1
     return side
 
@@ -40,11 +36,7 @@ def dfs(lines, start):
         neigh = []
         for dx, dy in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
             nx, ny = x + dx, y + dy
-            if (
-                0 <= nx < len(lines)
-                and 0 <= ny < len(lines[0])
-                and lines[nx][ny] == color
-            ):
+            if 0 <= nx < len(lines) and 0 <= ny < len(lines[0]) and lines[nx][ny] == color:
                 neigh.append((dx, dy))
                 if (nx, ny) not in garden:
                     garden.add((nx, ny))

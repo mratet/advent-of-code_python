@@ -1,7 +1,6 @@
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 
-
 input_rows = open("input.txt").read().splitlines()
 
 

@@ -1,8 +1,6 @@
-import itertools
-from collections import defaultdict
+from itertools import count, cycle
 
 from aocd import get_data
-from itertools import cycle, count
 
 WIDE = 7
 MAX_HEIGHT_TO_KEEP = 50
@@ -13,10 +11,7 @@ input = get_data(day=17, year=2022)
 
 def parse_shape(shape_str):
     return [
-        (x, y)
-        for y, row in enumerate(reversed(shape_str.splitlines()))
-        for x, char in enumerate(row)
-        if char == "#"
+        (x, y) for y, row in enumerate(reversed(shape_str.splitlines())) for x, char in enumerate(row) if char == "#"
     ]
 
 
@@ -39,7 +34,7 @@ def simulate_with_cycle_detections(jets):
     shape_stream = cycle(enumerate(shapes))
 
     occupied = set()
-    seen = dict()
+    seen = {}
     height_reached = []
     highest_y = -1
 
@@ -81,9 +76,7 @@ def simulate_with_cycle_detections(jets):
     return
 
 
-def extrapolate_height(
-    n, cycle_start, cycle_length, cycle_height_gain, height_before_cycle, height_reached
-):
+def extrapolate_height(n, cycle_start, cycle_length, cycle_height_gain, height_before_cycle, height_reached):
     remaining = n - cycle_start
     full_cycles, leftover = divmod(remaining, cycle_length)
     leftover_height = height_reached[cycle_start + leftover - 1] - height_before_cycle

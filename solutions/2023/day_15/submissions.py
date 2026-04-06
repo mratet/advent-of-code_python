@@ -41,8 +41,8 @@ def part_2(lines):
                 boxes[box_number].append((label, int(focal_length)))
 
     ans = 0
-    for box_number in boxes.keys():
-        for i, (l, focal_length) in enumerate(boxes[box_number]):
+    for box_number in boxes:
+        for i, (_l, focal_length) in enumerate(boxes[box_number]):
             ans += (box_number + 1) * (i + 1) * focal_length
     return ans
 
@@ -52,11 +52,11 @@ def part_2(lines):
 
 test_input = open("input-test.txt").read().splitlines()
 test_lines = []
-for i, line in enumerate(test_input[3:]):
+for line in test_input[3:]:
     if line[0] == "-":
         break
     test_lines.append(line)
-solution = test_input[i + 4]
+solution = test_input[len(test_lines) + 4]
 
 print(f"My answer on test set for the first problem is {part_1(test_lines)}")
 print(solution)

@@ -18,10 +18,7 @@ def part_1(lines):
 
 
 def easy_path(C, L):
-    for i in range(100):
-        if L[i] and (C + i) % (2 * (L[i] - 1)) == 0:
-            return False
-    return True
+    return all(L[i] and (C + i) % (2 * (L[i] - 1)) == 0 for i in range(100))
 
 
 def part_2(lines):

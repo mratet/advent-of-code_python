@@ -1,6 +1,7 @@
-from aocd import get_data
-import numpy as np
 import re
+
+import numpy as np
+from aocd import get_data
 
 input = get_data(day=5, year=2021).splitlines()
 

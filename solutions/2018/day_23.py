@@ -1,6 +1,7 @@
-from aocd import get_data
 import re
-from heapq import heappush, heappop
+from heapq import heappop, heappush
+
+from aocd import get_data
 
 input = get_data(day=23, year=2018).splitlines()
 
@@ -14,7 +15,8 @@ def parse_input(lines):
 
 
 def divide_box(box):
-    if box[0] == box[1]: return [box]
+    if box[0] == box[1]:
+        return [box]
 
     (mx, my, mz), (Mx, My, Mz) = box
     cx = (mx + Mx) // 2
@@ -62,10 +64,7 @@ def distance_to_origin(box):
 def part_1(lines):
     nanobots = parse_input(lines)
     max_nanobot = max(nanobots, key=lambda x: x[3])
-    return sum(
-        manhattan_distance(max_nanobot, nanobot) <= max_nanobot[3]
-        for nanobot in nanobots
-    )
+    return sum(manhattan_distance(max_nanobot, nanobot) <= max_nanobot[3] for nanobot in nanobots)
 
 
 def part_2(lines):

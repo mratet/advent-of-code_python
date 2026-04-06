@@ -7,11 +7,7 @@ def solve_crossword_puzzle(crosswords, decoded_words):
         crossword = crossword.lstrip()
         n = len(crossword)
         idx, letter = next((i, c) for i, c in enumerate(crossword) if c != ".")
-        count += next(
-            i
-            for i, w in enumerate(decoded_words, start=1)
-            if n == len(w) and w[idx] == letter
-        )
+        count += next(i for i, w in enumerate(decoded_words, start=1) if n == len(w) and w[idx] == letter)
     return count
 
 

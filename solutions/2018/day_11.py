@@ -18,9 +18,7 @@ def compute_prefix_power_grid(serial_number, grid_size=300):
 
     # Summed-area table : https://en.wikipedia.org/wiki/Summed-area_table
     for x, y in itertools.product(range(2, grid_size + 1), repeat=2):
-        grid[(x, y)] = (
-            grid[(x, y)] + grid[(x - 1, y)] + grid[(x, y - 1)] - grid[(x - 1, y - 1)]
-        )
+        grid[(x, y)] = grid[(x, y)] + grid[(x - 1, y)] + grid[(x, y - 1)] - grid[(x - 1, y - 1)]
 
     return grid
 

@@ -1,3 +1,4 @@
+import itertools
 from collections import defaultdict
 
 from aocd import get_data
@@ -23,12 +24,12 @@ def part_2(lines):
     count_seq = defaultdict(int)
     for n in numb:
         bananas, diff, seen = [], [], set()
-        for j in range(2001):
+        for _j in range(2001):
             bananas.append(n % 10)
             n = (64 * n ^ n) % 16777216
             n = (n // 32 ^ n) % 16777216
             n = (n * 2048 ^ n) % 16777216
-        diff = [b2 - b1 for b1, b2 in zip(bananas[:], bananas[1:])]
+        diff = [b2 - b1 for b1, b2 in itertools.pairwise(bananas)]
         for j in range(4, len(diff) + 1):
             seq = tuple(diff[j - 4 : j])
             if seq not in seen:

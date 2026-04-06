@@ -1,8 +1,9 @@
+import numpy as np
+from scipy.optimize import minimize
+
 lines = open("input.txt").read().splitlines()
 
 # WRITE YOUR SOLUTION HERE
-import numpy as np
-from scipy.optimize import minimize
 
 
 def find_intersection_2d(a1, a2):
@@ -84,7 +85,7 @@ def part_2(lines):
 
         return distance
 
-    n = len(asteroids)
+    len(asteroids)
     x0 = np.array([24, 13, 10, -3, 1, 2])
     result = minimize(shortest_distance, x0)
     print(result)
@@ -97,11 +98,11 @@ def part_2(lines):
 
 test_input = open("input-test.txt").read().splitlines()
 test_lines = []
-for i, line in enumerate(test_input[3:]):
+for line in test_input[3:]:
     if line[0] == "-":
         break
     test_lines.append(line)
-solution = test_input[i + 4]
+solution = test_input[len(test_lines) + 4]
 
 print(f"My answer on test set for the first problem is {part_1(test_lines)}")
 print(solution)

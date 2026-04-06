@@ -1,8 +1,7 @@
+import numpy as np
 from aocd import get_data
 
 input = get_data(day=20, year=2015)
-
-import numpy as np
 
 
 def part_1(input):

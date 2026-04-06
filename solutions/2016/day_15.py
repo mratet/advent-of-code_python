@@ -16,9 +16,7 @@ def find_perfect_button_push(disks):
     # N % length == -(i + 1 + start) % length
     # Possible to design a solution using Chinese Reminder Theorem for fast inference
     n = 0
-    while not all(
-        [(n + i + 1 + start) % length == 0 for i, (length, start) in enumerate(disks)]
-    ):
+    while not all((n + i + 1 + start) % length == 0 for i, (length, start) in enumerate(disks)):
         n += 1
     return n
 

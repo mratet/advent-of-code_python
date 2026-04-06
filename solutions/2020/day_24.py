@@ -1,10 +1,9 @@
+import re
+from collections import Counter, defaultdict
+
 from aocd import get_data
 
 input = get_data(day=24, year=2020).splitlines()
-
-from collections import defaultdict
-from collections import Counter
-import re
 
 
 # WRITE YOUR SOLUTION HERE
@@ -44,8 +43,7 @@ def part_1(lines):
 
 def neighbour_coordinates(p):
     return [
-        tuple(a + b for a, b in zip(p, t))
-        for t in [(0, -2), (0, 2), (-1, -1), (-1, 1), (1, -1), (1, 1)]
+        tuple(a + b for a, b in zip(p, t, strict=False)) for t in [(0, -2), (0, 2), (-1, -1), (-1, 1), (1, -1), (1, 1)]
     ]
 
 
@@ -62,14 +60,8 @@ def part_2(lines):
 
     n = 100
     for _ in range(n):
-        total_neighbours = Counter(
-            p for coordinate in black_tiles for p in neighbour_coordinates(coordinate)
-        )
-        black_tiles = {
-            p
-            for p, n in total_neighbours.items()
-            if (p in black_tiles and n == 1) or n == 2
-        }
+        total_neighbours = Counter(p for coordinate in black_tiles for p in neighbour_coordinates(coordinate))
+        black_tiles = {p for p, n in total_neighbours.items() if (p in black_tiles and n == 1) or n == 2}
     return len(black_tiles)
 
 

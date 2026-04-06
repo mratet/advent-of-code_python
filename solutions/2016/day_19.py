@@ -1,4 +1,5 @@
 import math
+
 from aocd import get_data
 
 input = int(get_data(day=19, year=2016))
@@ -30,7 +31,7 @@ def recursive_part_2(tab):
 def part_2(N):
     # largest power of 3 smaller than N
     n = 3 ** int(math.log(N, 3))
-    return N - n + max(N - 2 * n, 0) if N != n else n
+    return N - n + max(N - 2 * n, 0) if n != N else n
 
 
 def part_1(N):

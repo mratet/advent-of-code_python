@@ -1,10 +1,8 @@
 import itertools
-
+import unicodedata
 from functools import cache
 
-import unicodedata
 import bcrypt
-
 
 input_blocks = open("input.txt").read().split("\n\n")
 

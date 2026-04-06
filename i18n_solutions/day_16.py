@@ -1,8 +1,7 @@
-from blessed import Terminal
+import sys
 from dataclasses import dataclass
 
-from typing import List
-import sys
+from blessed import Terminal
 
 
 @dataclass
@@ -15,7 +14,7 @@ class PieceType:
     down: int
     left: int
     up: int
-    _rotation_count: int = None
+    _rotation_count: int | None = None
 
     @property
     def rotation_count(self):
@@ -145,9 +144,9 @@ class PipeGame:
         self.cheat_mode = False
         self.grid[0][1].fixed = self.grid[-1][-2].fixed = True
 
-    def load_grid(self, file_path: str) -> List[List[Piece]]:
+    def load_grid(self, file_path: str) -> list[list[Piece]]:
         try:
-            with open(file_path, "r") as f:
+            with open(file_path) as f:
                 rows = f.read().splitlines()
         except FileNotFoundError:
             print(f"Error: {file_path} not found.")
@@ -167,20 +166,12 @@ class PipeGame:
         return grid
 
     def compute_score(self) -> int:
-        return sum(
-            self.grid[y][x].rotation
-            for y in range(self.height)
-            for x in range(self.width)
-        )
+        return sum(self.grid[y][x].rotation for y in range(self.height) for x in range(self.width))
 
     def display_all_grid(self):
         print(self.term.clear)
         print(self.term.bold("Pipe Puzzle Game"))
-        print(
-            self.term.bold(
-                "hjkl: Move cursor | r: Rotate tile | f: Fix tile | c: Enable Cheat Mode | q: Quit"
-            )
-        )
+        print(self.term.bold("hjkl: Move cursor | r: Rotate tile | f: Fix tile | c: Enable Cheat Mode | q: Quit"))
         print(self.term.bold(f"Score: {self.compute_score()}"))
         print(self.term.bold("-" * 40))
         print()
@@ -216,21 +207,17 @@ class PipeGame:
 
         return True
 
-    def get_colored_tile(self, piece: Piece, cursor: List[int]) -> str:
+    def get_colored_tile(self, piece: Piece, cursor: list[int]) -> str:
         if cursor == self.cursor:
             return self.term.yellow(piece.char)
         elif self.cheat_mode:
-            return (
-                self.term.green(piece.char)
-                if self.is_piece_connected(cursor)
-                else self.term.red(piece.char)
-            )
+            return self.term.green(piece.char) if self.is_piece_connected(cursor) else self.term.red(piece.char)
         elif piece.fixed:
             return self.term.blue(piece.char)
         else:
             return piece.char
 
-    def update_single_tile(self, unk_cursor: List[int]):
+    def update_single_tile(self, unk_cursor: list[int]):
         x, y = unk_cursor
         symb = self.get_colored_tile(self.grid[y][x], unk_cursor)
         with self.term.location(x, y + 6):
@@ -273,17 +260,11 @@ class PipeGame:
     def toggle_fixed(self):
         x, y = self.cursor
         current_piece = self.grid[y][x]
-        self.grid[y][x] = Piece(
-            current_piece.type_char, current_piece.rotation, not current_piece.fixed
-        )
+        self.grid[y][x] = Piece(current_piece.type_char, current_piece.rotation, not current_piece.fixed)
         self.update_single_tile(self.cursor)
 
     def check_all_connected(self) -> bool:
-        return all(
-            self.is_piece_connected([x, y])
-            for y in range(self.height)
-            for x in range(self.width)
-        )
+        return all(self.is_piece_connected([x, y]) for y in range(self.height) for x in range(self.width))
 
     def run(self):
         with self.term.cbreak(), self.term.hidden_cursor():

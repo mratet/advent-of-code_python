@@ -1,11 +1,9 @@
-from collections import defaultdict
+from collections import defaultdict, deque
+from itertools import pairwise, product
 
 from aocd import get_data
 
 input = get_data(day=21, year=2024)
-
-from collections import deque
-from itertools import product
 
 # WRITE YOUR SOLUTION HERE
 DIRS = {
@@ -62,9 +60,9 @@ keypad_to_corr = {
 def flatten_nested_dictionary(d):
     def recursive_flatten(sub_d):
         if all(not isinstance(v, dict) for v in sub_d.values()):
-            keys, values = zip(*sub_d.items())
+            keys, values = zip(*sub_d.items(), strict=False)
             combinations = product(*[v if isinstance(v, list) else [v] for v in values])
-            return [dict(zip(keys, combo)) for combo in combinations]
+            return [dict(zip(keys, combo, strict=False)) for combo in combinations]
 
         result = [{}]
         for key, value in sub_d.items():
@@ -98,7 +96,7 @@ def flatten_nested_dictionary(d):
 
 def gen_next_sequence(sequence, mapping):
     seq = "A" + sequence
-    return "".join([mapping[s1 + s2] + "A" for s1, s2 in zip(seq, seq[1:])])
+    return "".join([mapping[s1 + s2] + "A" for s1, s2 in pairwise(seq)])
 
 
 def generate_shortest_paths(keypad, start, end):
@@ -127,12 +125,7 @@ def generate_shortest_paths(keypad, start, end):
         current = path[-1]
 
         if current == end:
-            path = "".join(
-                [
-                    DIRS[((y2 - y1), (x2 - x1))]
-                    for (x1, y1), (x2, y2) in zip(path, path[1:])
-                ]
-            )
+            path = "".join([DIRS[((y2 - y1), (x2 - x1))] for (x1, y1), (x2, y2) in pairwise(path)])
             if len(path) < min_length:
                 shortest_paths = [path]
                 min_length = len(path)
@@ -146,7 +139,7 @@ def generate_shortest_paths(keypad, start, end):
 
         for neighbor in neighbors(current):
             if neighbor not in path:
-                queue.append(path + [neighbor])
+                queue.append([*path, neighbor])
 
     return shortest_paths
 
@@ -155,7 +148,7 @@ def generate_keypad_mappings(code):
     K = ["789", "456", "123", ".0A"]
     Acode = "A" + code
     base_keypad_mapping = defaultdict(dict)
-    for start, end in zip(Acode, Acode[1:]):
+    for start, end in pairwise(Acode):
         base_keypad_mapping[start][end] = generate_shortest_paths(K, start, end)
     return flatten_nested_dictionary(base_keypad_mapping)
 
@@ -189,7 +182,7 @@ def get_transition_dict(direction):
     d = {}
     for v in direction.values():
         seq = "A" + v + "A"
-        d[v + "A"] = [direction[m1 + m2] + "A" for m1, m2 in zip(seq, seq[1:])]
+        d[v + "A"] = [direction[m1 + m2] + "A" for m1, m2 in pairwise(seq)]
     d["A"] = ["A"]
     return d
 

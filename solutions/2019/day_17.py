@@ -1,5 +1,5 @@
 from aocd import get_data
-from intcode import IntcodeComputer, MAP_FROM_ASCII, MAP_TO_ASCII
+from intcode import MAP_FROM_ASCII, MAP_TO_ASCII, IntcodeComputer
 
 aoc_input = get_data(day=17, year=2019)
 
@@ -59,20 +59,14 @@ def part_1(lines):
     pc = IntcodeComputer(lines)
     camera_view = pc.run()
     scaffolds, _ = parse_scaffold_view(MAP_FROM_ASCII(camera_view))
-    return sum(
-        x * y
-        for x, y in scaffolds
-        if all(((x + dx, y + dy) in scaffolds) for dx, dy in DIRS)
-    )
+    return sum(x * y for x, y in scaffolds if all(((x + dx, y + dy) in scaffolds) for dx, dy in DIRS))
 
 
 def part_2(lines):
     pc = IntcodeComputer(lines)
     pc.memory[0] = 2
     # Launch get_full_program if needed. Decomposition was made by hand
-    decomposed_program = (
-        "A,B,A,C,A,B,C,A,B,C\nR,12,R,4,R,10,R,12\nR,6,L,8,R,10\nL,8,R,4,R,4,R,6\nn\n"
-    )
+    decomposed_program = "A,B,A,C,A,B,C,A,B,C\nR,12,R,4,R,10,R,12\nR,6,L,8,R,10\nL,8,R,4,R,4,R,6\nn\n"
     *_, dust_collected = pc.run(MAP_TO_ASCII(decomposed_program))
     return dust_collected
 

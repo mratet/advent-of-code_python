@@ -1,7 +1,8 @@
+import re
+
 from aocd import get_data
 
 input = get_data(day=7, year=2017)
-import re
 
 
 # WRITE YOUR SOLUTION HERE
@@ -42,14 +43,13 @@ def part_2(lines):
     tot_weights = {program: compute_weight(program, programs) for program in programs}
     min_program = ""
     min_weight = 1e9
-    for n, w in tot_weights.items():
+    for n, _w in tot_weights.items():
         support = programs[n]["supports"]
         if support:
             support_weights = [tot_weights[s] for s in support]
-            if len(set(support_weights)) > 1:
-                if min(support_weights) < min_weight:
-                    min_program = n
-                    min_weight = min(support_weights)
+            if len(set(support_weights)) > 1 and min(support_weights) < min_weight:
+                min_program = n
+                min_weight = min(support_weights)
 
     for s in programs[min_program]["supports"]:
         if tot_weights[s] > min_weight:  # Heavier tower case

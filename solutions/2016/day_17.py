@@ -1,8 +1,8 @@
+from hashlib import md5
+
 from aocd import get_data
 
 input = get_data(day=17, year=2016)
-
-from hashlib import md5
 
 DIRECTIONS = (0, -1, "U"), (0, 1, "D"), (-1, 0, "L"), (1, 0, "R")
 

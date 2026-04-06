@@ -1,7 +1,8 @@
+from string import ascii_lowercase
+
 from aocd import get_data
 
 input = get_data(day=6, year=2020).split("\n\n")
-from string import ascii_lowercase
 
 
 # WRITE YOUR SOLUTION HERE

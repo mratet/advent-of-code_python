@@ -1,6 +1,7 @@
-from aocd import get_data
-import numpy as np
 import re
+
+import numpy as np
+from aocd import get_data
 
 input = get_data(day=22, year=2021).splitlines()
 
@@ -24,10 +25,8 @@ def solve(lines, part="part_1"):
     cubes, ops, X, Y, Z = _parse_input(lines)
     X_range, Y_range, Z_range = sorted(X), sorted(Y), sorted(Z)
     grid = np.zeros((len(X_range), len(Y_range), len(Z_range)), dtype=bool)
-    for op, (x1, x2, y1, y2, z1, z2) in zip(ops, cubes):
-        if part == "part_1" and (
-            x1 < -50 or x2 > 50 or y1 < -50 or y2 > 50 or z1 < -50 or z2 > 50
-        ):
+    for op, (x1, x2, y1, y2, z1, z2) in zip(ops, cubes, strict=False):
+        if part == "part_1" and (x1 < -50 or x2 > 50 or y1 < -50 or y2 > 50 or z1 < -50 or z2 > 50):
             continue
         X1, X2 = X_range.index(x1), X_range.index(x2)
         Y1, Y2 = Y_range.index(y1), Y_range.index(y2)
@@ -38,9 +37,7 @@ def solve(lines, part="part_1"):
     vols_y = np.diff(Y_range).astype(np.int64)
     vols_z = np.diff(Z_range).astype(np.int64)
 
-    volume_grid = (
-        vols_x.reshape(-1, 1, 1) * vols_y.reshape(1, -1, 1) * vols_z.reshape(1, 1, -1)
-    )
+    volume_grid = vols_x.reshape(-1, 1, 1) * vols_y.reshape(1, -1, 1) * vols_z.reshape(1, 1, -1)
     on_cubes_mask = grid[:-1, :-1, :-1]
     return np.sum(volume_grid[on_cubes_mask])
 

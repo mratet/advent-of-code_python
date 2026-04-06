@@ -1,7 +1,8 @@
-from aocd import get_data
 import re
 from itertools import combinations
+
 import sympy as sp
+from aocd import get_data
 
 input = get_data(day=24, year=2023).splitlines()
 
@@ -56,12 +57,7 @@ def part_1(lines):
 
     for a1, a2 in combinations(asteroids, 2):
         t1, t2, intersection = find_intersection_2d(a1, a2)
-        if (
-            t1 >= 0
-            and t2 >= 0
-            and min_val <= intersection[0] <= max_val
-            and min_val <= intersection[1] <= max_val
-        ):
+        if t1 >= 0 and t2 >= 0 and min_val <= intersection[0] <= max_val and min_val <= intersection[1] <= max_val:
             ans += 1
     return ans
 

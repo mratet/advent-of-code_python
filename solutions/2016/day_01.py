@@ -14,10 +14,7 @@ def follow_instructions(input, part):
 
     for line in input:
         rot, num = line[0], line[1:]
-        if rot == "R":
-            dir = (dir + 1) % 4
-        else:
-            dir = (dir - 1) % 4
+        dir = (dir + 1) % 4 if rot == "R" else (dir - 1) % 4
 
         dx, dy = dirs[dir]
         for _ in range(int(num)):

@@ -1,9 +1,9 @@
+# WRITE YOUR SOLUTION HERE
+import collections
+
 from aocd import get_data
 
 input = get_data(day=21, year=2023).splitlines()
-
-# WRITE YOUR SOLUTION HERE
-import collections
 
 
 def _parse(input):
@@ -20,7 +20,7 @@ def bfs(maze, start, nb):
     q.append(start)
     visited = set()
 
-    for i in range(nb):
+    for _i in range(nb):
         visited.clear()
         for _ in range(len(q)):
             x, y = q.popleft()
@@ -51,7 +51,7 @@ def part_2(lines):
     values = []
 
     while True:
-        values.append((bfs(maze, s_co, x)))
+        values.append(bfs(maze, s_co, x))
         if len(values) == 3:
             break
         x += 2 * size

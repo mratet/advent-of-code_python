@@ -1,7 +1,8 @@
+import re
+
 from aocd import get_data
 
 input = get_data(day=14, year=2024).splitlines()
-import re
 
 
 # WRITE YOUR SOLUTION HERE
@@ -9,7 +10,7 @@ def part_1(lines):
     X = 103
     Y = 101
     tl = tr = bl = br = 0
-    for i, line in enumerate(lines):
+    for _i, line in enumerate(lines):
         y, x, vy, vx = map(int, re.findall(r"-?\d+", line))
         px, py = (x + 100 * vx) % X, (y + 100 * vy) % Y
 

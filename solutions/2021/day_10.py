@@ -42,11 +42,7 @@ def part_1(lines):
 
 
 def part_2(lines):
-    scores = [
-        compute_stack_score(get_incomplete_stack(line))
-        for line in lines
-        if not is_corrupted_chunk(line)
-    ]
+    scores = [compute_stack_score(get_incomplete_stack(line)) for line in lines if not is_corrupted_chunk(line)]
     scores.sort()
     return scores[len(scores) // 2]
 

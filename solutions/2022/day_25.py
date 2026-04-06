@@ -1,5 +1,3 @@
-import itertools
-
 from aocd import get_data
 
 input = get_data(day=25, year=2022).splitlines()

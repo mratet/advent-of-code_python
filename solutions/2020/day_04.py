@@ -1,7 +1,8 @@
+import re
+
 from aocd import get_data
 
 input = get_data(day=4, year=2020).split("\n\n")
-import re
 
 # WRITE YOUR SOLUTION HERE
 MANDATORY_FIELDS = {"byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"}
@@ -10,10 +11,7 @@ MANDATORY_FIELDS = {"byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"}
 def part_1(lines):
     cnt = 0
     for line in lines:
-        passport = {
-            field.split(":")[0]: field.split(":")[1]
-            for field in line.replace("\n", " ").split(" ")
-        }
+        passport = {field.split(":")[0]: field.split(":")[1] for field in line.replace("\n", " ").split(" ")}
         cnt += not MANDATORY_FIELDS - set(passport)
     return cnt
 
@@ -35,10 +33,7 @@ def part_2(lines):
 
     cnt = 0
     for line in lines:
-        passport = {
-            field.split(":")[0]: field.split(":")[1]
-            for field in line.replace("\n", " ").split(" ")
-        }
+        passport = {field.split(":")[0]: field.split(":")[1] for field in line.replace("\n", " ").split(" ")}
         if not MANDATORY_FIELDS - set(passport):
             cnt += all(req(passport[key]) for key, req in REQUIREMENTS)
     return cnt

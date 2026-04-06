@@ -29,13 +29,13 @@ def get_dist_array(dirs):
 
 
 def part_1(lines):
-    inst = [n for n in lines.split(",")]
+    inst = list(lines.split(","))
     dist_array = get_dist_array(inst)
     return dist_array[-1]
 
 
 def part_2(lines):
-    inst = [n for n in lines.split(",")]
+    inst = list(lines.split(","))
     dist_array = get_dist_array(inst)
     return max(dist_array)
 

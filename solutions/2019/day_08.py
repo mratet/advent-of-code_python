@@ -17,10 +17,8 @@ def part_2(lines):
     W, H = 25, 6
     size = W * H
     layers = [lines[i : i + size] for i in range(0, len(lines), size)]
-    final_image = [
-        next(layer[i] for layer in layers if layer[i] != "2") for i in range(size)
-    ]
-    ascii_art = "\n".join("".join(final_image[row: row + W]) for row in range(0, size, W))
+    final_image = [next(layer[i] for layer in layers if layer[i] != "2") for i in range(size)]
+    ascii_art = "\n".join("".join(final_image[row : row + W]) for row in range(0, size, W))
     return convert_6(ascii_art, fill_pixel="1", empty_pixel="0")
 
 

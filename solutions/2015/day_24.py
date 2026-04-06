@@ -1,10 +1,10 @@
 import itertools
+from functools import reduce
+from operator import mul
+
 from aocd import get_data
 
 input = get_data(day=24, year=2015).splitlines()
-
-from operator import mul
-from functools import reduce
 
 
 def find_best_qe(nums, k):

@@ -1,9 +1,9 @@
+# WRITE YOUR SOLUTION HERE
+from functools import cache
+
 from aocd import get_data
 
 input = get_data(day=12, year=2023).splitlines()
-
-# WRITE YOUR SOLUTION HERE
-from functools import cache
 
 
 @cache

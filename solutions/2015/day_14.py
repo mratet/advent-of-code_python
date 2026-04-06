@@ -1,12 +1,10 @@
+import re
+
 from aocd import get_data
 
 input = get_data(day=14, year=2015).splitlines()
 
-import re
-
-pattern = re.compile(
-    r"(\w+) can fly (\d+) km/s for (\d+) seconds, but then must rest for (\d+) seconds."
-)
+pattern = re.compile(r"(\w+) can fly (\d+) km/s for (\d+) seconds, but then must rest for (\d+) seconds.")
 
 
 def compute_distances(time, input):

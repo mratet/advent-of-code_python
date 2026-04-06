@@ -1,10 +1,10 @@
-from aocd import get_data
-
-input = get_data(day=20, year=2023).splitlines()
-
 # WRITE YOUR SOLUTION HERE
 import math
 from collections import deque
+
+from aocd import get_data
+
+input = get_data(day=20, year=2023).splitlines()
 
 
 class Module:
@@ -82,9 +82,7 @@ def part_1(input):
                         q.append((module.name, x, outgoing))
             else:
                 module.memory[origin] = pulse
-                outgoing = (
-                    "lo" if all(x == "hi" for x in module.memory.values()) else "hi"
-                )
+                outgoing = "lo" if all(x == "hi" for x in module.memory.values()) else "hi"
                 for x in module.outputs:
                     q.append((module.name, x, outgoing))
 
@@ -133,9 +131,7 @@ def part_2(input):
                         q.append((module.name, x, outgoing))
             else:
                 module.memory[origin] = pulse
-                outgoing = (
-                    "lo" if all(x == "hi" for x in module.memory.values()) else "hi"
-                )
+                outgoing = "lo" if all(x == "hi" for x in module.memory.values()) else "hi"
                 for x in module.outputs:
                     q.append((module.name, x, outgoing))
 

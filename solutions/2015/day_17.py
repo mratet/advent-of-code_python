@@ -1,4 +1,5 @@
 import itertools
+
 from aocd import get_data
 
 input = get_data(day=17, year=2015).splitlines()

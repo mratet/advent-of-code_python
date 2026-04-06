@@ -1,5 +1,6 @@
-import itertools
 import collections
+import itertools
+
 from aocd import get_data
 
 input = get_data(day=24, year=2016).splitlines()
@@ -32,7 +33,7 @@ def return_distance(start, interest_coords, maze):
     while q:
         for _ in range(len(q)):
             x, y = q.popleft()
-            if (x, y) in interest_coords.keys():
+            if (x, y) in interest_coords:
                 res[int(interest_coords[(x, y)])] = dist
 
             for dx, dy in dirs:

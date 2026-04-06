@@ -1,16 +1,13 @@
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
-
 input_blocks = open("input.txt").read().split("\n\n")
 
 
 def parse_datetime(text):
     _, region, *date_parts = text.split()
     date_str = " ".join(date_parts)
-    return datetime.strptime(date_str, "%b %d, %Y, %H:%M").replace(
-        tzinfo=ZoneInfo(region)
-    )
+    return datetime.strptime(date_str, "%b %d, %Y, %H:%M").replace(tzinfo=ZoneInfo(region))
 
 
 total_minutes = 0

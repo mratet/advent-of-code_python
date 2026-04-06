@@ -1,4 +1,5 @@
 import re
+
 from aocd import get_data
 
 input = get_data(day=16, year=2015).splitlines()
@@ -22,7 +23,7 @@ def _parse(input):
     pattern = r"(\w+): (\d+)"
     for line in input:
         matchs = re.findall(pattern, line)
-        sue_dict = {k: v for k, v in matchs}
+        sue_dict = dict(matchs)
         sues.append(sue_dict)
     return sues
 
@@ -47,7 +48,7 @@ def check(types, value):
 def part_2(input):
     sues = _parse(input)
     for i, sue in enumerate(sues):
-        if all(list([check(k, v) for k, v in sue.items()])):
+        if all(check(k, v) for k, v in sue.items()):
             return i + 1
 
 

@@ -1,7 +1,7 @@
-import re
 import itertools
+import re
 
-lines = open("input.txt", "r").readlines()
+lines = open("input.txt").readlines()
 
 
 # WRITE YOUR SOLUTION HERE
@@ -41,27 +41,16 @@ def part_2(lines):
         m = re.finditer(r"(\d+)|([^.])", line)
         for match in m:
             if match.group().isdigit():
-                numbers.append(
-                    (int(match.group()), set((i, j) for j in range(*match.span())))
-                )
+                numbers.append((int(match.group()), {(i, j) for j in range(*match.span())}))
             else:
                 symbols[(i, match.start())] = match.group()
 
-    get_neighbors = lambda x, y: {
-        (x + i, y + j) for i, j in itertools.product((-1, 0, 1), repeat=2)
-    }
+    get_neighbors = lambda x, y: {(x + i, y + j) for i, j in itertools.product((-1, 0, 1), repeat=2)}
 
     gears = {coord for coord, symbol in symbols.items() if symbol == "*"}
-    gears_neighbors = [
-        [n for n, coords in numbers if any(get_neighbors(*gear) & coords)]
-        for gear in gears
-    ]
+    gears_neighbors = [[n for n, coords in numbers if any(get_neighbors(*gear) & coords)] for gear in gears]
 
-    res2 = sum(
-        gears_ratio[0] * gears_ratio[1]
-        for gears_ratio in gears_neighbors
-        if len(gears_ratio) == 2
-    )
+    res2 = sum(gears_ratio[0] * gears_ratio[1] for gears_ratio in gears_neighbors if len(gears_ratio) == 2)
     return res2
 
 
@@ -70,11 +59,11 @@ def part_2(lines):
 
 test_input = open("input-test.txt").read().split("\n")
 test_lines = []
-for i, line in enumerate(test_input[3:]):
+for line in test_input[3:]:
     if line[0] == "-":
         break
     test_lines.append(line)
-solution = test_input[i + 4]
+solution = test_input[len(test_lines) + 4]
 
 print(f"My answer on test set for the first problem is {part_1(test_lines)}")
 print(solution)

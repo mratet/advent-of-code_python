@@ -1,6 +1,7 @@
-from aocd import get_data
-from functools import cmp_to_key
 import ast
+from functools import cmp_to_key
+
+from aocd import get_data
 
 input = get_data(day=13, year=2022)
 
@@ -12,7 +13,7 @@ def compare_packets(left, right):
         return left < right
 
     if isinstance(left, list) and isinstance(right, list):
-        for l_item, r_item in zip(left, right):
+        for l_item, r_item in zip(left, right, strict=False):
             res = compare_packets(l_item, r_item)
             if res is not None:
                 return res
@@ -38,10 +39,7 @@ def part_1(lines):
 
 def part_2(lines):
     divider_packets = [[[2]], [[6]]]
-    packets = (
-        list(map(ast.literal_eval, lines.replace("\n\n", "\n").splitlines()))
-        + divider_packets
-    )
+    packets = list(map(ast.literal_eval, lines.replace("\n\n", "\n").splitlines())) + divider_packets
     packets = sorted(
         packets,
         key=cmp_to_key(lambda l, r: 2 * (compare_packets(l, r) - 0.5)),

@@ -7,7 +7,7 @@ input = get_data(day=25, year=2018).splitlines()
 
 
 def manhattan_distance(p1, p2):
-    return sum(abs(p1c - p2c) for p1c, p2c in zip(p1, p2))
+    return sum(abs(p1c - p2c) for p1c, p2c in zip(p1, p2, strict=False))
 
 
 def parse_input(lines):

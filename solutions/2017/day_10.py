@@ -1,8 +1,9 @@
+from functools import reduce
+from operator import xor
+
 from aocd import get_data
 
 input = get_data(day=10, year=2017)
-from functools import reduce
-from operator import xor
 
 
 # WRITE YOUR SOLUTION HERE
@@ -13,9 +14,7 @@ def rotation_step(lengths):
         if l > len(L):
             continue
         if current_pos + l < len(L):
-            L[current_pos : current_pos + l] = list(
-                reversed(L[current_pos : current_pos + l])
-            )
+            L[current_pos : current_pos + l] = list(reversed(L[current_pos : current_pos + l]))
         else:
             l1, r1 = current_pos, len(L)
             l2, r2 = 0, l - (len(L) - current_pos)

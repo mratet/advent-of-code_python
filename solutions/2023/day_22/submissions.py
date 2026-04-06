@@ -1,7 +1,8 @@
+import collections
+
 lines = open("input.txt").read().splitlines()
 
 # WRITE YOUR SOLUTION HERE
-import collections
 
 
 def part_1(lines):
@@ -27,20 +28,14 @@ def part_1(lines):
         elif x_s == x_e:
             z_max = max([basis[(x_e, y)][0] for y in range(y_s, y_e + 1)])
             for y in range(y_s, y_e + 1):
-                if (
-                    basis[(x_e, y)][0] == z_max
-                    and basis[(x_e, y)][1] not in is_supported_by[i + 1]
-                ):
+                if basis[(x_e, y)][0] == z_max and basis[(x_e, y)][1] not in is_supported_by[i + 1]:
                     is_supported_by[i + 1].append(basis[(x_e, y)][1])
                 basis[(x_e, y)] = (z_max + 1, i)
 
         elif y_s == y_e:
             z_max = max([basis[(x, y_e)][0] for x in range(x_s, x_e + 1)])
             for x in range(x_s, x_e + 1):
-                if (
-                    basis[(x, y_e)][0] == z_max
-                    and basis[(x, y_e)][1] not in is_supported_by[i + 1]
-                ):
+                if basis[(x, y_e)][0] == z_max and basis[(x, y_e)][1] not in is_supported_by[i + 1]:
                     is_supported_by[i + 1].append(basis[(x, y_e)][1])
                 basis[(x, y_e)] = (z_max + 1, i)
         else:
@@ -79,20 +74,14 @@ def part_2(lines):
         elif x_s == x_e:
             z_max = max([basis[(x_e, y)][0] for y in range(y_s, y_e + 1)])
             for y in range(y_s, y_e + 1):
-                if (
-                    basis[(x_e, y)][0] == z_max
-                    and basis[(x_e, y)][1] not in is_supported_by[i + 1]
-                ):
+                if basis[(x_e, y)][0] == z_max and basis[(x_e, y)][1] not in is_supported_by[i + 1]:
                     is_supported_by[i + 1].append(basis[(x_e, y)][1])
                 basis[(x_e, y)] = (z_max + 1, i)
 
         elif y_s == y_e:
             z_max = max([basis[(x, y_e)][0] for x in range(x_s, x_e + 1)])
             for x in range(x_s, x_e + 1):
-                if (
-                    basis[(x, y_e)][0] == z_max
-                    and basis[(x, y_e)][1] not in is_supported_by[i + 1]
-                ):
+                if basis[(x, y_e)][0] == z_max and basis[(x, y_e)][1] not in is_supported_by[i + 1]:
                     is_supported_by[i + 1].append(basis[(x, y_e)][1])
                 basis[(x, y_e)] = (z_max + 1, i)
         else:
@@ -139,11 +128,11 @@ def dfs(start, graph):
 
 test_input = open("input-test.txt").read().splitlines()
 test_lines = []
-for i, line in enumerate(test_input[3:]):
+for line in test_input[3:]:
     if line[0] == "-":
         break
     test_lines.append(line)
-solution = test_input[i + 4]
+solution = test_input[len(test_lines) + 4]
 
 print(f"My answer on test set for the first problem is {part_1(test_lines)}")
 print(solution)

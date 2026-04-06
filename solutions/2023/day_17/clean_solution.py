@@ -1,9 +1,9 @@
+# WRITE YOUR SOLUTION HERE
+from heapq import heappop, heappush
+
 from aocd import get_data
 
 input = get_data(day=17, year=2023).splitlines()
-
-# WRITE YOUR SOLUTION HERE
-from heapq import heappop, heappush
 
 N, S, W, E = (0, -1), (0, 1), (-1, 0), (1, 0)
 
@@ -27,9 +27,7 @@ def dijkstra(graph, source, target, part):
                 case "part_1":
                     isvalid = new_cnt_dir <= 3
                 case "part_2":
-                    isvalid = new_cnt_dir <= 10 and (
-                        new_dir == dir_ or cnt_dir_ >= 4 or cnt_dir_ == -1
-                    )
+                    isvalid = new_cnt_dir <= 10 and (new_dir == dir_ or cnt_dir_ >= 4 or cnt_dir_ == -1)
 
             if next_node in graph and isnt_reverse and isvalid:
                 cost = graph[next_node]

@@ -1,6 +1,5 @@
 import itertools
 import re
-from collections import defaultdict
 
 from aocd import get_data
 
@@ -43,11 +42,14 @@ def part_2(input):
         x, y = node
         for dx, dy in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
             nx, ny = x + dx, y + dy
-            if not (0 <= nx <= max_x and 0 <= ny <= max_y): continue
-            if (nx, ny) in walls or (nx, ny) in visited: continue
+            if not (0 <= nx <= max_x and 0 <= ny <= max_y):
+                continue
+            if (nx, ny) in walls or (nx, ny) in visited:
+                continue
             visited.add((nx, ny))
             queue.append(((nx, ny), steps_to_move_empty_node + 1))
     return -1
+
 
 print(f"My answer is {part_1(input)}")
 print(f"My answer is {part_2(input)}")

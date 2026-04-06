@@ -35,9 +35,7 @@ def build_best_asteroid_detection(asteroids):
             base_astro = (x, y)
 
     for k in astro_visu:
-        astro_visu[k].sort(
-            key=lambda a: abs(a[0] - base_astro[0]) + abs(a[1] - base_astro[1])
-        )
+        astro_visu[k].sort(key=lambda a: abs(a[0] - base_astro[0]) + abs(a[1] - base_astro[1]))
 
     return astro_visu
 

@@ -1,3 +1,5 @@
+import itertools
+
 from aocd import get_data
 
 input = get_data(day=23, year=2020)
@@ -27,7 +29,7 @@ def get_next_turn(state, starting_pos):
 
 def get_state_slow_ver(state, N):
     current_pos = 0
-    for i in range(N):
+    for _i in range(N):
         state, current_pos = get_next_turn(state, current_pos)
     idx = state.index(1)
     return "".join([str(n) for n in (state[1 + idx :] + state[:idx])])
@@ -64,7 +66,7 @@ def next_turn(next, current_cup):
 def get_state_fast_ver(init_state, N):
     current_cup = init_state[0]
     state = [0] * len(init_state)
-    for i, j in zip(init_state, init_state[1:]):
+    for i, j in itertools.pairwise(init_state):
         state[i] = j
 
     for _ in range(N):

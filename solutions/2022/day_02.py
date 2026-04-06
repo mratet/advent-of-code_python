@@ -9,7 +9,7 @@ to_num = {"A": 0, "X": 0, "B": 1, "Y": 1, "C": 2, "Z": 2}
 def part_1(lines):
     score1 = 0
     for line in lines:
-        a, b = map(to_num.get, line.split())
+        a, b = map(to_num.__getitem__, line.split())
         outcome = (b - a) % 3
         # 0: draw, 1: win, 2: loss
         score1 += [3, 6, 0][outcome] + b + 1

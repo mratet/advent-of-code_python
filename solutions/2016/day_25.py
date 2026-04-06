@@ -39,25 +39,15 @@ def program_execution(registers, input):
                     line = input[line_index + cond].split()
                     match line[0]:
                         case "inc":
-                            input[line_index + cond] = input[line_index + cond].replace(
-                                "inc", "dec"
-                            )
+                            input[line_index + cond] = input[line_index + cond].replace("inc", "dec")
                         case "dec":
-                            input[line_index + cond] = input[line_index + cond].replace(
-                                "dec", "inc"
-                            )
+                            input[line_index + cond] = input[line_index + cond].replace("dec", "inc")
                         case "tgl":
-                            input[line_index + cond] = input[line_index + cond].replace(
-                                "tgl", "inc"
-                            )
+                            input[line_index + cond] = input[line_index + cond].replace("tgl", "inc")
                         case "jnz":
-                            input[line_index + cond] = input[line_index + cond].replace(
-                                "jnz", "cpy"
-                            )
+                            input[line_index + cond] = input[line_index + cond].replace("jnz", "cpy")
                         case "cpy":
-                            input[line_index + cond] = input[line_index + cond].replace(
-                                "cpy", "jnz"
-                            )
+                            input[line_index + cond] = input[line_index + cond].replace("cpy", "jnz")
         line_index += 1
 
     return registers, sig

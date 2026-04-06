@@ -7,7 +7,7 @@ input = get_data(day=14, year=2023).splitlines()
 
 def right_rotation(matrix, n):
     for _ in range(n):
-        matrix = list(zip(*matrix[::-1]))
+        matrix = list(zip(*matrix[::-1], strict=False))
     return matrix
 
 

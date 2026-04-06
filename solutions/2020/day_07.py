@@ -1,8 +1,9 @@
+import re
+from functools import cache
+
 from aocd import get_data
 
 input = get_data(day=7, year=2020).splitlines()
-from functools import lru_cache
-import re
 
 
 # WRITE YOUR SOLUTION HERE
@@ -14,9 +15,7 @@ def parse_bag_rules(lines):
             bag_rules[main_bag] = {}
         else:
             content_matches = re.findall(r"(\d+) ([a-z ]+) bag", contents)
-            bag_rules[main_bag] = {
-                bag_color: int(quantity) for quantity, bag_color in content_matches
-            }
+            bag_rules[main_bag] = {bag_color: int(quantity) for quantity, bag_color in content_matches}
     return bag_rules
 
 
@@ -34,7 +33,7 @@ def part_1(lines):
 def part_2(lines):
     bag_rules = parse_bag_rules(lines)
 
-    @lru_cache(maxsize=None)
+    @cache
     def bag_weight(bag):
         if not bag_rules[bag]:
             return 0

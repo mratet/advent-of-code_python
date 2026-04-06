@@ -45,11 +45,7 @@ def lambda_is_inside_main_cube(grid_cubes):
     max_y = max(y for _, y, _ in grid_cubes)
     min_z = min(z for _, _, z in grid_cubes)
     max_z = max(z for _, _, z in grid_cubes)
-    return (
-        lambda x, y, z: min_x <= x <= max_x
-        and min_y <= y <= max_y
-        and min_z <= z <= max_z
-    )
+    return lambda x, y, z: min_x <= x <= max_x and min_y <= y <= max_y and min_z <= z <= max_z
 
 
 def is_interior_cube(grid_cubes, starting_cube):

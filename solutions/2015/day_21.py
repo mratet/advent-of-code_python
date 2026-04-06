@@ -1,5 +1,6 @@
 import itertools
 import math
+
 from aocd import get_data
 
 input = get_data(day=21, year=2015).splitlines()
@@ -53,9 +54,7 @@ def get_game_data(data):
     }
 
     rings_combinations = list(itertools.combinations(rings.values(), 2))
-    equipments = list(
-        itertools.product(weapons.values(), armors.values(), rings_combinations)
-    )
+    equipments = list(itertools.product(weapons.values(), armors.values(), rings_combinations))
 
     return player, boss, equipments
 
@@ -67,9 +66,7 @@ def part_1(input):
     for equipment in equipments:
         Weapon, Armor, (r1, r2) = equipment
         total_cost = Weapon["cost"] + Armor["cost"] + r1["cost"] + r2["cost"]
-        player["damage"] = (
-            Weapon["damage"] + Armor["damage"] + r1["damage"] + r2["damage"]
-        )
+        player["damage"] = Weapon["damage"] + Armor["damage"] + r1["damage"] + r2["damage"]
         player["armor"] = Weapon["armor"] + Armor["armor"] + r1["armor"] + r2["armor"]
 
         if fight_result(player, boss):
@@ -85,9 +82,7 @@ def part_2(input):
     for equipment in equipments:
         Weapon, Armor, (r1, r2) = equipment
         total_cost = Weapon["cost"] + Armor["cost"] + r1["cost"] + r2["cost"]
-        player["damage"] = (
-            Weapon["damage"] + Armor["damage"] + r1["damage"] + r2["damage"]
-        )
+        player["damage"] = Weapon["damage"] + Armor["damage"] + r1["damage"] + r2["damage"]
         player["armor"] = Weapon["armor"] + Armor["armor"] + r1["armor"] + r2["armor"]
 
         if not fight_result(player, boss):

@@ -1,7 +1,7 @@
-from collections import deque, defaultdict
-from string import ascii_lowercase, ascii_uppercase
-from heapq import heappush, heappop
 import math
+from collections import defaultdict, deque
+from heapq import heappop, heappush
+from string import ascii_lowercase, ascii_uppercase
 
 from aocd import get_data
 
@@ -43,9 +43,7 @@ def build_graph(start, dots, keys, doors):
     queue = deque([(start, 0, 0)])
     visited = {start}
 
-    keys_dist = (
-        {} if reverse_keys[start] in START_KEYS else {reverse_keys[start]: (0, 0)}
-    )
+    keys_dist = {} if reverse_keys[start] in START_KEYS else {reverse_keys[start]: (0, 0)}
     while queue:
         (x, y), doors_seen, cnt = queue.popleft()
         for dx, dy in DIRS:
@@ -62,10 +60,7 @@ def build_graph(start, dots, keys, doors):
                 queue.append(
                     (
                         neighbor,
-                        (
-                            doors_seen
-                            + (1 << ascii_uppercase.index(reverse_doors[neighbor]))
-                        ),
+                        (doors_seen + (1 << ascii_uppercase.index(reverse_doors[neighbor]))),
                         cnt + 1,
                     )
                 )

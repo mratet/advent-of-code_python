@@ -40,7 +40,7 @@ def check_mapping(start, end, category):
     ref = mapping(category, start) - start
     length = 10  # trade-off between speed and precision
     step = (end - start) // length + 1
-    return all([mapping(category, i) - i == ref for i in range(start, end, step)])
+    return all(mapping(category, i) - i == ref for i in range(start, end, step))
 
 
 def part_2(input):
@@ -53,9 +53,7 @@ def part_2(input):
         flag = True
         while intervals:
             start, end = intervals.pop()
-            if (end - start) >= 2 and not check_mapping(
-                start, end, category_transformation
-            ):
+            if (end - start) >= 2 and not check_mapping(start, end, category_transformation):
                 mid = (start + end) // 2
                 new_intervals.append((start, mid))
                 new_intervals.append((mid, end))

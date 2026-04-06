@@ -42,7 +42,7 @@ def solve(lines, part):
             paths.append(current_path)
             return
         for next_node in graph[last_node]:
-            next_path = current_path + [next_node]
+            next_path = [*current_path, next_node]
             if is_valid_path(next_path, part):
                 dfs(next_path)
 

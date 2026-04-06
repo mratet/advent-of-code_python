@@ -21,9 +21,7 @@ def generate_all_sequences(n, decoded_list):
     for start_pos in range(last_pos):
         tab = ["."] * (start_pos + first_len + 1)
         tab[start_pos : start_pos + first_len] = "#" * first_len
-        next_tab = generate_all_sequences(
-            n - start_pos - first_len - 1, decoded_list.copy()
-        )
+        next_tab = generate_all_sequences(n - start_pos - first_len - 1, decoded_list.copy())
         for x in next_tab:
             all_tab.append(tab + x)
     return all_tab
@@ -82,7 +80,7 @@ def solve(string, decoded):
 
 def part_2(lines):
     ans = 0
-    for i, line in enumerate(lines):
+    for _i, line in enumerate(lines):
         encoded, decoded = line.split()
         decoded = tuple([int(c) for c in decoded.split(",")])
         encoded = ((encoded + "?") * 5)[:-1]
@@ -96,11 +94,11 @@ def part_2(lines):
 
 test_input = open("input-test.txt").read().splitlines()
 test_lines = []
-for i, line in enumerate(test_input[3:]):
+for line in test_input[3:]:
     if line[0] == "-":
         break
     test_lines.append(line)
-solution = test_input[i + 4]
+solution = test_input[len(test_lines) + 4]
 
 print(f"My answer on test set for the first problem is {part_1(test_lines)}")
 print(solution)

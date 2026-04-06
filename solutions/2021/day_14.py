@@ -40,7 +40,7 @@ def count_letters(current_polymer):
 
 
 def solve(current_polymer, insertion_rules, n):
-    for i in range(n):
+    for _i in range(n):
         current_polymer = get_next_polymer(current_polymer, insertion_rules)
     letters_count = count_letters(current_polymer)
     return max(letters_count) - min(letters_count)

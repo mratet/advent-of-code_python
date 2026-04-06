@@ -1,7 +1,8 @@
+from itertools import product
+
 from aocd import get_data
 
 input = get_data(day=1, year=2020).splitlines()
-from itertools import product
 
 
 # WRITE YOUR SOLUTION HERE

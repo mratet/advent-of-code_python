@@ -26,8 +26,7 @@ def part_1(polymer: str) -> int:
 
 def part_2(polymer: str) -> int:
     return min(
-        polymer_reaction(polymer.replace(chr(i), "").replace(chr(i).upper(), ""))
-        for i in range(ord("a"), ord("z") + 1)
+        polymer_reaction(polymer.replace(chr(i), "").replace(chr(i).upper(), "")) for i in range(ord("a"), ord("z") + 1)
     )
 
 

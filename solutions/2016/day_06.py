@@ -1,11 +1,12 @@
 import collections
+
 from aocd import get_data
 
 input = get_data(day=6, year=2016).splitlines()
 
 
 def send_message(input, part="part_1"):
-    col = zip(*input)
+    col = zip(*input, strict=False)
     t = ""
     for row in col:
         count = collections.Counter(row)

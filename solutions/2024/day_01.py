@@ -1,7 +1,8 @@
+from collections import Counter
+
 from aocd import get_data
 
 input = get_data(day=1, year=2024).split()
-from collections import Counter
 
 
 # WRITE YOUR SOLUTION HERE
@@ -12,7 +13,7 @@ def parse_input(lines):
 
 def part_1(lines):
     left, right = parse_input(lines)
-    return sum([abs(r - l) for l, r in zip(left, right)])
+    return sum([abs(r - l) for l, r in zip(left, right, strict=False)])
 
 
 def part_2(lines):

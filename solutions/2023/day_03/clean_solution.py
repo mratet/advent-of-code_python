@@ -1,20 +1,16 @@
+# WRITE YOUR SOLUTION HERE
+import re
+
 from aocd import get_data
 
 input = get_data(day=3, year=2023).splitlines()
-
-# WRITE YOUR SOLUTION HERE
-import re
 
 
 def part_1(grid):
     def is_valid(r, s, e):
         for cr in [r - 1, r, r + 1]:
             for cc in range(s - 1, e + 1):
-                if (
-                    0 <= cr < len(grid)
-                    and 0 <= cc < len(row)
-                    and grid[cr][cc] not in ".01234556789"
-                ):
+                if 0 <= cr < len(grid) and 0 <= cc < len(row) and grid[cr][cc] not in ".01234556789":
                     return True
         return False
 

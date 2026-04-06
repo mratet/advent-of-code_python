@@ -1,8 +1,9 @@
+from collections import defaultdict
+from itertools import combinations
+
 from aocd import get_data
 
 input = get_data(day=23, year=2024).splitlines()
-from collections import defaultdict
-from itertools import combinations
 
 
 # WRITE YOUR SOLUTION HERE
@@ -37,7 +38,7 @@ def part_2(lines):
     def bron_kerbosch(R, P, X):
         if not P and not X:
             C[len(R)].add(frozenset(R))
-        for v in P.union(set([])):
+        for v in P.union(set()):
             bron_kerbosch(
                 R.union({v}),
                 P.intersection(set(graph[v])),
@@ -47,7 +48,7 @@ def part_2(lines):
             X.add(v)
 
     bron_kerbosch(set(), computers, set())
-    return ",".join(sorted(list(C[max(C)].pop())))
+    return ",".join(sorted(C[max(C)].pop()))
 
 
 # END OF SOLUTION

@@ -1,8 +1,8 @@
-from functools import lru_cache
+import re
+from functools import cache
+from itertools import cycle, islice, product
 
 from aocd import get_data
-import re
-from itertools import product, cycle, islice
 
 input = get_data(day=21, year=2021).splitlines()
 
@@ -31,7 +31,7 @@ def single_player_game(player, dice_gen):
     return turn
 
 
-@lru_cache(maxsize=None)
+@cache
 def play_quantum_game(p1_position, p1_score, p2_position, p2_score, turn):
     if p1_score >= 21:
         return (1, 0)
@@ -44,15 +44,11 @@ def play_quantum_game(p1_position, p1_score, p2_position, p2_score, turn):
         if turn == 0:
             new_p1_position = (p1_position + roll_sum) % GAMEBOARD_SIZE
             new_p1_score = p1_score + new_p1_position + 1
-            child_wins = play_quantum_game(
-                new_p1_position, new_p1_score, p2_position, p2_score, (turn + 1) % 2
-            )
+            child_wins = play_quantum_game(new_p1_position, new_p1_score, p2_position, p2_score, (turn + 1) % 2)
         if turn == 1:
             new_p2_position = (p2_position + roll_sum) % GAMEBOARD_SIZE
             new_p2_score = p2_score + new_p2_position + 1
-            child_wins = play_quantum_game(
-                p1_position, p1_score, new_p2_position, new_p2_score, (turn + 1) % 2
-            )
+            child_wins = play_quantum_game(p1_position, p1_score, new_p2_position, new_p2_score, (turn + 1) % 2)
         total_wins = total_wins[0] + child_wins[0], total_wins[1] + child_wins[1]
     return total_wins
 

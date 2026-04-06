@@ -1,8 +1,9 @@
+from collections import defaultdict
+from functools import cmp_to_key
+
 from aocd import get_data
 
 input = get_data(day=5, year=2024).split("\n\n")
-from collections import defaultdict
-from functools import cmp_to_key
 
 
 # WRITE YOUR SOLUTION HERE
@@ -19,24 +20,14 @@ def parse_input(lines):
 def part_1(lines):
     dict_rule, pages = parse_input(lines)
     cmp = lambda a, b: -1 * int(b in dict_rule[a])
-    return sum(
-        [
-            page[len(page) // 2]
-            for page in pages
-            if (page == sorted(page, key=cmp_to_key(cmp)))
-        ]
-    )
+    return sum([page[len(page) // 2] for page in pages if (page == sorted(page, key=cmp_to_key(cmp)))])
 
 
 def part_2(lines):
     dict_rule, pages = parse_input(lines)
     cmp = lambda a, b: -1 * int(b in dict_rule[a])
     return sum(
-        [
-            sorted_p[len(sorted_p) // 2]
-            for page in pages
-            if (sorted_p := sorted(page, key=cmp_to_key(cmp))) != page
-        ]
+        [sorted_p[len(sorted_p) // 2] for page in pages if (sorted_p := sorted(page, key=cmp_to_key(cmp))) != page]
     )
 
 

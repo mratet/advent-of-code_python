@@ -1,3 +1,5 @@
+import itertools
+
 from aocd import get_data
 
 input = get_data(day=20, year=2016).splitlines()
@@ -35,7 +37,7 @@ def part_1(input):
 def part_2(input):
     intervals = _parse(input)
     intervals = merge_intervals(intervals)
-    cnt = sum([s2 - e1 - 1 for (_, e1), (s2, _) in zip(intervals, intervals[1:])])
+    cnt = sum([s2 - e1 - 1 for (_, e1), (s2, _) in itertools.pairwise(intervals)])
     return cnt
 
 

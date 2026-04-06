@@ -1,8 +1,9 @@
 import itertools
-from functools import lru_cache
-from aocd import get_data
-from collections import deque
 import re
+from collections import deque
+from functools import cache
+
+from aocd import get_data
 
 input = get_data(day=16, year=2022)
 
@@ -11,11 +12,10 @@ def parse_input(lines):
     graph = {}
 
     for line in lines.splitlines():
-        match = re.match(
-            r"Valve (\w+) has flow rate=(\d+); tunnels? leads? to valves? (.+)", line
-        )
+        match = re.match(r"Valve (\w+) has flow rate=(\d+); tunnels? leads? to valves? (.+)", line)
+        assert match
         name, flow, neighbors = match.groups()
-        graph[name] = {"flow": int(flow), "tunnels": [n for n in neighbors.split(", ")]}
+        graph[name] = {"flow": int(flow), "tunnels": list(neighbors.split(", "))}
 
     useful_valves = {name for name, props in graph.items() if props["flow"] > 0}
     return graph, useful_valves
@@ -40,7 +40,7 @@ def compute_distances(graph):
 def solve(graph, useful_valves, max_minutes=30):
     dists = compute_distances(graph)
 
-    @lru_cache(maxsize=None)
+    @cache
     def dfs(current, time_left, unopened):
         best = 0
         for valve in unopened:

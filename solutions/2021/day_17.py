@@ -1,6 +1,7 @@
-from aocd import get_data
-from itertools import product
 import re
+from itertools import product
+
+from aocd import get_data
 
 input = get_data(day=17, year=2021)
 
@@ -22,7 +23,7 @@ def solve(lines, part="part_1"):
     for vel_x, vel_y in product(range(1, 400), range(-100, 400)):
         pos_x, pos_y = 0, 0
         height_list = [pos_y]
-        for step in range(200):
+        for _step in range(200):
             pos_x += vel_x
             pos_y += vel_y
             height_list.append(pos_y)

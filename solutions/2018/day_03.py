@@ -1,7 +1,8 @@
-from aocd import get_data
-from collections import Counter
 import re
+from collections import Counter
+
 import numpy as np
+from aocd import get_data
 
 input_data = get_data(day=3, year=2018)
 GRID_SIZE = 1000
@@ -15,7 +16,7 @@ def parse_claims(text):
 def part_1(lines):
     fabric = np.zeros((GRID_SIZE, GRID_SIZE), dtype=int)
 
-    for claim_id, left, top, width, height in parse_claims(lines):
+    for _claim_id, left, top, width, height in parse_claims(lines):
         fabric[top : top + height, left : left + width] += 1
 
     return np.count_nonzero(fabric > 1)

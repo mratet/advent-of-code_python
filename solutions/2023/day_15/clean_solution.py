@@ -1,10 +1,10 @@
+# WRITE YOUR SOLUTION HERE
+from collections import defaultdict
+from functools import reduce
+
 from aocd import get_data
 
 input = get_data(day=15, year=2023).splitlines()
-
-# WRITE YOUR SOLUTION HERE
-from functools import reduce
-from collections import defaultdict
 
 char = lambda i, c: (i + ord(c)) * 17 % 256
 hash = lambda s: reduce(char, s, 0)
@@ -29,9 +29,7 @@ def part_2(lines):
             label, focal_length = u.split("=")
             boxes[hash(label)][label] = int(focal_length)
 
-    return sum(
-        (i + 1) * (j + 1) * l for i in boxes for j, l in enumerate(boxes[i].values())
-    )
+    return sum((i + 1) * (j + 1) * l for i in boxes for j, l in enumerate(boxes[i].values()))
 
 
 # END OF SOLUTION

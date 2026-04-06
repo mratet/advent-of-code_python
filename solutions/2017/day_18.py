@@ -1,7 +1,8 @@
+from collections import defaultdict
+
 from aocd import get_data
 
 input = get_data(day=18, year=2017).splitlines()
-from collections import defaultdict
 
 
 # WRITE YOUR SOLUTION HERE
@@ -32,9 +33,8 @@ def part_1(lines):
         elif op == "rcv":
             if Z != 0:
                 return frq
-        elif op == "jgz":
-            if registers[X] > 0:
-                i += Y - 1
+        elif op == "jgz" and registers[X] > 0:
+            i += Y - 1
         i += 1
 
 

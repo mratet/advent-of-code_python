@@ -31,7 +31,7 @@ def solve(contraption, start):
 
     ans = 0
     maze = [["." for _ in range(m)] for j in range(n)]
-    for (x, y), dir in visited:
+    for (x, y), _dir in visited:
         if maze[y][x] == ".":
             maze[y][x] = "#"
             ans += 1
@@ -65,11 +65,11 @@ def part_2(lines):
 
 test_input = open("input-test.txt").read().splitlines()
 test_lines = []
-for i, line in enumerate(test_input[3:]):
+for line in test_input[3:]:
     if line[0] == "-":
         break
     test_lines.append(line)
-solution = test_input[i + 4]
+solution = test_input[len(test_lines) + 4]
 
 print(f"My answer on test set for the first problem is {part_1(test_lines)}")
 print(solution)

@@ -1,8 +1,8 @@
+import re
 from collections import defaultdict
 from math import prod
 
 from aocd import get_data
-import re
 
 input = get_data(day=11, year=2022)
 
@@ -17,24 +17,23 @@ def parse_monkey_data(input_text):
         items = list(map(int, re.findall(r"\d+", lines[1])))
 
         operation_match = re.search(r"Operation: new = old ([*+]) (\w+)", lines[2])
+        assert operation_match
         op_symbol, op_value = operation_match.groups()
         if op_value == "old":
             operation = lambda old, op=op_symbol: old * old if op == "*" else old + old
         else:
             op_value = int(op_value)
-            operation = (
-                lambda old, op=op_symbol, val=op_value: old * val
-                if op == "*"
-                else old + val
-            )
+            operation = lambda old, op=op_symbol, val=op_value: old * val if op == "*" else old + val
 
-        divisible_by = int(re.search(r"divisible by (\d+)", lines[3]).group(1))
-        true_target = int(
-            re.search(r"If true: throw to monkey (\d+)", lines[4]).group(1)
-        )
-        false_target = int(
-            re.search(r"If false: throw to monkey (\d+)", lines[5]).group(1)
-        )
+        m_div = re.search(r"divisible by (\d+)", lines[3])
+        assert m_div
+        divisible_by = int(m_div.group(1))
+        m_true = re.search(r"If true: throw to monkey (\d+)", lines[4])
+        assert m_true
+        true_target = int(m_true.group(1))
+        m_false = re.search(r"If false: throw to monkey (\d+)", lines[5])
+        assert m_false
+        false_target = int(m_false.group(1))
 
         monkeys[monkey_id] = {
             "items": items,

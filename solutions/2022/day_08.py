@@ -1,5 +1,6 @@
-from aocd import get_data
 from math import prod
+
+from aocd import get_data
 
 input = get_data(day=8, year=2022).splitlines()
 X, Y = len(input), len(input[0])
@@ -17,10 +18,7 @@ def get_views(tree):
 
 def check_tree_visibility(tree, grid):
     views = get_views(tree)
-    for view in views:
-        if not view or all(grid[neigh_tree] < grid[tree] for neigh_tree in view):
-            return True
-    return False
+    return any(not view or all(grid[neigh_tree] < grid[tree] for neigh_tree in view) for view in views)
 
 
 def compute_scenic_score(tree, grid):

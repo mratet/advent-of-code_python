@@ -1,8 +1,9 @@
+import collections
+import itertools
+
 from aocd import get_data
 
 input = get_data(day=9, year=2015).splitlines()
-import itertools
-import collections
 
 
 def _parse(lines):
