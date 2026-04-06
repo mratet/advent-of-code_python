@@ -1,6 +1,5 @@
 import itertools
-from functools import reduce
-from operator import mul
+import math
 
 from aocd import get_data
 
@@ -8,25 +7,25 @@ input = get_data(day=24, year=2015).splitlines()
 
 
 def find_best_qe(nums, k):
-    aim = sum(nums) // k
+    target = sum(nums) // k
     # We test the first group of combinations
     for n in range(1, len(nums)):
-        good = [x for x in list(itertools.combinations(nums, n)) if sum(x) == aim]
-        if len(good) > 0:
-            break
+        good = [x for x in list(itertools.combinations(nums, n)) if sum(x) == target]
+        if good:
+            return min(math.prod(x) for x in good)
 
-    best_comb = min(good, key=lambda x: reduce(mul, x))
-    return reduce(mul, best_comb)
+
+def solve(input, N):
+    nums = list(map(int, input))
+    return find_best_qe(nums, N)
 
 
 def part_1(input):
-    nums = list(map(int, input))
-    return find_best_qe(nums, 3)
+    return solve(input, 3)
 
 
 def part_2(input):
-    nums = list(map(int, input))
-    return find_best_qe(nums, 4)
+    return solve(input, 4)
 
 
 print(f"My answer is {part_1(input)}")

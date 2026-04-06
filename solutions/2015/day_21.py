@@ -59,7 +59,7 @@ def get_game_data(data):
     return player, boss, equipments
 
 
-def part_1(input):
+def solve(input, part):
     player, boss, equipments = get_game_data(input)
 
     costs = []
@@ -68,27 +68,18 @@ def part_1(input):
         total_cost = Weapon["cost"] + Armor["cost"] + r1["cost"] + r2["cost"]
         player["damage"] = Weapon["damage"] + Armor["damage"] + r1["damage"] + r2["damage"]
         player["armor"] = Weapon["armor"] + Armor["armor"] + r1["armor"] + r2["armor"]
-
-        if fight_result(player, boss):
+        if fight_result(player, boss) == (part == "part_1"):
             costs.append(total_cost)
 
-    return min(costs)
+    return min(costs) if part == "part_1" else max(costs)
+
+
+def part_1(input):
+    return solve(input, "part_1")
 
 
 def part_2(input):
-    player, boss, equipments = get_game_data(input)
-
-    costs = []
-    for equipment in equipments:
-        Weapon, Armor, (r1, r2) = equipment
-        total_cost = Weapon["cost"] + Armor["cost"] + r1["cost"] + r2["cost"]
-        player["damage"] = Weapon["damage"] + Armor["damage"] + r1["damage"] + r2["damage"]
-        player["armor"] = Weapon["armor"] + Armor["armor"] + r1["armor"] + r2["armor"]
-
-        if not fight_result(player, boss):
-            costs.append(total_cost)
-
-    return max(costs)
+    return solve(input, "part_2")
 
 
 print(f"My answer is {part_1(input)}")

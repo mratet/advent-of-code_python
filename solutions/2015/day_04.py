@@ -6,7 +6,7 @@ input = get_data(day=4, year=2015)
 
 
 def match_md5(input, match):
-    my_hash, i = "2", 0
+    my_hash, i = "", 0
     while not my_hash.startswith(match):
         new_input = input + str(i)
         my_hash = md5(new_input.encode()).hexdigest()

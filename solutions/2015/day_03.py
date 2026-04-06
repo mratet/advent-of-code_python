@@ -1,19 +1,18 @@
 from aocd import get_data
 
-input = get_data(day=3, year=2015)[:-1]
+input = get_data(day=3, year=2015)
 
 DIRS = {"v": (0, -1), "^": (0, 1), ">": (1, 0), "<": (-1, 0)}
 
 
 def follow_direction(instructions):
-    visited = set()
-    pose = (0, 0)
-    visited.add(pose)
+    pos = (0, 0)
+    visited = {pos}
 
     for c in instructions:
         dx, dy = DIRS[c]
-        pose = (pose[0] + dx, pose[1] + dy)
-        visited.add(pose)
+        pos = (pos[0] + dx, pos[1] + dy)
+        visited.add(pos)
 
     return visited
 

@@ -12,20 +12,17 @@ def ribbon_area(l, w, h):
     return l * w * h + 2 * a + 2 * b
 
 
+def solve(input, part="part_1"):
+    surface_func = area if part == "part_1" else ribbon_area
+    return sum(surface_func(*map(int, line.split("x"))) for line in input)
+
+
 def part_1(input):
-    t = 0
-    for line in input:
-        l, w, h = list(map(int, line.split("x")))
-        t += area(l, w, h)
-    return t
+    return solve(input, part="part_1")
 
 
 def part_2(input):
-    t = 0
-    for line in input:
-        l, w, h = list(map(int, line.split("x")))
-        t += ribbon_area(l, w, h)
-    return t
+    return solve(input, part="part_2")
 
 
 print(f"My answer is {part_1(input)}")

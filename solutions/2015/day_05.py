@@ -6,27 +6,24 @@ input = get_data(day=5, year=2015).splitlines()
 
 
 def nice_string_part1(str):
-    cond1 = re.search(r"([aeiou].*){3}", str)
-    # deux parametres identiques consecutifs
-    cond2 = re.search(r"(.)\1", str)
-    cond3 = re.search(r"ab|cd|pq|xy", str)
-    return cond1 and cond2 and not cond3
+    has_three_vowels = re.search(r"([aeiou].*){3}", str)
+    has_double_letter = re.search(r"(.)\1", str)
+    has_forbidden_pair = re.search(r"ab|cd|pq|xy", str)
+    return bool(has_three_vowels and has_double_letter and not has_forbidden_pair)
 
 
 def nice_string_part2(str):
-    # Sequences de deux parametres qui se repete
-    cond1 = re.search(r"(..).*\1", str)
-    # Recherche pattern de la forme a.a
-    cond2 = re.search(r"(.).\1", str)
-    return cond1 and cond2
+    has_repeating_pair = re.search(r"(..).*\1", str)
+    has_sandwich = re.search(r"(.).\1", str)
+    return bool(has_repeating_pair and has_sandwich)
 
 
 def part_1(input):
-    return sum([1 for str in input if nice_string_part1(str)])
+    return sum(nice_string_part1(str) for str in input)
 
 
 def part_2(input):
-    return sum([1 for str in input if nice_string_part2(str)])
+    return sum(nice_string_part2(str) for str in input)
 
 
 print(f"My answer is {part_1(input)}")

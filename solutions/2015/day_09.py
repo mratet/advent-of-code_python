@@ -15,26 +15,24 @@ def _parse(lines):
     return graph
 
 
-def part_1(input):
+def solve(input, part="part_1"):
     weights = _parse(input)
-    shortest_route = 1e9
+    best_route_distance = 1e9 if part == "part_1" else 0
+    comp_func = min if part == "part_1" else max
 
     for perm in itertools.permutations(weights.keys()):
         path = sum([weights[i][j] for i, j in itertools.pairwise(perm)])
-        shortest_route = min(shortest_route, path)
+        best_route_distance = comp_func(best_route_distance, path)
 
-    return shortest_route
+    return best_route_distance
+
+
+def part_1(input):
+    return solve(input, "part_1")
 
 
 def part_2(input):
-    weights = _parse(input)
-    longest_route = 0
-
-    for perm in itertools.permutations(weights.keys()):
-        path = sum([weights[i][j] for i, j in itertools.pairwise(perm)])
-        longest_route = max(longest_route, path)
-
-    return longest_route
+    return solve(input, "part_2")
 
 
 print(f"My answer is {part_1(input)}")

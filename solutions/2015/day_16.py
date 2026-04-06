@@ -19,37 +19,32 @@ sue_informations = {
 
 
 def _parse(input):
-    sues = []
-    pattern = r"(\w+): (\d+)"
-    for line in input:
-        matchs = re.findall(pattern, line)
-        sue_dict = dict(matchs)
-        sues.append(sue_dict)
-    return sues
+    return [dict(re.findall(r"(\w+): (\d+)", line)) for line in input]
+
+
+def check(key, value, part):
+    value = int(value)
+    if part == "part_2":
+        if key in ("cats", "trees"):
+            return sue_informations[key] < value
+        if key in ("pomeranians", "goldfish"):
+            return sue_informations[key] > value
+    return sue_informations[key] == value
+
+
+def solve(input, part):
+    sues = _parse(input)
+    for i, sue in enumerate(sues):
+        if all(check(k, v, part) for k, v in sue.items()):
+            return i + 1
 
 
 def part_1(input):
-    sues = _parse(input)
-    for i, sue in enumerate(sues):
-        sue_inter = {k: v for k, v in sue.items() if sue_informations[k] == int(v)}
-        if len(sue_inter) == len(sue):
-            return i + 1
-
-
-def check(types, value):
-    value = int(value)
-    if types in ("cats", "trees"):
-        return sue_informations[types] < value
-    elif types in ("pomeranians", "goldfish"):
-        return sue_informations[types] > value
-    return sue_informations[types] == value
+    return solve(input, "part_1")
 
 
 def part_2(input):
-    sues = _parse(input)
-    for i, sue in enumerate(sues):
-        if all(check(k, v) for k, v in sue.items()):
-            return i + 1
+    return solve(input, "part_2")
 
 
 print(f"My answer is {part_1(input)}")

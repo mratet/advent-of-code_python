@@ -17,21 +17,19 @@ def _parse(input):
     return graph
 
 
-def compute_hapiness(graph):
-    n = len(graph)
-    arrangements = list(itertools.permutations(graph.keys()))
-    total_changed = []
-    for arrangement in arrangements:
-        changed = sum(
-            graph[v][arrangement[(i + 1) % n]] + graph[v][arrangement[i - 1]] for i, v in enumerate(arrangement)
+def compute_happiness(graph):
+    return max(
+        sum(
+            graph[v][arrangement[(i + 1) % len(graph)]] + graph[v][arrangement[i - 1]]
+            for i, v in enumerate(arrangement)
         )
-        total_changed.append(changed)
-    return max(total_changed)
+        for arrangement in itertools.permutations(graph.keys())
+    )
 
 
 def part_1(input):
     graph = _parse(input)
-    return compute_hapiness(graph)
+    return compute_happiness(graph)
 
 
 def part_2(input):
@@ -42,7 +40,7 @@ def part_2(input):
         graph["me"][v] = 0
         graph[v]["me"] = 0
 
-    return compute_hapiness(graph)
+    return compute_happiness(graph)
 
 
 print(f"My answer is {part_1(input)}")

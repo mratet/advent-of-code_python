@@ -1,151 +1,72 @@
-from copy import deepcopy
-
 from aocd import get_data
 
 input = get_data(day=22, year=2015).splitlines()
 
-spells = {
-    "missile": {
-        "cost": 53,
-        "damage": 4,
-        "armor": 0,
-        "heal_hp": 0,
-        "heal_mana": 0,
-        "turns": 0,
-    },
-    "drain": {
-        "cost": 73,
-        "damage": 2,
-        "armor": 0,
-        "heal_hp": 2,
-        "heal_mana": 0,
-        "turns": 0,
-    },
-    "shield": {
-        "cost": 113,
-        "damage": 0,
-        "armor": 7,
-        "heal_hp": 0,
-        "heal_mana": 0,
-        "turns": 6,
-    },
-    "poison": {
-        "cost": 173,
-        "damage": 3,
-        "armor": 0,
-        "heal_hp": 0,
-        "heal_mana": 0,
-        "turns": 6,
-    },
-    "recharge": {
-        "cost": 229,
-        "damage": 0,
-        "armor": 0,
-        "heal_hp": 0,
-        "heal_mana": 101,
-        "turns": 5,
-    },
-}
+boss_hp_init, boss_damage = (int(line.split(": ")[1]) for line in input)
+least_mana_used: int = 10**9
 
 
-def get_game_data(data):
-    player = {
-        "hp": 50,
-        "armor": 0,
-        "mana": 500,
-    }
-    boss = {
-        "hp": int(data[0].split(": ")[1]),
-        "damage": int(data[1].split(": ")[1]),
-    }
+def play(hp, mana, boss_hp, shield_t, poison_t, recharge_t, spent_mana, player_turn=True, hard=False):
+    global least_mana_used
 
-    return player, boss
+    if player_turn and hard:
+        hp -= 1
+        if hp <= 0:
+            return
 
+    # Apply effects
+    armor = 7 if shield_t > 0 else 0
+    if poison_t > 0:
+        boss_hp -= 3
+    if recharge_t > 0:
+        mana += 101
+    shield_t = max(0, shield_t - 1)
+    poison_t = max(0, poison_t - 1)
+    recharge_t = max(0, recharge_t - 1)
 
-def play(player, boss, active_spells, spent_mana, player_turn=True, part2=False):
-    active_spells_this_turn = deepcopy(active_spells)
-    player_this_turn = deepcopy(player)
-    boss_this_turn = deepcopy(boss)
+    if boss_hp <= 0:
+        least_mana_used = min(least_mana_used, spent_mana)
+        return
 
-    if player_turn and part2:
-        player_this_turn["hp"] -= 1
-        if player_this_turn["hp"] <= 0:
-            return False
-
-    for spell in active_spells_this_turn:
-        player_this_turn["mana"] += active_spells_this_turn[spell]["heal_mana"]
-        player_this_turn["hp"] += active_spells_this_turn[spell]["heal_hp"]
-        boss_this_turn["hp"] -= active_spells_this_turn[spell]["damage"]
-        active_spells_this_turn[spell]["turns"] -= 1
-
-    active_spells2_keys = list(active_spells_this_turn.keys())
-    for spell in active_spells2_keys:
-        if active_spells_this_turn[spell]["turns"] <= 0:
-            player_this_turn["armor"] -= active_spells_this_turn[spell]["armor"]
-            del active_spells_this_turn[spell]
-
-    if boss_this_turn["hp"] <= 0:
-        global leastManaUsed
-        if spent_mana < leastManaUsed:
-            leastManaUsed = spent_mana
-        return True
-
-    if spent_mana >= leastManaUsed:
-        return False
+    if spent_mana >= least_mana_used:
+        return
 
     if player_turn:
-        for spell in spells:
-            if spell in active_spells_this_turn:
-                continue
-            else:
-                if spells[spell]["cost"] <= player_this_turn["mana"]:
-                    active_spells_next_turn = deepcopy(active_spells_this_turn)
-                    player_next_turn = deepcopy(player_this_turn)
-
-                    player_next_turn["mana"] -= spells[spell]["cost"]
-                    player_next_turn["armor"] += spells[spell]["armor"]
-                    active_spells_next_turn[spell] = {
-                        "damage": spells[spell]["damage"],
-                        "armor": spells[spell]["armor"],
-                        "heal_hp": spells[spell]["heal_hp"],
-                        "heal_mana": spells[spell]["heal_mana"],
-                        "turns": spells[spell]["turns"],
-                    }
-                    play(
-                        player_next_turn,
-                        boss_this_turn,
-                        active_spells_next_turn,
-                        spent_mana + spells[spell]["cost"],
-                        False,
-                        part2,
-                    )
+        # Missile
+        if mana >= 53:
+            play(hp, mana - 53, boss_hp - 4, shield_t, poison_t, recharge_t, spent_mana + 53, False, hard)
+        # Drain
+        if mana >= 73:
+            play(hp + 2, mana - 73, boss_hp - 2, shield_t, poison_t, recharge_t, spent_mana + 73, False, hard)
+        # Shield
+        if mana >= 113 and shield_t == 0:
+            play(hp, mana - 113, boss_hp, 6, poison_t, recharge_t, spent_mana + 113, False, hard)
+        # Poison
+        if mana >= 173 and poison_t == 0:
+            play(hp, mana - 173, boss_hp, shield_t, 6, recharge_t, spent_mana + 173, False, hard)
+        # Recharge
+        if mana >= 229 and recharge_t == 0:
+            play(hp, mana - 229, boss_hp, shield_t, poison_t, 5, spent_mana + 229, False, hard)
     else:
-        player_this_turn["hp"] -= max(1, boss_this_turn["damage"] - player_this_turn["armor"])
-        if player_this_turn["hp"] > 0:
-            play(
-                player_this_turn,
-                boss_this_turn,
-                active_spells_this_turn,
-                spent_mana,
-                True,
-                part2,
-            )
+        hp -= max(1, boss_damage - armor)
+        if hp > 0:
+            play(hp, mana, boss_hp, shield_t, poison_t, recharge_t, spent_mana, True, hard)
 
 
-def part_1(input):
-    player, boss = get_game_data(input)
-    play(player, boss, {}, 0, True)
-    return leastManaUsed
+def solve(hard=False):
+    global least_mana_used
+    least_mana_used = 10**9
+    play(50, 500, boss_hp_init, 0, 0, 0, 0, True, hard)
+    return least_mana_used
 
 
-def part_2(input):
-    player, boss = get_game_data(input)
-    play(player, boss, {}, 0, True, True)
-    return leastManaUsed
+def part_1():
+    return solve(hard=False)
 
 
-leastManaUsed = 1e9
-print(f"My answer is {part_1(input)}")
+def part_2():
+    return solve(hard=True)
 
-leastManaUsed = 1e9
-print(f"My answer is {part_2(input)}")
+
+print(f"My answer is {part_1()}")
+print(f"My answer is {part_2()}")

@@ -4,6 +4,9 @@ from aocd import get_data
 
 input = get_data(day=25, year=2015)
 
+MUL = 252533
+MOD = 33554393
+
 
 def get_coord(r, c):
     # (1, n) -> n (n + 1) / 2
@@ -15,16 +18,9 @@ def get_coord(r, c):
 
 
 def part_1(input):
-    pattern = r"(\d+)+"
-    matchs = re.findall(pattern, input)
-    r, c = int(matchs[0]), int(matchs[1])
+    r, c = map(int, re.findall(r"(\d+)+", input))
     n = get_coord(r, c)
-
-    state = 20151125
-    for _ in range(n - 1):
-        state = (state * 252533) % 33554393
-
-    return state
+    return 20151125 * pow(MUL, n - 1, MOD) % MOD
 
 
 print(f"My answer is {part_1(input)}")
