@@ -5,84 +5,56 @@ from aocd import get_data
 
 input = get_data(day=24, year=2016).splitlines()
 
-N, S, E, W = (0, 1), (0, -1), (1, 0), (-1, 0)
-dirs = [N, E, S, W]
+dirs = [(0, 1), (0, -1), (1, 0), (-1, 0)]
 
 
 def _parse_input(input):
-    maze, interest_coords = {}, {}
-    n, m = len(input), len(input[0])
-    for i, j in itertools.product(range(n), range(m)):
-        c = input[i][j]
-        if c == ".":
-            maze[(j, i)] = "."
-        elif c.isdigit():
-            interest_coords[(j, i)] = c
-            maze[(j, i)] = "."
-    return maze, interest_coords
+    open_tiles, targets = set(), {}
+    for i, row in enumerate(input):
+        for j, c in enumerate(row):
+            if c != "#":
+                open_tiles.add((j, i))
+                if c.isdigit():
+                    targets[(j, i)] = c
+    return open_tiles, targets
 
 
-def return_distance(start, interest_coords, maze):
-    res = [0] * len(interest_coords)
-    visited = set()
-    visited.add(start)
-    q = collections.deque()
-    q.append(start)
-    dist = 0
-
-    while q:
-        for _ in range(len(q)):
-            x, y = q.popleft()
-            if (x, y) in interest_coords:
-                res[int(interest_coords[(x, y)])] = dist
-
-            for dx, dy in dirs:
-                nx, ny = x + dx, y + dy
-                if (nx, ny) in maze and (nx, ny) not in visited:
-                    q.append((nx, ny))
-                    visited.add((nx, ny))
-        dist += 1
-    return res
+def bfs_distances(start, targets, open_tiles):
+    distances = {}
+    visited = {start}
+    queue = collections.deque([(start, 0)])
+    while queue:
+        (x, y), dist = queue.popleft()
+        if (x, y) in targets:
+            distances[targets[(x, y)]] = dist
+        for dx, dy in dirs:
+            neighbor = (x + dx, y + dy)
+            if neighbor in open_tiles and neighbor not in visited:
+                visited.add(neighbor)
+                queue.append((neighbor, dist + 1))
+    return distances
 
 
-def graph_construction(maze, interest_coords):
-    weights = collections.defaultdict(dict)
-    for start, c in interest_coords.items():
-        tab = return_distance(start, interest_coords, maze)
-        for i, dist in enumerate(tab):
-            weights[c][str(i)] = dist
-            weights[str(i)][c] = dist
-    return weights
+def build_graph(open_tiles, targets):
+    return {label: bfs_distances(pos, targets, open_tiles) for pos, label in targets.items()}
+
+
+def solve(input, part="part_1"):
+    open_tiles, targets = _parse_input(input)
+    graph = build_graph(open_tiles, targets)
+    nodes = [label for label in graph if label != "0"]
+    return min(
+        sum(graph[i][j] for i, j in itertools.pairwise(("0", *perm, *(("0",) if part == "part_2" else ()))))
+        for perm in itertools.permutations(nodes)
+    )
 
 
 def part_1(input):
-    maze, interest_coords = _parse_input(input)
-    graph = graph_construction(maze, interest_coords)
-
-    l = [str(i) for i in range(len(interest_coords))]
-
-    shortest_route = 1e9
-    for perm in itertools.permutations(l):
-        if perm[0] == "0":
-            # if perm[0] == '0' and perm[-1] == '0':
-            path = sum([graph[i][j] for i, j in itertools.pairwise(perm)])
-            shortest_route = min(shortest_route, path)
-    return shortest_route
+    return solve(input, "part_1")
 
 
 def part_2(input):
-    maze, interest_coords = _parse_input(input)
-    graph = graph_construction(maze, interest_coords)
-
-    l = [str(i) for i in range(len(interest_coords))]
-    l.append("0")
-
-    shortest_route = 1e9
-    for perm in itertools.permutations(l):
-        if perm[0] == "0" and perm[-1] == "0":
-            path = sum([graph[i][j] for i, j in itertools.pairwise(perm)])
-            shortest_route = min(shortest_route, path)
-    return shortest_route
+    return solve(input, "part_2")
 
 
 print(f"My answer is {part_1(input)}")

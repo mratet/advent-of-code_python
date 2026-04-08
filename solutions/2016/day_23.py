@@ -5,13 +5,28 @@ from aocd import get_data
 input = get_data(day=23, year=2016).splitlines()
 
 
-def program_execution(registers, input):
-    line_index = 0
-    n = len(input)
+TOGGLE = {"inc": "dec", "dec": "inc", "tgl": "inc", "jnz": "cpy", "cpy": "jnz"}
 
-    while line_index < n:
-        instructions, *args = input[line_index].split()
-        match instructions:
+
+def _parse_program(input):
+    program = []
+    for line in input:
+        op, *args = line.split()
+        args = [a if a in "abcd" else int(a) for a in args]
+        program.append([op, args])
+    return program
+
+
+def _resolve(registers, x):
+    return registers[x] if isinstance(x, str) else x
+
+
+def program_execution(registers, program):
+    line_index = 0
+
+    while line_index < len(program):
+        op, args = program[line_index]
+        match op:
             case "inc":
                 c = args[0]
                 registers[c] = registers[c] + 1
@@ -19,45 +34,32 @@ def program_execution(registers, input):
                 c = args[0]
                 registers[c] = registers[c] - 1
             case "cpy":
-                x, y = args[0], args[1]
-                if y.isdigit():
-                    continue
-                registers[y] = registers[x] if x in "abcd" else int(x)
+                x, y = args
+                if isinstance(y, str):
+                    registers[y] = _resolve(registers, x)
             case "jnz":
-                x, y = args[0], args[1]
-                cond = registers[x] if x in "abcd" else int(x)
-                cond2 = registers[y] if y in "abcd" else int(y)
-                line_index += cond2 if cond != 0 else 1
-                line_index -= 1
+                x, y = args
+                if _resolve(registers, x):
+                    line_index += _resolve(registers, y)
+                    continue
             case "tgl":
-                x = args[0]
-                cond = registers[x] if x in "abcd" else int(x)
-                if 0 <= line_index + cond < n - 1:
-                    line = input[line_index + cond].split()
-                    match line[0]:
-                        case "inc":
-                            input[line_index + cond] = input[line_index + cond].replace("inc", "dec")
-                        case "dec":
-                            input[line_index + cond] = input[line_index + cond].replace("dec", "inc")
-                        case "tgl":
-                            input[line_index + cond] = input[line_index + cond].replace("tgl", "inc")
-                        case "jnz":
-                            input[line_index + cond] = input[line_index + cond].replace("jnz", "cpy")
-                        case "cpy":
-                            input[line_index + cond] = input[line_index + cond].replace("cpy", "jnz")
+                target = line_index + _resolve(registers, args[0])
+                if 0 <= target < len(program):
+                    program[target][0] = TOGGLE[program[target][0]]
         line_index += 1
 
     return registers
 
 
 def part_1(input):
+    program = _parse_program(input)
     registers = {"a": 7, "b": 0, "c": 0, "d": 0}
-    registers = program_execution(registers, input)
+    registers = program_execution(registers, program)
     return registers["a"]
 
 
 def part_2(input):
-    # You can't run the program because it'll be long
+    # You can't run the program because it'll be too long
     # By looking at the evolution of a, you can understand what the code is doing
     N = 12
     return math.factorial(N) + 73 * 81

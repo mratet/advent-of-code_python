@@ -8,17 +8,22 @@ def valid_triangle(val):
     return a + b > c
 
 
+def solve(input, part):
+    matrix = [map(int, line.split()) for line in input]
+    triangles = (
+        matrix
+        if part == "part_1"
+        else [col[i : i + 3] for col in zip(*matrix, strict=False) for i in range(0, len(matrix), 3)]
+    )
+    return sum(valid_triangle(t) for t in triangles)
+
+
 def part_1(input):
-    return sum(valid_triangle(val) for val in [[int(x) for x in line.split()] for line in input])
+    return solve(input, "part_1")
 
 
 def part_2(input):
-    t, n = 0, len(input)
-    for i in range(0, n, 3):
-        matrix = [map(int, line.split()) for line in input[i : (i + 3)]]
-        rows = list(zip(*matrix, strict=False))
-        t += sum([valid_triangle(val) for val in rows])
-    return t
+    return solve(input, "part_2")
 
 
 print(f"My answer is {part_1(input)}")

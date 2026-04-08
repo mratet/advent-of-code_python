@@ -11,7 +11,7 @@ def _parse(input):
     instructions = []
 
     for line in input:
-        if line[1] == "e":
+        if line.startswith("rect"):
             A, B = map(int, line.split()[1].split("x"))
             instructions.append(("r", A, B))
         else:

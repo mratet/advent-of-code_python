@@ -2,48 +2,46 @@ import collections
 
 from aocd import get_data
 
-input = int(get_data(day=13, year=2016))
+input = get_data(day=13, year=2016)
+
+FAV_NUMBER = int(input)
 
 
-def is_a_wall(coord, fav_num):
+def is_a_wall(coord):
     x, y = coord
-    i = x * x + 3 * x + 2 * x * y + y + y * y + fav_num
+    i = x * x + 3 * x + 2 * x * y + y + y * y + FAV_NUMBER
     return i.bit_count() % 2 == 1
 
 
-def solve(input, part="part_1"):
+def is_valid(x, y):
+    return x >= 0 and y >= 0 and not is_a_wall((x, y))
+
+
+def bfs(stop_condition):
     start = (1, 1)
-    q = collections.deque()
-    q.append(start)
-    visited = set()
-    cnt = 0
+    queue = collections.deque([(start, 0)])
+    visited = {start: 0}
 
-    while q:
-        for _ in range(len(q)):
-            x, y = q.popleft()
-            if (x, y) in visited:
-                continue
-            visited.add((x, y))
-
-            if part == "part_1" and (x, y) == (31, 39):
-                return cnt
-
-            for dx, dy in [(-1, 0), (1, 0), (0, 1), (0, -1)]:
-                nx, ny = x + dx, y + dy
-
-                if nx >= 0 and ny >= 0 and not is_a_wall((nx, ny), input):
-                    q.append((nx, ny))
-        cnt += 1
-        if part == "part_2" and cnt == 51:
-            return len(visited)
+    while queue:
+        (x, y), distance = queue.popleft()
+        if stop_condition(x, y, distance, visited):
+            return visited, distance
+        for dx, dy in [(-1, 0), (1, 0), (0, 1), (0, -1)]:
+            nx, ny = x + dx, y + dy
+            if (nx, ny) not in visited and is_valid(nx, ny):
+                visited[(nx, ny)] = distance + 1
+                queue.append(((nx, ny), distance + 1))
+    return visited, -1
 
 
 def part_1(input):
-    return solve(input, "part_1")
+    _, distance = bfs(lambda x, y, d, v: (x, y) == (31, 39))
+    return distance
 
 
 def part_2(input):
-    return solve(input, "part_2")
+    visited, _ = bfs(lambda x, y, d, v: d == 50)
+    return len(visited)
 
 
 print(f"My answer is {part_1(input)}")

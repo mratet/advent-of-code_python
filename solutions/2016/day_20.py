@@ -4,26 +4,18 @@ from aocd import get_data
 
 input = get_data(day=20, year=2016).splitlines()
 
-R = [0, 4294967295]
-
 
 def _parse(input):
-    intervals = []
-    for line in input:
-        s, e = line.split("-")
-        intervals.append([int(s), int(e)])
-
-    return intervals
+    return sorted(list(map(int, line.split("-"))) for line in input)
 
 
 def merge_intervals(intervals):
-    intervals.sort()
     res = [intervals[0]]
 
     for start, end in intervals[1:]:
-        lastEnd = res[-1][1]
-        if start <= lastEnd + 1:
-            res[-1][1] = max(lastEnd, end)
+        last_end = res[-1][1]
+        if start <= last_end + 1:
+            res[-1][1] = max(last_end, end)
         else:
             res.append([start, end])
     return res
@@ -37,8 +29,7 @@ def part_1(input):
 def part_2(input):
     intervals = _parse(input)
     intervals = merge_intervals(intervals)
-    cnt = sum([s2 - e1 - 1 for (_, e1), (s2, _) in itertools.pairwise(intervals)])
-    return cnt
+    return sum(s2 - e1 - 1 for (_, e1), (s2, _) in itertools.pairwise(intervals))
 
 
 print(f"My answer is {part_1(input)}")

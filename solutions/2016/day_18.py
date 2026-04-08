@@ -10,11 +10,11 @@ def next_row(tiles):
     return "".join(row)
 
 
-def count_safe_tiles(input, N):
+def count_safe_tiles(row, N):
     cnt = 0
     for _ in range(N):
-        cnt += sum([elt == "." for elt in input])
-        input = next_row(input)
+        cnt += row.count(".")
+        row = next_row(row)
     return cnt
 
 

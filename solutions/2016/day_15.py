@@ -1,20 +1,18 @@
+import re
+
 from aocd import get_data
 
-input = get_data(day=15, year=2016).splitlines()
+input = get_data(day=15, year=2016)
 
 
 def _parse(input):
-    disks = []
-    for line in input:
-        line = line.split()
-        disks.append([int(line[3]), int(line[-1][:-1])])
-    return disks
+    return [list(map(int, m)) for m in re.findall(r"(\d+) positions.*?position (\d+)", input)]
 
 
 def find_perfect_button_push(disks):
-    # N + i + 1 + start % length == 0
-    # N % length == -(i + 1 + start) % length
-    # Possible to design a solution using Chinese Reminder Theorem for fast inference
+    # Disk i reaches position 0 when: (N + i + 1 + start) % length == 0
+    # Equivalent to: N ≡ -(i + 1 + start) (mod length)
+    # This is a system of congruences solvable via the Chinese Remainder Theorem if a faster solution is needed
     n = 0
     while not all((n + i + 1 + start) % length == 0 for i, (length, start) in enumerate(disks)):
         n += 1

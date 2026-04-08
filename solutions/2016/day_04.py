@@ -1,41 +1,29 @@
-import collections
+import re
+from collections import Counter
 
 from aocd import get_data
 
 input = get_data(day=4, year=2016).splitlines()
 
 
-def cipher(letters, n):
-    phrase = []
-    for c in letters:
-        if c.isalpha():
-            c = chr((ord(c) - ord("a") + int(n)) % 26 + ord("a"))
-        phrase.append(c)
-    return "".join(phrase)
+def decrypt(name, n):
+    return "".join(chr((ord(c) - ord("a") + n) % 26 + ord("a")) if c.isalpha() else c for c in name)
 
 
-def solve(input, part="part_1"):
-    t = 0
+def real_rooms(input):
     for line in input:
-        *letters, password = line.split("-")
-        ID, checksum = password.split("[")
-
-        count = collections.Counter("".join(letters))
-        sorted_count = sorted(count.items(), key=lambda x: (x[1], -ord(x[0])), reverse=True)
-        most_freq_letters = "".join([x for (x, y) in sorted_count])
-        if most_freq_letters.startswith(checksum[:-1]):
-            t += int(ID)
-            if "north" in cipher(" ".join(letters), int(ID)) and part == "part_2":
-                return ID
-    return t
+        name, sector, checksum = re.findall(r"([a-z-]+)-(\d+)\[(\w+)]", line)[0]
+        freq = sorted(Counter(name.replace("-", "")).items(), key=lambda x: (-x[1], x[0]))
+        if "".join(c for c, _ in freq).startswith(checksum):
+            yield name, int(sector)
 
 
 def part_1(input):
-    return solve(input)
+    return sum(sector for _, sector in real_rooms(input))
 
 
 def part_2(input):
-    return solve(input, part="part_2")
+    return next(sector for name, sector in real_rooms(input) if "north" in decrypt(name, sector))
 
 
 print(f"My answer is {part_1(input)}")

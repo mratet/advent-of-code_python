@@ -1,4 +1,4 @@
-import collections
+from collections import Counter
 
 from aocd import get_data
 
@@ -6,15 +6,9 @@ input = get_data(day=6, year=2016).splitlines()
 
 
 def send_message(input, part="part_1"):
-    col = zip(*input, strict=False)
-    t = ""
-    for row in col:
-        count = collections.Counter(row)
-        c, _ = max(count.items(), key=lambda x: x[1])
-        if part == "part_2":
-            c, _ = min(count.items(), key=lambda x: x[1])
-        t += c
-    return t
+    cols = zip(*input, strict=False)
+    func = max if part == "part_1" else min
+    return "".join([func(Counter(col).items(), key=lambda x: x[1])[0] for col in cols])
 
 
 def part_1(input):

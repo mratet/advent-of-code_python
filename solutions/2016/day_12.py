@@ -3,13 +3,21 @@ from aocd import get_data
 input = get_data(day=12, year=2016).splitlines()
 
 
-def program_execution(registers, input):
-    line_index = 0
-    n = len(input)
+def _parse_program(input):
+    program = []
+    for line in input:
+        op, *args = line.split()
+        args = [a if a in "abcd" else int(a) for a in args]
+        program.append((op, args))
+    return program
 
-    while line_index < n:
-        instructions, *args = input[line_index].split()
-        match instructions:
+
+def program_execution(registers, program):
+    line_index = 0
+
+    while line_index < len(program):
+        op, args = program[line_index]
+        match op:
             case "inc":
                 c = args[0]
                 registers[c] = registers[c] + 1
@@ -17,27 +25,30 @@ def program_execution(registers, input):
                 c = args[0]
                 registers[c] = registers[c] - 1
             case "cpy":
-                x, y = args[0], args[1]
-                registers[y] = registers[x] if x in "abcd" else int(x)
+                x, y = args
+                registers[y] = registers[x] if isinstance(x, str) else x
             case "jnz":
-                x, y = args[0], args[1]
-                cond = registers[x] if x in "abcd" else int(x)
-                line_index += int(y) if cond != 0 else 1
-                line_index -= 1
+                x, y = args
+                cond = registers[x] if isinstance(x, str) else x
+                if cond:
+                    line_index += y
+                    continue
         line_index += 1
 
     return registers
 
 
 def part_1(input):
+    program = _parse_program(input)
     registers = {"a": 0, "b": 0, "c": 0, "d": 0}
-    registers = program_execution(registers, input)
+    registers = program_execution(registers, program)
     return registers["a"]
 
 
 def part_2(input):
+    program = _parse_program(input)
     registers = {"a": 0, "b": 0, "c": 1, "d": 0}
-    registers = program_execution(registers, input)
+    registers = program_execution(registers, program)
     return registers["a"]
 
 

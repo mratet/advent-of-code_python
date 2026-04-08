@@ -4,32 +4,29 @@ input = get_data(day=16, year=2016)
 
 
 def dragon_curve(a):
-    b = [not elt for elt in a[::-1]]
-    a.append(False)
-    return a + b
+    b = "".join("0" if c == "1" else "1" for c in reversed(a))
+    return a + "0" + b
 
 
 def checksum(s):
     while len(s) % 2 == 0:
-        s = [e1 == e2 for e1, e2 in zip(s[::2], s[1::2], strict=False)]
+        s = "".join("1" if s[i] == s[i + 1] else "0" for i in range(0, len(s), 2))
     return s
 
 
-def solve(input, N):
-    s = [elt == "1" for elt in input]
-    while len(s) < N:
+def solve(input, n):
+    s = input
+    while len(s) < n:
         s = dragon_curve(s)
-    return "".join([str(int(elt)) for elt in checksum(s[:N])])
+    return checksum(s[:n])
 
 
 def part_1(input):
-    N = 272
-    return solve(input, N)
+    return solve(input, 272)
 
 
 def part_2(input):
-    N = 35651584
-    return solve(input, N)
+    return solve(input, 35651584)
 
 
 print(f"My answer is {part_1(input)}")

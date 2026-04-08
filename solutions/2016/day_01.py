@@ -9,8 +9,7 @@ dirs = [N, E, S, W]
 def follow_instructions(input, part):
     dir = 0
     pos = (0, 0)
-    visited = set()
-    visited.add(pos)
+    visited = {pos}
 
     for line in input:
         rot, num = line[0], line[1:]
@@ -26,14 +25,17 @@ def follow_instructions(input, part):
     return pos
 
 
-def part_1(input):
-    last_pos = follow_instructions(input, "part_1")
+def solve(input, part):
+    last_pos = follow_instructions(input, part)
     return abs(last_pos[0]) + abs(last_pos[1])
+
+
+def part_1(input):
+    return solve(input, "part_1")
 
 
 def part_2(input):
-    last_pos = follow_instructions(input, "part_2")
-    return abs(last_pos[0]) + abs(last_pos[1])
+    return solve(input, "part_2")
 
 
 print(f"My answer is {part_1(input)}")

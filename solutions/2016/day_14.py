@@ -1,4 +1,5 @@
 import re
+from functools import lru_cache
 from hashlib import md5
 
 from aocd import get_data
@@ -6,30 +7,27 @@ from aocd import get_data
 input = get_data(day=14, year=2016)
 
 
-def extend_hash(hash):
-    for _ in range(2017):
-        hash = md5(hash.encode()).hexdigest()
-    return hash
+def find_password(input, part="part_1"):
+    base = md5(input.encode())
 
+    @lru_cache(maxsize=2048)
+    def get_hash(i):
+        h = base.copy()
+        h.update(str(i).encode())
+        h = h.hexdigest()
+        if part == "part_2":
+            for _ in range(2016):
+                h = md5(h.encode()).hexdigest()
+        return h
 
-def match_md5(input, part="part_1"):
-    my_hash, i, cnt = "", 0, 0
-    visited = {}
+    cnt, i = 0, 0
     while cnt < 64:
-        new_input = input + str(i)
-        my_hash = extend_hash(new_input) if part == "part_2" else md5(new_input.encode()).hexdigest()
+        my_hash = get_hash(i)
         match = re.search(r"(.)\1\1", my_hash)
         if match:
-            c = match.group(1)
-            for j in range(1, 1001):
-                temp_input = input + str(i + j)
-                if temp_input in visited:
-                    my_hash = visited[temp_input]
-                else:
-                    my_hash = extend_hash(temp_input) if part == "part_2" else md5(temp_input.encode()).hexdigest()
-                    visited[temp_input] = my_hash
-
-                if re.search(c * 5, my_hash):
+            target = match.group(1) * 5
+            for j in range(i + 1, i + 1001):
+                if target in get_hash(j):
                     cnt += 1
                     break
         i += 1
@@ -37,11 +35,11 @@ def match_md5(input, part="part_1"):
 
 
 def part_1(input):
-    return match_md5(input, "part_1")
+    return find_password(input, "part_1")
 
 
 def part_2(input):
-    return match_md5(input, "part_2")
+    return find_password(input, "part_2")
 
 
 print(f"My answer is {part_1(input)}")
