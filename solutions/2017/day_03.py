@@ -16,7 +16,7 @@ def generate_spiral_matrix(N):
         matrix[x, y] = val
         val -= 1
         nx, ny = x + dx, y + dy
-        if nx < 0 or nx >= N or ny < 0 or ny >= N or matrix[nx, ny] != 0:
+        if not (0 <= nx < N and 0 <= ny < N and matrix[nx, ny] == 0):
             dx, dy = dy, -dx
         x, y = x + dx, y + dy
 

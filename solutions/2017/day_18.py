@@ -6,79 +6,47 @@ input = get_data(day=18, year=2017).splitlines()
 
 
 # WRITE YOUR SOLUTION HERE
-def part_1(lines):
-    i = 0
-    registers = defaultdict(int)
-    get_value = lambda val: int(val) if val.lstrip("-").isdigit() else registers[val]
-
-    while i < len(lines):
-        op, *val = lines[i].split()
-        if len(val) == 1:
-            Z = get_value(val[0])
-        if len(val) == 2:
-            X, Y = val
-            X = int(X) if X.lstrip("-").isdigit() else X
-            Y = get_value(Y)
-
-        if op == "snd":
-            frq = Z
-        elif op == "set":
-            registers[X] = Y
-        elif op == "add":
-            registers[X] += Y
-        elif op == "mul":
-            registers[X] *= Y
-        elif op == "mod":
-            registers[X] = registers[X] % Y
-        elif op == "rcv":
-            if Z != 0:
-                return frq
-        elif op == "jgz" and registers[X] > 0:
-            i += Y - 1
-        i += 1
-
-
-def program_execution(program, state):
+def program_execution(program, state, part="part_2"):
     pos = state["pos"]
     registers = state["registers"]
     snd_queue = state["snd_queue"]
     rcv_queue = state["rcv_queue"]
     cnt = state["count"]
+    get_value = lambda v: int(v) if v.lstrip("-").isdigit() else registers[v]
 
     while pos < len(program):
-        op, *val = program[pos].split()
-        if len(val) == 1:
-            Z = val[0]
-        if len(val) == 2:
-            X, Y = val
-            X = int(X) if X.lstrip("-").isdigit() else X
-            Y = int(Y) if Y.lstrip("-").isdigit() else registers[Y]
+        op, *args = program[pos].split()
 
         if op == "snd":
             cnt += 1
-            snd_queue.append(registers[Z])
+            snd_queue.append(get_value(args[0]))
         elif op == "set":
-            registers[X] = Y
+            registers[args[0]] = get_value(args[1])
         elif op == "add":
-            registers[X] += Y
+            registers[args[0]] += get_value(args[1])
         elif op == "mul":
-            registers[X] *= Y
+            registers[args[0]] *= get_value(args[1])
         elif op == "mod":
-            registers[X] %= Y
+            registers[args[0]] %= get_value(args[1])
         elif op == "rcv":
-            if len(rcv_queue) == 0:
-                state["pos"] = pos
-                state["registers"] = registers
-                state["snd_queue"] = snd_queue
-                state["rcv_queue"] = rcv_queue
-                state["count"] = cnt
+            if part == "part_1" and get_value(args[0]) != 0:
+                state.update(pos=pos, count=cnt)
                 return state
-            registers[Z] = rcv_queue.pop(0)
+            else:
+                if not rcv_queue:
+                    state.update(pos=pos, count=cnt)
+                    return state
+                registers[args[0]] = rcv_queue.pop(0)
         elif op == "jgz":
-            if isinstance(X, int) or registers[X] > 0:
-                pos += Y - 1
+            if get_value(args[0]) > 0:
+                pos += get_value(args[1]) - 1
         pos += 1
-    assert 1 == 2
+
+
+def part_1(lines):
+    state = {"pos": 0, "registers": defaultdict(int), "snd_queue": [], "rcv_queue": [], "count": 0}
+    state = program_execution(lines, state, part="part_1")
+    return state["snd_queue"][-1]
 
 
 def part_2(lines):

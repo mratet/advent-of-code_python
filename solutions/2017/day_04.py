@@ -5,21 +5,11 @@ input = get_data(day=4, year=2017).splitlines()
 
 # WRITE YOUR SOLUTION HERE
 def part_1(lines):
-    ans = 0
-    for line in lines:
-        words = line.split()
-        if len(words) == len(set(words)):
-            ans += 1
-    return ans
+    return sum(len(word := line.split()) == len(set(word)) for line in lines)
 
 
 def part_2(lines):
-    ans = 0
-    for line in lines:
-        words = ["".join(sorted(w)) for w in line.split()]
-        if len(words) == len(set(words)):
-            ans += 1
-    return ans
+    return sum(len(word := [tuple(sorted(x)) for x in line.split()]) == len(set(word)) for line in lines)
 
 
 # END OF SOLUTION

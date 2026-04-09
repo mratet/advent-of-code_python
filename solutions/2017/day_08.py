@@ -1,24 +1,22 @@
+import operator
 from collections import defaultdict
 
 from aocd import get_data
 
 input = get_data(day=8, year=2017).splitlines()
 # WRITE YOUR SOLUTION HERE
+OPS = {"<": operator.lt, ">": operator.gt, "<=": operator.le, ">=": operator.ge, "==": operator.eq, "!=": operator.ne}
 
 
 def cpu_simulation(lines):
-    D = defaultdict(int)
-    highest_val = 0
+    regs = defaultdict(int)
+    highest = 0
     for line in lines:
         var, op, val, _, cond_var, cond_op, cond_val = line.split()
-        if eval(str(D[cond_var]) + cond_op + cond_val):
-            if op == "inc":
-                D[var] += int(val)
-            elif op == "dec":
-                D[var] -= int(val)
-        if D[var] > highest_val:
-            highest_val = D[var]
-    return max(D.values()), highest_val
+        if OPS[cond_op](regs[cond_var], int(cond_val)):
+            regs[var] += int(val) if op == "inc" else -int(val)
+            highest = max(regs[var], highest)
+    return max(regs.values()), highest
 
 
 def part_1(lines):

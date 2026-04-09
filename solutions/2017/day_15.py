@@ -1,41 +1,40 @@
+import re
+
 from aocd import get_data
 
-input = get_data(day=15, year=2017).splitlines()
+input = get_data(day=15, year=2017)
+
+FACTOR_A = 16807
+FACTOR_B = 48271
+MOD = 2147483647
+MASK = 0xFFFF
 
 
 # WRITE YOUR SOLUTION HERE
-def part_1(lines):
-    N = 40000000
-    A = int(lines[0].split()[-1])
-    B = int(lines[1].split()[-1])
+def next_value(val, factor, multiple):
+    val = val * factor % MOD
+    while val % multiple:
+        val = val * factor % MOD
+    return val
+
+
+def solve(lines, part="part_1"):
+    A, B = map(int, re.findall(r"(\d+)", lines))
+    N, mult_a, mult_b = (40_000_000, 1, 1) if part == "part_1" else (5_000_000, 4, 8)
     ans = 0
-    for _i in range(N):
-        A = (A * 16807) % 2147483647
-        B = (B * 48271) % 2147483647
-        if (A - B) % 2**16 == 0:
-            ans += 1
+    for _ in range(N):
+        A = next_value(A, FACTOR_A, mult_a)
+        B = next_value(B, FACTOR_B, mult_b)
+        ans += (A & MASK) == (B & MASK)
     return ans
 
 
-def get_next_value(current_value, C, mod):
-    current_value = (current_value * C) % 2147483647
-    while current_value % mod != 0:
-        current_value = (current_value * C) % 2147483647
-    return current_value
+def part_1(lines):
+    return solve(lines, "part_1")
 
 
 def part_2(lines):
-    N = 5000000
-    A = int(lines[0].split()[-1])
-    B = int(lines[1].split()[-1])
-    ans = 0
-    for _i in range(N):
-        A = get_next_value(A, 16807, 4)
-        B = get_next_value(B, 48271, 8)
-        assert A % 4 == 0 and B % 8 == 0
-        if (A - B) % 2**16 == 0:
-            ans += 1
-    return ans
+    return solve(lines, "part_2")
 
 
 # END OF SOLUTION

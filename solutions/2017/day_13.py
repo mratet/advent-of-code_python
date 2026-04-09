@@ -1,3 +1,5 @@
+from itertools import count
+
 from aocd import get_data
 
 input = get_data(day=13, year=2017).splitlines()
@@ -5,30 +7,19 @@ input = get_data(day=13, year=2017).splitlines()
 
 # WRITE YOUR SOLUTION HERE
 def get_security_scanner(lines):
-    L = [0] * 100
-    for l in lines:
-        depth, R = l.split(": ")
-        L[int(depth)] = int(R)
-    return L
+    return [tuple(map(int, line.split(": "))) for line in lines]
 
 
 def part_1(lines):
-    L = get_security_scanner(lines)
-    return sum([i * L[i] for i in range(100) if L[i] and i % (2 * (L[i] - 1)) == 0])
-
-
-def easy_path(C, L):
-    return all(L[i] and (C + i) % (2 * (L[i] - 1)) == 0 for i in range(100))
+    firewall = get_security_scanner(lines)
+    return sum(depth * range for depth, range in firewall if depth % (2 * (range - 1)) == 0)
 
 
 def part_2(lines):
-    L = get_security_scanner(lines)
-    c = 0
-    while True:
-        if easy_path(c, L):
-            break
-        c += 1
-    return c
+    firewall = get_security_scanner(lines)
+    return next(
+        delay for delay in count(0) if all((delay + depth) % (2 * (range - 1)) != 0 for depth, range in firewall)
+    )
 
 
 # END OF SOLUTION

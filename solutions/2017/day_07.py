@@ -12,11 +12,11 @@ def parse_programs(data):
     lines = data.strip().split("\n")
     for line in lines:
         match = re.match(r"(\w+) \((\d+)\)(?: -> (.*))?", line)
-        if match:
-            name = match.group(1)
-            weight = int(match.group(2))
-            supports = match.group(3).split(", ") if match.group(3) else []
-            program_dict[name] = {"weight": weight, "supports": supports}
+        assert match
+        name = match[1]
+        weight = int(match[2])
+        supports = match[3].split(", ") if match[3] else []
+        program_dict[name] = {"weight": weight, "supports": supports}
 
     return program_dict
 
@@ -31,11 +31,8 @@ def compute_weight(program, programs):
 
 def part_1(lines):
     programs = parse_programs(lines)
-    cnt = {program: compute_weight(program, programs) for program in programs}
-    A = max(cnt.values())
-    for n, w in cnt.items():
-        if w == A:
-            return n
+    tot_weight = {program: compute_weight(program, programs) for program in programs}
+    return next(n for n, _w in tot_weight.items() if _w == max(tot_weight.values()))
 
 
 def part_2(lines):

@@ -4,30 +4,23 @@ input = get_data(day=5, year=2017).splitlines()
 
 
 # WRITE YOUR SOLUTION HERE
-def part_1(lines):
-    i = 0
+def solve(lines, part):
+    i, count = 0, 0
     inst = [int(n) for n in lines]
-    count = 0
     while i < len(inst):
-        inst[i] += 1
-        i += inst[i] - 1
+        offset = inst[i]
+        inst[i] += 1 if (part == "part_1" or offset < 3) else -1
+        i += offset
         count += 1
     return count
+
+
+def part_1(lines):
+    return solve(lines, "part_1")
 
 
 def part_2(lines):
-    i = 0
-    inst = [int(n) for n in lines]
-    count = 0
-    while i < len(inst):
-        current_pos = i
-        i += inst[i]
-        if inst[current_pos] < 3:
-            inst[current_pos] += 1
-        else:
-            inst[current_pos] -= 1
-        count += 1
-    return count
+    return solve(lines, "part_2")
 
 
 # END OF SOLUTION

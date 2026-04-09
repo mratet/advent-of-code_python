@@ -2,28 +2,24 @@ from aocd import get_data
 
 input = get_data(day=11, year=2017)
 
+MOVES = {
+    "n": (2, 0),
+    "s": (-2, 0),
+    "ne": (1, 1),
+    "sw": (-1, -1),
+    "nw": (1, -1),
+    "se": (-1, 1),
+}
+
 
 # WRITE YOUR SOLUTION HERE
 def get_dist_array(dirs):
     x, y = 0, 0
     dist = []
     for d in dirs:
-        if d == "n":
-            x += 2
-        elif d == "s":
-            x -= 2
-        elif d == "ne":
-            x += 1
-            y += 1
-        elif d == "sw":
-            x -= 1
-            y -= 1
-        elif d == "nw":
-            x += 1
-            y -= 1
-        elif d == "se":
-            x -= 1
-            y += 1
+        dx, dy = MOVES[d]
+        x += dx
+        y += dy
         dist.append((abs(x) + abs(y)) // 2)
     return dist
 

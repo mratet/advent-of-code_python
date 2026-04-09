@@ -19,55 +19,57 @@ def parse_input(lines):
     return starting_wires, double_wires, wires
 
 
-def compute_true_stat(W, path, d):
-    connection = set()
-    for a, b in path:
-        connection.add(a)
-        connection.add(b)
-    double_wires = connection.intersection(d)
-    return len(path) + len(double_wires), W + 2 * sum(double_wires)
-
-
 def build_all_bridges(starting_wires, double_wires, wires):
     connected_wire = (
         lambda a, b, free_slot: (a[1] == b[0] or a[1] == b[1]) if free_slot else (a[0] == b[0] or a[0] == b[1])
     )
     visited = set()
-    tab = []
+    max_strength = 0
+    best_longest = (0, 0)  # (depth, strength)
 
-    def dfs(last_wire, bridge_strength, path, free_slot):
+    def dfs(last_wire, depth, strength, free_slot):
+        nonlocal max_strength, best_longest
         for wire in filter(lambda w: connected_wire(last_wire, w, free_slot), wires):
             if wire in visited:
                 continue
             visited.add(wire)
-            path.append(wire)
             dfs(
                 wire,
-                bridge_strength + sum(wire),
-                path,
+                depth + 1,
+                strength + sum(wire),
                 1 if last_wire[free_slot] == wire[0] else 0,
             )
-            path.pop()
             visited.remove(wire)
-        tab.append(compute_true_stat(bridge_strength, path, double_wires))
+        # Account for double wires in depth and strength
+        connection = {port for wire in visited for port in wire}
+        used_doubles = connection.intersection(double_wires)
+        true_depth = depth + len(used_doubles)
+        true_strength = strength + 2 * sum(used_doubles)
+        max_strength = max(max_strength, true_strength)
+        best_longest = max(best_longest, (true_depth, true_strength))
 
     for w in starting_wires:
         free_slot = 1 if w[1] != 0 else 0
-        dfs(w, w[free_slot], [w], free_slot)
+        visited.add(w)
+        dfs(w, 1, w[free_slot], free_slot)
+        visited.remove(w)
 
-    return tab
+    return max_strength, best_longest[1]
+
+
+def solve(lines):
+    starting_wires, double_wires, wires = parse_input(lines)
+    return build_all_bridges(starting_wires, double_wires, wires)
 
 
 def part_1(lines):
-    starting_wires, double_wires, wires = parse_input(lines)
-    bridges = build_all_bridges(starting_wires, double_wires, wires)
-    return max(bridges, key=lambda w: w[1])[1]
+    max_strength, _ = solve(lines)
+    return max_strength
 
 
 def part_2(lines):
-    starting_wires, double_wires, wires = parse_input(lines)
-    bridges = build_all_bridges(starting_wires, double_wires, wires)
-    return max(bridges)[1]
+    _, longest_strength = solve(lines)
+    return longest_strength
 
 
 # END OF SOLUTION

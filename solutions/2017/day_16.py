@@ -4,42 +4,58 @@ input = get_data(day=16, year=2017).splitlines()
 
 
 # WRITE YOUR SOLUTION HERE
-def part_1(lines):
-    programs = [ord("a") + i for i in range(16)]
-    instruc = lines[0].split(",")
-    programs = dance(programs, instruc)
-    return "".join([chr(s) for s in programs])
+def parse(line):
+    instructions = []
+    for inst in line.split(","):
+        if inst[0] == "s":
+            instructions.append(("s", int(inst[1:])))
+        elif inst[0] == "x":
+            a, b = map(int, inst[1:].split("/"))
+            instructions.append(("x", a, b))
+        else:
+            instructions.append(("p", inst[1], inst[3]))
+    return instructions
 
 
-def dance(programs, instruc):
-    for inst in instruc:
-        if inst[0] == "x":
-            A, B = map(int, inst[1:].split("/"))
-            programs[A], programs[B] = programs[B], programs[A]
-        elif inst[0] == "p":
-            A, B = inst[1:].split("/")
-            idx1, idx2 = programs.index(ord(A)), programs.index(ord(B))
-            programs[idx1], programs[idx2] = programs[idx2], programs[idx1]
-        elif inst[0] == "s":
-            idx = 16 - int(inst[1:])
+def dance(programs, instructions):
+    for inst in instructions:
+        if inst[0] == "s":
+            idx = 16 - inst[1]
             programs = programs[idx:] + programs[:idx]
+        elif inst[0] == "x":
+            programs[inst[1]], programs[inst[2]] = programs[inst[2]], programs[inst[1]]
+        else:
+            idx1, idx2 = programs.index(inst[1]), programs.index(inst[2])
+            programs[idx1], programs[idx2] = programs[idx2], programs[idx1]
     return programs
 
 
-def part_2(lines):
-    programs = [ord("a") + i for i in range(16)]
-    instruc = lines[0].split(",")
-    S = set()
-    N = 0
-    while tuple(programs) not in S:
-        S.add(tuple(programs))
-        programs = dance(programs, instruc)
-        N += 1
+def solve(lines):
+    programs = list("abcdefghijklmnop")
+    instructions = parse(lines[0])
+
+    initial = programs[:]
+    programs = dance(programs, instructions)
+    first_dance = "".join(programs)
+    cycle = 1
+    while programs != initial:
+        programs = dance(programs, instructions)
+        cycle += 1
 
     # It happens to be a perfect cycle so a modulo is enough
-    for _ in range(100000000 % N):
-        programs = dance(programs, instruc)
-    return "".join([chr(s) for s in programs])
+    for _ in range(1_000_000_000 % cycle):
+        programs = dance(programs, instructions)
+    return first_dance, "".join(programs)
+
+
+def part_1(lines):
+    p1, _ = solve(lines)
+    return p1
+
+
+def part_2(lines):
+    _, p2 = solve(lines)
+    return p2
 
 
 # END OF SOLUTION
