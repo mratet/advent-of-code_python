@@ -55,9 +55,7 @@ def count_intersection(box, nanobots):
 
 
 def distance_to_origin(box):
-    origin = (0, 0, 0)
-    ox, oy, oz = get_closest_point(origin, box)
-    return abs(ox) + abs(oy) + abs(oz)
+    return manhattan_distance(get_closest_point((0, 0, 0), box), (0, 0, 0))
 
 
 # WRITE YOUR SOLUTION HERE

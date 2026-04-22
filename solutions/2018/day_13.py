@@ -20,7 +20,7 @@ MAPPING = {">": "E", "<": "W", "v": "S", "^": "N"}
 @dataclass(order=True)
 class Cart:
     sort_index: tuple = field(init=False, repr=False)
-    id: int
+    cart_id: int
     x: int
     y: int
     direction: str
@@ -60,7 +60,7 @@ def parse_input(lines):
     for y, line in enumerate(lines):
         for x, c in enumerate(line):
             if c in "<>^v":
-                carts.append(Cart(cart_id, x, y, MAPPING[c]))
+                carts.append(Cart(cart_id=cart_id, x=x, y=y, direction=MAPPING[c]))
                 grid[(x, y)] = "|" if c in "v^" else "-"
                 cart_id += 1
             elif c in "-|+/\\":
@@ -81,13 +81,12 @@ def simulate(grid, carts, stop_on_first_collision=True):
             cart.move()
 
             pos = (cart.x, cart.y)
-            if pos in positions and positions[pos].active:
+            if pos in positions:
                 if stop_on_first_collision:
                     return pos
-                else:
-                    cart.active = False
-                    positions[pos].active = False
-                    continue
+                cart.active = False
+                positions[pos].active = False
+                continue
 
             track = grid[pos]
             if track == "+":
@@ -100,7 +99,7 @@ def simulate(grid, carts, stop_on_first_collision=True):
         if not stop_on_first_collision:
             active_carts = [c for c in carts if c.active]
             if len(active_carts) == 1:
-                return (active_carts[0].x, active_carts[0].y)
+                return active_carts[0].x, active_carts[0].y
 
 
 # WRITE YOUR SOLUTION HERE

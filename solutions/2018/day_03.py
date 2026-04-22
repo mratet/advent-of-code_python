@@ -1,5 +1,4 @@
 import re
-from collections import Counter
 
 import numpy as np
 from aocd import get_data
@@ -12,29 +11,26 @@ def parse_claims(text):
     return [tuple(map(int, re.findall(r"\d+", line))) for line in text.splitlines()]
 
 
-# WRITE YOUR SOLUTION HERE
-def part_1(lines):
+def build_fabric(lines):
+    claims = parse_claims(lines)
     fabric = np.zeros((GRID_SIZE, GRID_SIZE), dtype=int)
 
-    for _claim_id, left, top, width, height in parse_claims(lines):
+    for _, left, top, width, height in claims:
         fabric[top : top + height, left : left + width] += 1
+    return claims, fabric
 
+
+# WRITE YOUR SOLUTION HERE
+def part_1(lines):
+    _, fabric = build_fabric(lines)
     return np.count_nonzero(fabric > 1)
 
 
 def part_2(lines):
-    fabric = np.zeros((GRID_SIZE, GRID_SIZE), dtype=int)
-    fabric_claims = np.zeros((GRID_SIZE, GRID_SIZE), dtype=int)
-    claim_areas = {}
+    claims, fabric = build_fabric(lines)
 
-    for claim_id, left, top, width, height in parse_claims(lines):
-        fabric[top : top + height, left : left + width] += 1
-        fabric_claims[top : top + height, left : left + width] = claim_id
-        claim_areas[claim_id] = width * height
-
-    unique_claims = Counter(fabric_claims[fabric == 1])
-    for claim_id, count in unique_claims.items():
-        if count == claim_areas.get(claim_id):
+    for claim_id, left, top, width, height in claims:
+        if np.all(fabric[top : top + height, left : left + width] == 1):
             return claim_id
 
 

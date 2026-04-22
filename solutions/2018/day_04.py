@@ -24,14 +24,14 @@ def analyze_guard_sleep(records):
     for timestamp, event in records:
         minute = timestamp.minute
         if "Guard" in event:
-            m = re.search(r"#(\d+)", event)
-            assert m
-            current_guard = int(m.group(1))
+            match = re.search(r"#(\d+)", event)
+            assert match
+            current_guard = int(match.group(1))
         elif "falls asleep" in event:
             asleep_minute = minute
         elif "wakes up" in event:
-            for m in range(asleep_minute, minute):
-                guards[current_guard][m] += 1
+            for match in range(asleep_minute, minute):
+                guards[current_guard][match] += 1
     return guards
 
 
@@ -40,7 +40,7 @@ def part_1(lines):
     records = parse_input(lines)
     guards = analyze_guard_sleep(records)
     sleepiest_guard = max(guards, key=lambda gid: sum(guards[gid]))
-    best_minute = guards[sleepiest_guard].index(max(guards[sleepiest_guard]))
+    best_minute = max(range(60), key=lambda minute: guards[sleepiest_guard][minute])
     return sleepiest_guard * best_minute
 
 

@@ -8,9 +8,9 @@ def compute_scoreboard(N):
 
     elf1 = 0
     elf2 = 1
-    for _ in range(N + 20):
+    for _ in range(N):
         next_recipe = scoreboard[elf1] + scoreboard[elf2]
-        if next_recipe > 9:
+        if next_recipe >= 10:
             scoreboard.append(next_recipe // 10)
         scoreboard.append(next_recipe % 10)
 
@@ -28,7 +28,8 @@ def part_1(lines):
 
 def part_2(lines):
     N = int(lines)
-    scoreboard = compute_scoreboard(50 * N)
+    # answer is empirically within 30 * N recipes
+    scoreboard = compute_scoreboard(30 * N)
     return scoreboard.index(str(N))
 
 

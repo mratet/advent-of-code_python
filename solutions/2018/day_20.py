@@ -8,16 +8,15 @@ DIRECTIONS = {"N": (0, 1), "S": (0, -1), "E": (1, 0), "W": (-1, 0)}
 
 
 def bfs(start, graph):
-    to_visit = deque()
+    to_visit = deque([start])
     dist = {start: 0}
-    to_visit.append(start)
 
     while to_visit:
-        node = to_visit.pop()
+        node = to_visit.popleft()
         for neighbor in graph[node]:
             if neighbor not in dist:
                 dist[neighbor] = dist[node] + 1
-                to_visit.appendleft(neighbor)
+                to_visit.append(neighbor)
 
     return dist
 

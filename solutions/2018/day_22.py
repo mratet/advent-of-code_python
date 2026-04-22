@@ -6,6 +6,7 @@ from aocd import get_data
 input = get_data(day=22, year=2018).splitlines()
 
 TOOLS = ["TORCH", "CLIMBING_GEAR", "NEITHER"]
+GRID_SIZE = 1000
 
 
 class Region(Enum):
@@ -52,7 +53,7 @@ def part_1(lines):
 
 def part_2(lines):
     depth, X, Y = parse_input(lines)
-    erosion_grid = get_erosion_grid(1000, 1000, depth, (X, Y))
+    erosion_grid = get_erosion_grid(GRID_SIZE, GRID_SIZE, depth, (X, Y))
 
     source = (0, 0, "TORCH")
     target = (X, Y, "TORCH")
@@ -69,7 +70,7 @@ def part_2(lines):
             return dist_node
 
         x, y, t = node
-        neighbors = [(x, y, tool) for tool in TOOLS if tool is not t] + [
+        neighbors = [(x, y, tool) for tool in TOOLS if tool != t] + [
             (x + dx, y + dy, t) for dx, dy in ((-1, 0), (1, 0), (0, -1), (0, 1))
         ]
         for neighbor in neighbors:

@@ -2,10 +2,12 @@ from collections import Counter
 
 from aocd import get_data
 
+MAX_TOTAL_DISTANCE = 10000
+
 input_data = get_data(day=6, year=2018).splitlines()
 
 
-def manhattan(p1, p2):
+def manhattan_distance(p1, p2):
     return abs(p1[0] - p2[0]) + abs(p1[1] - p2[1])
 
 
@@ -14,23 +16,23 @@ def parse_coordinates(lines):
 
 
 def closest_coordinate_index(point, coordinates):
-    distances = [manhattan(point, c) for c in coordinates]
+    distances = [manhattan_distance(point, c) for c in coordinates]
     min_dist = min(distances)
-    indices = [i for i, d in enumerate(distances) if d == min_dist]
-    return indices[0] if len(indices) == 1 else -1
+    return distances.index(min_dist) if distances.count(min_dist) == 1 else -1
 
 
 # WRITE YOUR SOLUTION HERE
 def part_1(lines):
     coordinates = parse_coordinates(lines)
-    grid_size = 1000
+    max_x = max(x for x, _ in coordinates)
+    max_y = max(y for _, y in coordinates)
     edge_ids = {-1}
     all_tiles = []
 
-    for x in range(grid_size):
-        for y in range(grid_size):
+    for x in range(max_x):
+        for y in range(max_y):
             closest_id = closest_coordinate_index((x, y), coordinates)
-            if x in {0, grid_size - 1} or y in {0, grid_size - 1}:
+            if x in {0, max_x - 1} or y in {0, max_y - 1}:
                 edge_ids.add(closest_id)
             all_tiles.append(closest_id)
 
@@ -40,13 +42,12 @@ def part_1(lines):
 
 def part_2(lines):
     coordinates = parse_coordinates(lines)
-    grid_size = 1000
-    max_total_distance = 10000
-
+    max_x = max(x for x, _ in coordinates)
+    max_y = max(y for _, y in coordinates)
     return sum(
-        sum(manhattan((x, y), c) for c in coordinates) < max_total_distance
-        for x in range(grid_size)
-        for y in range(grid_size)
+        sum(manhattan_distance((x, y), c) for c in coordinates) < MAX_TOTAL_DISTANCE
+        for x in range(max_x)
+        for y in range(max_y)
     )
 
 

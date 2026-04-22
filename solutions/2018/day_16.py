@@ -30,7 +30,7 @@ def parse_registers(line: str) -> list[int]:
 
 
 def apply_instruction(name: str, instr: list[int], regs: list[int]) -> list[int]:
-    opcode, a, b, c = instr
+    _, a, b, c = instr
     result = regs.copy()
     match name:
         case "addr":

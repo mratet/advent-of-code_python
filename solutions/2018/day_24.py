@@ -105,7 +105,7 @@ def parse_army_input(text: str) -> list[Units]:
 
 def target_selection(units):
     units = sorted(units, key=lambda u: (u.effective_power, u.initiative), reverse=True)
-    units_attacked = []
+    units_attacked = set()
     attack_dict = {}
     for unit in units:
         op_units = [u for u in units if u.type != unit.type and u not in units_attacked]
@@ -118,14 +118,14 @@ def target_selection(units):
         if unit.compute_damage(target) == 0:
             continue
         attack_dict[unit] = target
-        units_attacked.append(target)
+        units_attacked.add(target)
     return attack_dict
 
 
-def attacking_phase(attacking_dict, units_alived):
+def attacking_phase(attacking_dict, units_alive):
     full_damage = 0
-    units_alived.sort(key=lambda u: u.initiative, reverse=True)
-    for unit in units_alived:
+    units_alive.sort(key=lambda u: u.initiative, reverse=True)
+    for unit in units_alive:
         if not unit.is_alive or unit not in attacking_dict:
             continue
         target = attacking_dict[unit]
@@ -137,11 +137,11 @@ def attacking_phase(attacking_dict, units_alived):
 
 def battle(armies):
     while True:
-        units_alived = [u for u in armies if u.is_alive]
-        if len({u.type for u in units_alived}) == 1:
-            return units_alived[0].type, sum(u.count for u in units_alived)
-        attacking_dict = target_selection(units_alived)
-        battle_damages = attacking_phase(attacking_dict, units_alived)
+        units_alive = [u for u in armies if u.is_alive]
+        if len({u.type for u in units_alive}) == 1:
+            return units_alive[0].type, sum(u.count for u in units_alive)
+        attacking_dict = target_selection(units_alive)
+        battle_damages = attacking_phase(attacking_dict, units_alive)
         if battle_damages == 0:
             return "Draw", -1
 

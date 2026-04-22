@@ -1,4 +1,5 @@
 import re
+from collections import deque
 
 from aocd import get_data
 
@@ -19,8 +20,6 @@ def parse_input(lines):
 
 
 def flow(clay, abyss_limit):
-    from collections import deque
-
     source = (500, 0)
     flowing = set()
     still = set()

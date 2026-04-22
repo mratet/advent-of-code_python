@@ -16,15 +16,14 @@ def compare_box_ids(box1, box2):
 
 # WRITE YOUR SOLUTION HERE
 def part_1(lines):
-    two = sum(2 in Counter(box_id).values() for box_id in lines)
-    three = sum(3 in Counter(box_id).values() for box_id in lines)
-    return two * three
+    counts = [Counter(box_id).values() for box_id in lines]
+    return sum(2 in c for c in counts) * sum(3 in c for c in counts)
 
 
 def part_2(lines):
     for b1, b2 in combinations(lines, 2):
         if S := compare_box_ids(b1, b2):
-            return "".join(S)
+            return S
 
 
 # END OF SOLUTION

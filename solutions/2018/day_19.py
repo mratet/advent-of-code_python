@@ -43,35 +43,35 @@ def apply_instruction(instr, regs):
     return result
 
 
-def get_main_value(programm, part="part_1"):
-    programm = programm.copy()
-    ip_register = int(programm.pop(0)[-1])
+def get_main_value(program, part="part_1"):
+    program = program.copy()
+    ip_register = int(program.pop(0)[-1])
     ip = 0
     registers = [0] * 6
     registers[0] = 0 if part == "part_1" else 1
 
-    while ip < len(programm):
+    while ip < len(program):
         registers[ip_register] = ip
-        registers = apply_instruction(programm[ip], registers)
+        registers = apply_instruction(program[ip], registers)
         ip = registers[ip_register]
         ip += 1
         if ip == 1:
             return registers[2]
 
 
-def real_programm(n):
+def real_program(n):
     return sum(d for d in range(1, n + 1) if n % d == 0)
 
 
 # WRITE YOUR SOLUTION HERE
 def part_1(lines):
     main_value = get_main_value(lines, "part_1")
-    return real_programm(main_value)
+    return real_program(main_value)
 
 
 def part_2(lines):
     main_value = get_main_value(lines, "part_2")
-    return real_programm(main_value)
+    return real_program(main_value)
 
 
 # END OF SOLUTION

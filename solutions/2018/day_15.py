@@ -33,10 +33,6 @@ def find_closest(start, targets, blocked_case):
     return reachable_targets
 
 
-def manhattan_distance(p1, p2):
-    return abs(p1[0] - p2[0]) + abs(p1[1] - p2[1])
-
-
 @dataclass(order=True)
 class Unit:
     sort_index: tuple = field(init=False, repr=False)
@@ -97,12 +93,12 @@ class Unit:
 
 
 def parse_input(lines):
-    walls = []
+    walls = set()
     units = []
     for y, line in enumerate(lines):
         for x, c in enumerate(line):
             if c == "#":
-                walls.append((x, y))
+                walls.add((x, y))
             elif c in "GE":
                 units.append(Unit(x, y, c))
 
@@ -121,7 +117,7 @@ def simulate(walls, units, part="part_1"):
             if not unit.is_alive:
                 continue
 
-            blocked_cases = walls + [(u.x, u.y) for u in units if u.is_alive]
+            blocked_cases = walls | {(u.x, u.y) for u in units if u.is_alive}
             targets = [u for u in units if u.is_alive and u.type != unit.type]
             if not targets:
                 allies_hp = [u.hit_points for u in units if u.is_alive and u.type == unit.type]

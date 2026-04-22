@@ -3,19 +3,15 @@ from aocd import get_data
 input_data = get_data(day=5, year=2018)
 
 
-def polymer_one_step(polymer: str) -> str:
-    for i in range(26):
-        lower = chr(ord("a") + i)
-        upper = chr(ord("A") + i)
-        polymer = polymer.replace(lower + upper, "").replace(upper + lower, "")
-    return polymer
+PAIRS = [(chr(ord("a") + i), chr(ord("A") + i)) for i in range(26)]
 
 
 def polymer_reaction(polymer: str) -> int:
-    prev = None
-    while polymer != prev:
-        prev = polymer
-        polymer = polymer_one_step(polymer)
+    prev_len = None
+    while len(polymer) != prev_len:
+        prev_len = len(polymer)
+        for lower, upper in PAIRS:
+            polymer = polymer.replace(lower + upper, "").replace(upper + lower, "")
     return len(polymer)
 
 

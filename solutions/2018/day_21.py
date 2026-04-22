@@ -11,6 +11,7 @@ def get_personal_input(lines):
 def real_program(true_val):
     reg6 = 0
     function = lambda x: ((x & 16777215) * 65899) & 16777215
+    seen_set = set()
     seen = []
     while True:
         reg4 = reg6 | 65536
@@ -18,9 +19,10 @@ def real_program(true_val):
 
         while reg4 > 0:
             reg6 = function(reg6 + (reg4 & 255))
-            reg4 = reg4 // 256
-        if reg6 in seen:
+            reg4 >>= 8
+        if reg6 in seen_set:
             break
+        seen_set.add(reg6)
         seen.append(reg6)
     return seen
 

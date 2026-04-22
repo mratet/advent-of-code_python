@@ -7,8 +7,8 @@ def parse_input(lines):
     transition_dict = {}
     init_state, transitions = lines[0].split(": ")[1], lines[1]
     for transition in transitions.splitlines():
-        input, output = transition.split(" => ")
-        transition_dict[input] = output
+        pattern, output = transition.split(" => ")
+        transition_dict[pattern] = output
     return init_state, transition_dict
 
 
@@ -17,10 +17,7 @@ def simulate(state, transition_dict, n):
     MAX_CYCLE = 1000
     for _ in range(min(n, MAX_CYCLE)):
         state = "...." + state + "...."
-        next_state = ""
-        for i in range(len(state) - 4):
-            entry = state[i : i + 5]
-            next_state += transition_dict[entry]
+        next_state = "".join(transition_dict[state[i : i + 5]] for i in range(len(state) - 4))
         idx += next_state.index("#") - 2
         state = next_state.lstrip(".").rstrip(".")
     pot_sum = sum(i + idx for i, plant in enumerate(state) if plant == "#")

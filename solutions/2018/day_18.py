@@ -44,15 +44,17 @@ def part_1(lines, minutes=10):
 def part_2(lines):
     lumber = parse_input(lines)
     total_minutes = 1000000000
-    seen = []
+    seen = {}
     while True:
         state = tuple(lumber.values())
         if state in seen:
-            cycle_start = seen.index(state)
+            cycle_start = seen[state]
             cycle_length = len(seen) - cycle_start
             remaining = (total_minutes - cycle_start) % cycle_length
-            return part_1(lines, cycle_start + remaining)
-        seen.append(state)
+            for _ in range(remaining):
+                lumber = evolve(lumber)
+            return compute_resource_value(lumber)
+        seen[state] = len(seen)
         lumber = evolve(lumber)
 
 

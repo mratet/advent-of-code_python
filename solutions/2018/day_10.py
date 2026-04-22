@@ -11,10 +11,7 @@ def parse_input(lines):
 
 def compute_area(points):
     xs, ys = zip(*points, strict=False)
-    min_x, max_x = min(xs), max(xs)
-    min_y, max_y = min(ys), max(ys)
-    area = (max_x - min_x) * (max_y - min_y)
-    return area
+    return (max(xs) - min(xs)) * (max(ys) - min(ys))
 
 
 def render_ascii(points):
@@ -24,7 +21,6 @@ def render_ascii(points):
 
     width = max_x - min_x + 1
     height = max_y - min_y + 1
-
     grid = [["." for _ in range(width)] for _ in range(height)]
 
     for x, y in points:

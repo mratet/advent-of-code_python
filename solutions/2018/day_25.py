@@ -11,11 +11,7 @@ def manhattan_distance(p1, p2):
 
 
 def parse_input(lines):
-    points = []
-    for line in lines:
-        x, y, z, t = map(int, line.split(","))
-        points.append((x, y, z, t))
-    return points
+    return [tuple(map(int, line.split(","))) for line in lines]
 
 
 def dfs(start_node, graph, visited):

@@ -18,7 +18,7 @@ def sum_metadata(node):
 
 def node_value(node):
     children, metadata = node
-    if len(children) == 0:
+    if not children:
         return sum_metadata(node)
     return sum(
         node_value(children[metadata_index - 1]) for metadata_index in metadata if metadata_index <= len(children)
