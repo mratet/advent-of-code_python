@@ -5,12 +5,11 @@ from intcode import IntcodeComputer
 aoc_input = get_data(day=11, year=2019)
 
 # WRITE YOUR SOLUTION HERE
-N, S, E, W = (0, 1), (0, -1), (1, 0), (-1, 0)
-DIRS = [N, E, S, W]
+DIRS = [(0, 1), (1, 0), (0, -1), (-1, 0)]
 
 
 def print_registration_identifier(grid: dict):
-    white = [pos for pos, color in grid.items() if color]
+    white = {pos for pos, color in grid.items() if color}
     Xs, Ys = zip(*white, strict=False)
     min_x, max_x = min(Xs), max(Xs)
     min_y, max_y = min(Ys), max(Ys)
@@ -36,8 +35,7 @@ def solve(lines, part="part_1"):
 
     if part == "part_1":
         return len(screen_state)
-    else:
-        return convert_6(print_registration_identifier(screen_state))
+    return convert_6(print_registration_identifier(screen_state))
 
 
 def part_1(lines):

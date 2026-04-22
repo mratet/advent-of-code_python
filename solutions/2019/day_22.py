@@ -10,7 +10,7 @@ def get_instructions(lines):
         if line[:3] == "cut":
             instr.append(("cut", int(line[4:])))
         elif line[:9] == "deal with":
-            instr.append(("inc", int(line[-2:])))
+            instr.append(("inc", int(line.split()[-1])))
         else:
             instr.append(("new", -1))
     return instr
@@ -54,17 +54,20 @@ def get_linear_params(instr):
     return a, b
 
 
-def get_position(x, a, b, deck_size, shuffle_count):
+def _compose(a, b, deck_size, shuffle_count):
     Ma = pow(a, shuffle_count, deck_size)
     Mb = b * (Ma - 1) * pow(a - 1, -1, deck_size)
+    return Ma, Mb
+
+
+def get_position(x, a, b, deck_size, shuffle_count):
+    Ma, Mb = _compose(a, b, deck_size, shuffle_count)
     return (Ma * x + Mb) % deck_size
 
 
 def get_card(x, a, b, deck_size, shuffle_count):
-    Ma = pow(a, shuffle_count, deck_size)
-    Ma_inv = pow(Ma, -1, deck_size)
-    Mb = b * (Ma - 1) * pow(a - 1, -1, deck_size)
-    return (Ma_inv * (x - Mb)) % deck_size
+    Ma, Mb = _compose(a, b, deck_size, shuffle_count)
+    return (pow(Ma, -1, deck_size) * (x - Mb)) % deck_size
 
 
 def part_2(lines):

@@ -5,13 +5,6 @@ from aocd import get_data
 input = get_data(day=6, year=2019).splitlines()
 
 
-# WRITE YOUR SOLUTION HERE
-def part_1(lines):
-    graph = {r: l for l, r in (line.split(")") for line in lines)}
-    dfs = lambda s: 0 if s == "COM" else 1 + dfs(graph[s])
-    return sum(dfs(n) for n in graph)
-
-
 def compute_graph(lines):
     graph = defaultdict(list)
     for line in lines:
@@ -21,8 +14,7 @@ def compute_graph(lines):
     return graph
 
 
-def part_2(lines):
-    graph = compute_graph(lines)
+def compute_distances(graph, start):
     dist = {}
 
     def dfs(s, d):
@@ -32,8 +24,19 @@ def part_2(lines):
         for n in graph[s]:
             dfs(n, d + 1)
 
-    dfs("YOU", 0)
-    return dist["SAN"] - 2
+    dfs(start, 0)
+    return dist
+
+
+# WRITE YOUR SOLUTION HERE
+def part_1(lines):
+    graph = compute_graph(lines)
+    return sum(compute_distances(graph, "COM").values())
+
+
+def part_2(lines):
+    graph = compute_graph(lines)
+    return compute_distances(graph, "YOU")["SAN"] - 2
 
 
 # END OF SOLUTION

@@ -8,6 +8,10 @@ N_PHASE = 100
 
 
 # WRITE YOUR SOLUTION HERE
+def cumsum_from_right(x):
+    return x[::-1].cumsum()[::-1]
+
+
 def build_fft(N):
     fft = np.zeros((N, N), dtype=int)
     base_pattern = [0, 1, 0, -1]
@@ -19,11 +23,11 @@ def build_fft(N):
 
 
 def part_1(lines):
-    signal = np.array([int(s) for s in str(lines)])
+    signal = np.array([int(s) for s in lines])
     fft = build_fft(len(signal))
     for _ in range(N_PHASE):
         signal = abs(signal @ fft.T) % 10
-    return "".join([str(n) for n in signal[:8]])
+    return "".join(str(n) for n in signal[:8])
 
 
 def part_2(lines):
@@ -34,11 +38,10 @@ def part_2(lines):
     signal = np.array([int(s) for s in str(lines)])
     repeated_signal = np.tile(signal, repeat + 1)
 
-    cumsum_from_right = lambda x: x[::-1].cumsum()[::-1]
     # In low frequencies (i.e right part of the fft), we're only averaging values
     for _ in range(N_PHASE):
         repeated_signal = abs(cumsum_from_right(repeated_signal)) % 10
-    return "".join([str(d) for d in repeated_signal[start : start + 8]])
+    return "".join(str(d) for d in repeated_signal[start : start + 8])
 
 
 # END OF SOLUTION

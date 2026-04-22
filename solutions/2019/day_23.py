@@ -21,23 +21,23 @@ def _process_packets(computer, input_value, packets_queues):
 
 def solve(lines, part="part_1"):
     computers = [IntcodeComputer(lines) for _ in range(50)]
-    packets_queus = [deque([]) for _ in range(50)]
+    packets_queues = [deque() for _ in range(50)]
 
     for i, computer in enumerate(computers):
-        _process_packets(computer, [i], packets_queus)
+        _process_packets(computer, [i], packets_queues)
 
     last_NAT: tuple[int, int] | None = None
     NAT: tuple[int, int] | None = None
 
     while True:
         network_is_idle = True
-        for computer, packet_queue in zip(computers, packets_queus, strict=False):
+        for computer, packet_queue in zip(computers, packets_queues, strict=False):
             if not packet_queue:
-                _process_packets(computer, [-1], packets_queus)
+                _process_packets(computer, [-1], packets_queues)
             else:
                 network_is_idle = False
                 while packet_queue:
-                    NAT_received = _process_packets(computer, packet_queue.popleft(), packets_queus)
+                    NAT_received = _process_packets(computer, packet_queue.popleft(), packets_queues)
 
                     if NAT_received:
                         if part == "part_1":
@@ -45,7 +45,7 @@ def solve(lines, part="part_1"):
                         NAT = NAT_received
 
         if network_is_idle and NAT is not None:
-            _process_packets(computers[0], NAT, packets_queus)
+            _process_packets(computers[0], NAT, packets_queues)
             if last_NAT == NAT and part == "part_2":
                 return NAT[1]
             last_NAT = NAT

@@ -13,14 +13,14 @@ aoc_input = get_data(day=18, year=2019).splitlines()
 
 
 def parse_input(lines, part="part_1"):
-    entrance, dots, doors, keys = None, [], {}, {}
+    entrance, dots, doors, keys = None, set(), {}, {}
     for y in range(len(lines)):
         for x in range(len(lines[0])):
             symb = lines[y][x]
             if symb in "#":
                 continue
             elif symb == ".":
-                dots.append((x, y))
+                dots.add((x, y))
             elif symb.isupper():
                 doors[symb] = (x, y)
             else:
@@ -75,6 +75,8 @@ def dijkstra(graph, start_keys):
 
     while heap:
         dist_node, (current_keys, owned_key) = heappop(heap)
+        if dist_node > dist[(current_keys, owned_key)]:
+            continue
         if owned_key == (1 << (len(graph) - len(current_keys))) - 1:
             return dist_node
 

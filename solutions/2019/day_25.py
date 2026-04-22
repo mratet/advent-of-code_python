@@ -4,10 +4,12 @@ from intcode import MAP_FROM_ASCII, MAP_TO_ASCII, IntcodeComputer
 aoc_input = get_data(day=25, year=2019)
 
 
+PLAY = False  # Set to True to play interactively
+
+
 # WRITE YOUR SOLUTION HERE
-def part_1(lines, wanna_play=False):
-    # Change this parameter if you want to play by yourself
-    if not wanna_play:
+def part_1(lines):
+    if not PLAY:
         return 4206594
     pc = IntcodeComputer(lines)
     buffer = pc.run()

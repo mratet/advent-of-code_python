@@ -1,4 +1,5 @@
 import time
+from enum import Enum
 from itertools import batched
 
 from aocd import get_data
@@ -8,15 +9,22 @@ from intcode import IntcodeComputer
 aoc_input = get_data(day=13, year=2019)
 
 
+class Mode(Enum):
+    PLAY = "play"
+    WATCH = "watch"
+    AUTO = "auto"
+
+
 class IntcodeGUI:
-    def __init__(self, program_file: str, playing_type: int = 0):
-        self.term = Terminal()
+    def __init__(self, program_file: str, mode: Mode = Mode.AUTO):
         self.computer = IntcodeComputer(program_file)
+        if mode != Mode.AUTO:
+            self.term = Terminal()
         self.grid: dict[tuple[int, int], int] = {}
         self.score = 0
         self.ball_pos = (0, 0)
         self.paddle_pos = (0, 0)
-        self.playing_type = playing_type
+        self.mode = mode
 
         self.min_x = 0
         self.max_x = 0
@@ -44,7 +52,7 @@ class IntcodeGUI:
             tile_map = {0: " ", 1: "█", 2: "▒", 3: self.term.bold_blue("_"), 4: "●"}
 
             for y in range(self.min_y, self.max_y + 1):
-                with self.term.location(self.min_x, y + 5):  # +5 to offset the header
+                with self.term.location(self.min_x, y + 5):
                     for x in range(self.min_x, self.max_x + 1):
                         tile_id = self.grid.get((x, y), 0)
                         print(tile_map[tile_id], end="")
@@ -65,7 +73,7 @@ class IntcodeGUI:
         tile_map = {0: " ", 1: "█", 2: "▒", 3: self.term.bold_blue("_"), 4: "●"}
         char = tile_map.get(tile_id, " ")
 
-        with self.term.location(x, y + 5):  # +5 to offset the header lines
+        with self.term.location(x, y + 5):
             print(char, end="", flush=True)
 
     def update_score(self, new_score: int):
@@ -79,6 +87,25 @@ class IntcodeGUI:
 
     def run(self):
         self.computer.memory[0] = 2
+
+        if self.mode == Mode.AUTO:
+            for x, y, tile_id in batched(self.computer.run(), n=3):
+                if x == -1 and y == 0:
+                    self.score = tile_id
+                elif tile_id == 4:
+                    self.ball_pos = (x, y)
+                elif tile_id == 3:
+                    self.paddle_pos = (x, y)
+            while not self.computer.hasted:
+                joystick = (self.ball_pos[0] > self.paddle_pos[0]) - (self.ball_pos[0] < self.paddle_pos[0])
+                for x, y, tile_id in batched(self.computer.run([joystick]), n=3):
+                    if x == -1 and y == 0:
+                        self.score = tile_id
+                    elif tile_id == 4:
+                        self.ball_pos = (x, y)
+                    elif tile_id == 3:
+                        self.paddle_pos = (x, y)
+            return self.score
 
         initial_output = self.computer.run()
         for x, y, tile_id in batched(initial_output, n=3):
@@ -99,7 +126,7 @@ class IntcodeGUI:
                     else:
                         self.update_tile(x, y, tile_id)
 
-                if self.playing_type == 0:
+                if self.mode == Mode.PLAY:
                     key = self.term.inkey(timeout=0.001)
                     if key == "q":
                         break
@@ -109,19 +136,13 @@ class IntcodeGUI:
                         joystick = 1
                     else:
                         joystick = 0
-                elif self.playing_type == 1:
+                elif self.mode == Mode.WATCH:
                     time.sleep(0.001)
-                    if self.ball_pos[0] < self.paddle_pos[0]:
-                        joystick = -1
-                    elif self.ball_pos[0] > self.paddle_pos[0]:
-                        joystick = 1
-                    else:
-                        joystick = 0
+                    joystick = (self.ball_pos[0] > self.paddle_pos[0]) - (self.ball_pos[0] < self.paddle_pos[0])
 
         return self.score
 
 
-# WRITE YOUR SOLUTION HERE
 def part_1(lines):
     pc = IntcodeComputer(lines)
     tiles = pc.run()
@@ -129,9 +150,8 @@ def part_1(lines):
 
 
 def part_2(lines):
-    # Use playing_type 0 if you want to play
-    gui = IntcodeGUI(program_file=lines, playing_type=1)
-    return gui.run()
+    # Mode.PLAY to play manually, Mode.WATCH to watch the AI
+    return IntcodeGUI(lines, mode=Mode.AUTO).run()
 
 
 # END OF SOLUTION

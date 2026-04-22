@@ -6,34 +6,24 @@ from intcode import IntcodeComputer
 aoc_input = get_data(day=19, year=2019)
 
 
+def probe(lines, x, y):
+    [state] = IntcodeComputer(lines).run([x, y])
+    return state
+
+
 # WRITE YOUR SOLUTION HERE
 def part_1(lines):
-    screen_state = {}
-    N = 50
-    for x, y in product(range(N), range(N)):
-        pc = IntcodeComputer(lines)
-        [state] = pc.run([x, y])
-        screen_state[(x, y)] = state
-    return sum(screen_state.values())
+    return sum(probe(lines, x, y) for x, y in product(range(50), range(50)))
 
 
 def part_2(lines):
     square_size = 100
-    x, y = square_size, square_size
+    x, y = 0, square_size
 
     while True:
-        x -= 5
-        # Find left beam border
-        while True:
-            pc = IntcodeComputer(lines)
-            [state] = pc.run([x, y])
-            if state:
-                break
+        while not probe(lines, x, y):
             x += 1
-
-        pc = IntcodeComputer(lines)
-        [state] = pc.run([x + square_size - 1, y - (square_size - 1)])  # TOP_RIGHT_CORNER
-        if state:
+        if probe(lines, x + square_size - 1, y - (square_size - 1)):  # TOP_RIGHT_CORNER
             return x * 10000 + y - (square_size - 1)  # TOP_LEFT_CORNER
         y += 1
 

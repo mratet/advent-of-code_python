@@ -7,38 +7,44 @@ from aocd import get_data
 aoc_input = get_data(day=12, year=2019).splitlines()
 
 
+def extract_numb(l):
+    return map(int, re.findall(r"-?\d+", l))
+
+
+PART_1_STEPS = 1000
+
+
+def apply_gravity(pos, vel):
+    for i in range(len(pos)):
+        vel[i] += np.sum(np.sign(pos - pos[i]), axis=0)
+
+
 # WRITE YOUR SOLUTION HERE
 def part_1(lines):
-    extract_numb = lambda l: map(int, re.findall(r"-?\d+", l))
     pos = np.array([list(extract_numb(l)) for l in lines])
     vel = np.zeros_like(pos)
-    T = 1000
-    for _ in range(T):
-        for i in range(len(pos)):
-            vel[i] += np.sum(np.sign(pos - pos[i]), axis=0)
+    for _ in range(PART_1_STEPS):
+        apply_gravity(pos, vel)
         pos += vel
-    return (np.sum(abs(pos), axis=1) * np.sum(abs(vel), axis=1)).sum()
+    return (np.sum(np.abs(pos), axis=1) * np.sum(np.abs(vel), axis=1)).sum()
 
 
 def part_2(lines):
-    extract_numb = lambda l: map(int, re.findall(r"-?\d+", l))
     pos = np.array([list(extract_numb(l)) for l in lines])
     vel = np.zeros_like(pos)
     start_stats = np.vstack((pos, vel))
-    repetition_time = [0, 0, 0]
-    T = 1
-    while not all(repetition_time):
-        for x in range(len(pos)):
-            vel[x] += np.sum(np.sign(pos - pos[x]), axis=0)
+    periods = [0, 0, 0]
+    t = 1
+    while not all(periods):
+        apply_gravity(pos, vel)
         pos += vel
 
-        cur_stats = np.vstack((pos, vel))
-        flag = np.all(cur_stats == start_stats, axis=0)
-        for x in range(3):
-            if flag[x] and not repetition_time[x]:
-                repetition_time[x] = T
-        T += 1
-    return lcm(*repetition_time)
+        axes_at_start = np.all(np.vstack((pos, vel)) == start_stats, axis=0)
+        for axis in range(3):
+            if axes_at_start[axis] and not periods[axis]:
+                periods[axis] = t
+        t += 1
+    return lcm(*periods)
 
 
 # END OF SOLUTION

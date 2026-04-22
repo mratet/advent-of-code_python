@@ -2,6 +2,8 @@ from aocd import get_data
 
 input = get_data(day=3, year=2019).splitlines()
 
+DIRECTIONS = {"R": (0, 1), "L": (0, -1), "U": (-1, 0), "D": (1, 0)}
+
 
 # WRITE YOUR SOLUTION HERE
 def get_wire_path(insts):
@@ -9,31 +11,28 @@ def get_wire_path(insts):
     path = []
     for inst in insts:
         op, val = inst[0], int(inst[1:])
+        dx, dy = DIRECTIONS[op]
         for _ in range(val):
-            if op == "R":
-                y += 1
-            elif op == "L":
-                y -= 1
-            elif op == "U":
-                x -= 1
-            elif op == "D":
-                x += 1
+            x, y = x + dx, y + dy
             path.append((x, y))
     return path
 
 
+def get_paths(lines):
+    path_1 = get_wire_path(lines[0].split(","))
+    path_2 = get_wire_path(lines[1].split(","))
+    crossed_pos = set(path_1) & set(path_2)
+    return path_1, path_2, crossed_pos
+
+
 def part_1(lines):
-    wire1, wire2 = lines[0], lines[1]
-    path1, path2 = get_wire_path(wire1.split(",")), get_wire_path(wire2.split(","))
-    crossed_pos = set(path1) & set(path2)
+    _, _, crossed_pos = get_paths(lines)
     return min(abs(x) + abs(y) for (x, y) in crossed_pos)
 
 
 def part_2(lines):
-    wire1, wire2 = lines[0], lines[1]
-    path1, path2 = get_wire_path(wire1.split(",")), get_wire_path(wire2.split(","))
-    crossed_pos = set(path1) & set(path2)
-    return min(path1.index(pos) + path2.index(pos) + 2 for pos in crossed_pos)
+    path_1, path_2, crossed_pos = get_paths(lines)
+    return min(path_1.index(pos) + path_2.index(pos) + 2 for pos in crossed_pos)
 
 
 # END OF SOLUTION

@@ -1,8 +1,13 @@
 from collections import deque
 from typing import ClassVar
 
-MAP_FROM_ASCII = lambda s: "".join(map(chr, s))
-MAP_TO_ASCII = lambda s: list(map(ord, s))
+
+def MAP_FROM_ASCII(s):
+    return "".join(map(chr, s))
+
+
+def MAP_TO_ASCII(s):
+    return list(map(ord, s))
 
 
 class IntcodeComputer:
@@ -62,8 +67,7 @@ class IntcodeComputer:
 
             operations = self._OPERATIONS[op]
             parameters = [self.memory[self.ip + 1 + i] for i in range(len(operations))]
-            get_decomposition = lambda n, a: (n // 10**a) % 10
-            parameters_mode = [get_decomposition(opcode, i + 2) for i in range(len(operations))]
+            parameters_mode = [(opcode // 10 ** (i + 2)) % 10 for i in range(len(operations))]
             params = [
                 self.apply_mode(p, p_mode, operations[i])
                 for i, (p, p_mode) in enumerate(zip(parameters, parameters_mode, strict=False))

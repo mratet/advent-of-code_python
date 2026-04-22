@@ -10,30 +10,26 @@ DIRS = [(0, 1), (1, 0), (0, -1), (-1, 0)]
 
 # WRITE YOUR SOLUTION HERE
 def dijkstra(graph, source=0, target=None):
-    len(graph)
-    prec = dict.fromkeys(graph)
-    black = dict.fromkeys(graph, False)
-    dist = {k: float("inf") for k in graph}
+    dist = defaultdict(lambda: float("inf"))
     dist[source] = 0
     heap = [(0, source)]
     while heap:
-        dist_node, node = heappop(heap)  # le sommet le plus proche
-        if not black[node]:
-            black[node] = True
+        dist_node, node = heappop(heap)
+        if dist_node > dist[node]:
+            continue
         if node == target:
             break
         for neighbor in graph[node]:
             dist_neighbor = dist_node + 1
             if dist_neighbor < dist[neighbor]:
                 dist[neighbor] = dist_neighbor
-                prec[neighbor] = node
                 heappush(heap, (dist_neighbor, neighbor))
-    return dist, prec
+    return dist
 
 
 def _parse_input(lines):
-    min_x, max_x, min_y, max_y = 1e9, 0, 1e9, 0
-    dots = []
+    min_x, max_x, min_y, max_y = float("inf"), float("-inf"), float("inf"), float("-inf")
+    dots = set()
     door = {}
     for x in range(len(lines)):
         for y in range(len(lines[0])):
@@ -41,7 +37,7 @@ def _parse_input(lines):
             if symb == " " or symb == "#":
                 continue
             if symb == ".":
-                dots.append((x, y))
+                dots.add((x, y))
                 min_x = min(x, min_x)
                 max_x = max(x, max_x)
                 min_y = min(y, min_y)
@@ -95,7 +91,7 @@ def build_graph(door, dots, extreme_coords, part="part_1"):
 def part_1(lines):
     door, dots, extreme_coords = _parse_input(lines)
     start, end, graph = build_graph(door, dots, extreme_coords, "part_1")
-    dist, prec = dijkstra(graph, start, end)
+    dist = dijkstra(graph, start, end)
     return dist[end]
 
 
@@ -103,7 +99,7 @@ def part_2(lines):
     # To get faster results, you might need to modify dijkstra instead of precomputing a huge graph
     door, dots, extreme_coords = _parse_input(lines)
     start, end, graph = build_graph(door, dots, extreme_coords, "part_2")
-    dist, prec = dijkstra(graph, start, end)
+    dist = dijkstra(graph, start, end)
     return dist[end]
 
 

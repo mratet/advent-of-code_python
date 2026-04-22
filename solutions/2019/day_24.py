@@ -1,93 +1,82 @@
-from itertools import product
-
 from aocd import get_data
 
 aoc_input = get_data(day=24, year=2019).splitlines()
 
 DIRS = [(0, 1), (0, -1), (1, 0), (-1, 0)]
-
-RECURSION_LIMIT = 100
 OUT_RECURSION = {(0, 1): (2, 3), (0, -1): (2, 1), (1, 0): (3, 2), (-1, 0): (1, 2)}
 
 
 # WRITE YOUR SOLUTION HERE
-def _parse_input(lines, part="part_1"):
-    bugs = {}
-    for y in range(len(lines)):
-        for x in range(len(lines[0])):
-            bugs[(0, y, x)] = lines[y][x]
-    if part == "part_2":
-        for d in range(-RECURSION_LIMIT, RECURSION_LIMIT):
-            if d == 0:
-                continue
-            for x, y in product(range(5), repeat=2):
-                bugs[(d, x, y)] = "."
-    return bugs
+def _parse_input(lines):
+    return {(0, row, col) for row in range(len(lines)) for col in range(len(lines[0])) if lines[row][col] == "#"}
 
 
 def get_neighbors(node, part="part_1"):
-    d, x, y = node
+    d, row, col = node
     if part == "part_1":
-        return [(0, x + dx, y + dy) for (dx, dy) in DIRS]
+        return [(0, row + drow, col + dcol) for drow, dcol in DIRS]
 
-    if (x, y) == (2, 2):
+    if (row, col) == (2, 2):
         return []
     neighbors = []
-    for dx, dy in DIRS:
-        nx, ny = x + dx, y + dy
-        if (nx, ny) == (2, 2):
-            if (x, y) == (2, 1):
-                neighbors += [(d - 1, x, 0) for x in range(5)]
-            elif (x, y) == (2, 3):
-                neighbors += [(d - 1, x, 4) for x in range(5)]
-            elif (x, y) == (3, 2):
-                neighbors += [(d - 1, 4, y) for y in range(5)]
-            elif (x, y) == (1, 2):
-                neighbors += [(d - 1, 0, y) for y in range(5)]
+    for drow, dcol in DIRS:
+        nrow, ncol = row + drow, col + dcol
+        if (nrow, ncol) == (2, 2):
+            if (row, col) == (2, 1):
+                neighbors += [(d - 1, i, 0) for i in range(5)]
+            elif (row, col) == (2, 3):
+                neighbors += [(d - 1, i, 4) for i in range(5)]
+            elif (row, col) == (3, 2):
+                neighbors += [(d - 1, 4, i) for i in range(5)]
+            elif (row, col) == (1, 2):
+                neighbors += [(d - 1, 0, i) for i in range(5)]
             continue
 
-        if not (0 <= nx < 5 and 0 <= ny < 5):
-            nx, ny = OUT_RECURSION[(dx, dy)]
-            neighbors.append((d + 1, nx, ny))
+        if not (0 <= nrow < 5 and 0 <= ncol < 5):
+            nrow, ncol = OUT_RECURSION[(drow, dcol)]
+            neighbors.append((d + 1, nrow, ncol))
             continue
 
-        neighbors.append((d, nx, ny))
+        neighbors.append((d, nrow, ncol))
     return neighbors
 
 
 def get_next_state(bugs, part="part_1"):
-    new_grid = {}
-    for node, symb in bugs.items():
+    if part == "part_1":
+        candidates = {(0, row, col) for row in range(5) for col in range(5)}
+    else:
+        candidates = bugs | {n for node in bugs for n in get_neighbors(node, part=part)}
+
+    new_bugs = set()
+    for node in candidates:
         neighbors = get_neighbors(node, part=part)
-        count = sum(bugs.get(neighbor, ".") == "#" for neighbor in neighbors)
-        if symb == "#":
-            new_grid[node] = "#" if count == 1 else "."
-        elif symb == ".":
-            new_grid[node] = "#" if count in (1, 2) else "."
-    return new_grid
+        count = sum(1 for n in neighbors if n in bugs)
+        is_bug = node in bugs
+        if (is_bug and count == 1) or (not is_bug and count in (1, 2)):
+            new_bugs.add(node)
+    return new_bugs
 
 
 def compute_diversity(bugs):
-    bug_order = sorted(bugs.keys())
-    return sum(2**i for i, node in enumerate(bug_order) if bugs[node] == "#")
+    return sum(2 ** (row * 5 + col) for _, row, col in bugs)
 
 
 def part_1(lines):
     bugs = _parse_input(lines)
     seen = set()
     while True:
-        if tuple(bugs.items()) in seen:
+        state = frozenset(bugs)
+        if state in seen:
             return compute_diversity(bugs)
-        seen.add(tuple(bugs.items()))
-        next_bugs = get_next_state(bugs, "part_1")
-        bugs = next_bugs
+        seen.add(state)
+        bugs = get_next_state(bugs, "part_1")
 
 
 def part_2(lines):
-    bugs = _parse_input(lines, "part_2")
+    bugs = _parse_input(lines)
     for _ in range(200):
         bugs = get_next_state(bugs, "part_2")
-    return sum(c == "#" for c in bugs.values())
+    return len(bugs)
 
 
 # END OF SOLUTION
