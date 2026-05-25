@@ -3,6 +3,10 @@ from aocd import get_data
 input = get_data(day=15, year=2020)
 
 
+def parse(lines):
+    return [int(n) for n in lines.split(",")]
+
+
 # WRITE YOUR SOLUTION HERE
 def compute_spoken_number(n, seed):
     memory = {s: turn + 1 for turn, s in enumerate(seed)}
@@ -16,11 +20,11 @@ def compute_spoken_number(n, seed):
 
 
 def part_1(lines):
-    return compute_spoken_number(2020, [int(n) for n in lines.split(",")])
+    return compute_spoken_number(2020, parse(lines))
 
 
 def part_2(lines):
-    return compute_spoken_number(30000000, [int(n) for n in lines.split(",")])
+    return compute_spoken_number(30000000, parse(lines))
 
 
 # END OF SOLUTION

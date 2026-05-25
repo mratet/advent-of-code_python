@@ -1,5 +1,3 @@
-from string import ascii_lowercase
-
 from aocd import get_data
 
 input = get_data(day=6, year=2020).split("\n\n")
@@ -7,17 +5,11 @@ input = get_data(day=6, year=2020).split("\n\n")
 
 # WRITE YOUR SOLUTION HERE
 def part_1(lines):
-    return sum([len(set(line.replace("\n", ""))) for line in lines])
+    return sum(len(set(line.replace("\n", ""))) for line in lines)
 
 
 def part_2(lines):
-    cnt = 0
-    for line in lines:
-        form = set(ascii_lowercase)
-        for ans in line.split():
-            form &= set(ans)
-        cnt += len(form)
-    return cnt
+    return sum(len(set.intersection(*map(set, line.split()))) for line in lines)
 
 
 # END OF SOLUTION

@@ -1,4 +1,5 @@
 import re
+from functools import reduce
 
 from aocd import get_data
 
@@ -6,64 +7,45 @@ input = get_data(day=21, year=2020)
 
 
 # WRITE YOUR SOLUTION HERE
-def parse_recipe(input):
+def parse_recipe(data):
     pattern = r"([\w\s]+) \(contains ([\w\s,]+)\)"
     recipes = []
-    ings = set()
-    alls = set()
+    allergens = set()
 
-    for match in re.finditer(pattern, input):
+    for match in re.finditer(pattern, data):
         ingredients = match.group(1).split()
-        allergens = [a.strip() for a in match.group(2).split(",")]
-        recipes.append({"ingredients": ingredients, "allergens": allergens})
-        for ing in ingredients:
-            ings.add(ing)
-        for all in allergens:
-            alls.add(all)
-    return recipes, ings, alls
-
-
-def get_next_dict(candidates, true_name, encode_name):
-    new_candidates = {}
-    for name, t in candidates.items():
-        if name != true_name:
-            new_candidates[name] = [v for v in t if v != encode_name]
-    return new_candidates
+        recipe_allergens = [a.strip() for a in match.group(2).split(",")]
+        recipes.append({"ingredients": ingredients, "allergens": recipe_allergens})
+        allergens.update(recipe_allergens)
+    return recipes, allergens
 
 
 def get_candidates(recipes, allergens):
     candidates = {}
     for allergen in allergens:
-        S = set()
-        for recipe in recipes:
-            if allergen in recipe["allergens"]:
-                S = set(recipe["ingredients"]) if not S else S.intersection(recipe["ingredients"])
-        candidates[allergen] = S
+        ingredient_sets = [set(r["ingredients"]) for r in recipes if allergen in r["allergens"]]
+        candidates[allergen] = reduce(set.intersection, ingredient_sets)
     return candidates
 
 
-def get_mapping_dict(candidates):
+def get_mapping(candidates):
     mapping = {}
     while candidates:
-        for ingredient, names in candidates.items():
-            if len(names) == 1:
-                (name,) = names
-                mapping[ingredient] = name
-                candidates = get_next_dict(candidates, ingredient, name)
+        allergen, (ingredient,) = next((a, s) for a, s in candidates.items() if len(s) == 1)
+        mapping[allergen] = ingredient
+        candidates = {a: s - {ingredient} for a, s in candidates.items() if a != allergen}
     return mapping
 
 
 def part_1(lines):
-    recipes, ingredients, allergens = parse_recipe(lines)
-    candidates = get_candidates(recipes, allergens)
-    mapping = get_mapping_dict(candidates)
-    return sum([len(set(recipe["ingredients"]) - set(mapping.values())) for recipe in recipes])
+    recipes, allergens = parse_recipe(lines)
+    mapping = get_mapping(get_candidates(recipes, allergens))
+    return sum(len(set(recipe["ingredients"]) - set(mapping.values())) for recipe in recipes)
 
 
 def part_2(lines):
-    recipes, ingredients, allergens = parse_recipe(lines)
-    candidates = get_candidates(recipes, allergens)
-    mapping = dict(sorted(get_mapping_dict(candidates).items()))
+    recipes, allergens = parse_recipe(lines)
+    mapping = dict(sorted(get_mapping(get_candidates(recipes, allergens)).items()))
     return ",".join(mapping.values())
 
 

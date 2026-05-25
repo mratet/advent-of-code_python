@@ -7,7 +7,7 @@ input = get_data(day=17, year=2020).splitlines()
 
 
 # WRITE YOUR SOLUTION HERE
-def count_activ_neighboors(state, pos):
+def count_active_neighbors(state, pos):
     D, H, W = len(state), len(state[0]), len(state[0])
     cnt_active = 0
     d, h, w = pos
@@ -26,7 +26,7 @@ def get_next_state(state):
     for d in range(new_D):
         for h in range(new_H):
             for w in range(new_W):
-                cnt_active = count_activ_neighboors(state, (d, h, w))
+                cnt_active = count_active_neighbors(state, (d, h, w))
                 current_state = (
                     state[d - 1][h - 1][w - 1] if (1 <= d < D + 1 and 1 <= h < H + 1 and 1 <= w < W + 1) else "."
                 )
@@ -42,7 +42,7 @@ def part_1(lines):
     state = [lines]
     for _ in range(6):
         state = get_next_state(state)
-    return sum([row.count("#") for grid in state for row in grid])
+    return sum(row.count("#") for grid in state for row in grid)
 
 
 def neighbour_coordinates(p):

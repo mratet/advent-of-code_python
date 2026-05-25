@@ -1,29 +1,17 @@
 import re
-from collections import Counter, defaultdict
+from collections import Counter
 
 from aocd import get_data
 
 input = get_data(day=24, year=2020).splitlines()
 
+DIRS = {"e": (1, 0, 0), "w": (-1, 0, 0), "ne": (0, 1, 0), "sw": (0, -1, 0), "se": (0, 0, 1), "nw": (0, 0, -1)}
+
 
 # WRITE YOUR SOLUTION HERE
 def get_hexa_coords(line):
-    x, y, z = 0, 0, 0
     dirs = re.findall("e|se|sw|w|nw|ne", line)
-    for d in dirs:
-        if d == "e":
-            x += 1
-        elif d == "w":
-            x -= 1
-        elif d == "ne":
-            y += 1
-        elif d == "sw":
-            y -= 1
-        elif d == "se":
-            z += 1
-        elif d == "nw":
-            z -= 1
-    return (x, y, z)
+    return tuple(sum(DIRS[d][i] for d in dirs) for i in range(3))
 
 
 def transform_hex_coords(hex_coords):
@@ -33,12 +21,12 @@ def transform_hex_coords(hex_coords):
     return (north_contrib, east_contrib + 2 * y)
 
 
-def part_1(lines):
-    state = defaultdict(int)
+def get_black_tiles(lines):
+    black_tiles = set()
     for line in lines:
-        cardinal_pos = transform_hex_coords(get_hexa_coords(line))
-        state[cardinal_pos] += 1
-    return sum([c % 2 for c in state.values()])
+        pos = transform_hex_coords(get_hexa_coords(line))
+        black_tiles.symmetric_difference_update({pos})
+    return black_tiles
 
 
 def neighbour_coordinates(p):
@@ -47,21 +35,15 @@ def neighbour_coordinates(p):
     ]
 
 
-def part_2(lines):
-    black_tiles = set()
-    for line in lines:
-        hexa_coords = get_hexa_coords(line)
-        pos = transform_hex_coords(hexa_coords)
-        # Only max 2 flips in the init
-        if pos in black_tiles:
-            black_tiles.remove(pos)
-        else:
-            black_tiles.add(pos)
+def part_1(lines):
+    return len(get_black_tiles(lines))
 
-    n = 100
-    for _ in range(n):
+
+def part_2(lines):
+    black_tiles = get_black_tiles(lines)
+    for _ in range(100):
         total_neighbours = Counter(p for coordinate in black_tiles for p in neighbour_coordinates(coordinate))
-        black_tiles = {p for p, n in total_neighbours.items() if (p in black_tiles and n == 1) or n == 2}
+        black_tiles = {p for p, cnt in total_neighbours.items() if (p in black_tiles and cnt == 1) or cnt == 2}
     return len(black_tiles)
 
 

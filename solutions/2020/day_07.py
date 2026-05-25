@@ -21,12 +21,11 @@ def parse_bag_rules(lines):
 
 def part_1(lines):
     bag_rules = parse_bag_rules(lines)
-    valid_bag = ["shiny gold"]
-    for _ in range(50):
+    valid_bag = {"shiny gold"}
+    for _ in range(50):  # 50 > max nesting depth in any bag rule input
         for bag, luggage in bag_rules.items():
-            for bag_v in valid_bag:
-                if bag_v in luggage and bag not in valid_bag:
-                    valid_bag.append(bag)
+            if luggage.keys() & valid_bag and bag not in valid_bag:
+                valid_bag.add(bag)
     return len(valid_bag) - 1
 
 
@@ -37,7 +36,7 @@ def part_2(lines):
     def bag_weight(bag):
         if not bag_rules[bag]:
             return 0
-        return sum([v * (bag_weight(b) + 1) for b, v in bag_rules[bag].items()])
+        return sum(v * (bag_weight(b) + 1) for b, v in bag_rules[bag].items())
 
     return bag_weight("shiny gold")
 

@@ -15,7 +15,7 @@ def parse_input(data):
             options = rule.split(" | ")
             rules[int(key)] = [list(map(int, option.split())) for option in options]
 
-    return rules, (messages_part.splitlines())
+    return rules, messages_part.splitlines()
 
 
 def match_rule(rules, rule_id, input_str, position):
@@ -46,14 +46,14 @@ def match(rules, input_str):
 
 def part_1(lines):
     rules, messages = parse_input(lines)
-    return sum([match(rules, message) for message in messages])
+    return sum(match(rules, message) for message in messages)
 
 
 def part_2(lines):
     rules, messages = parse_input(lines)
     rules[8] = [[42], [42, 8]]
     rules[11] = [[42, 31], [42, 11, 31]]
-    return sum([match(rules, message) for message in messages])
+    return sum(match(rules, message) for message in messages)
 
 
 # END OF SOLUTION

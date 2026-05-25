@@ -9,9 +9,9 @@ def compute_accumulator(lines: list[str]) -> tuple[int, list, bool]:
     hist = {0}
     accumulator = 0
     candidates = []
-    terminated = True
+    terminated = False
     while i < len(lines):
-        intruct, number = lines[i][:3], int(lines[i][4:])
+        intruct, number = lines[i].split()[0], int(lines[i].split()[1])
         match intruct:
             case "acc":
                 accumulator += number
@@ -23,9 +23,10 @@ def compute_accumulator(lines: list[str]) -> tuple[int, list, bool]:
                 candidates.append((i, lines[i]))
                 i += 1
         if i in hist:
-            terminated = False
             break
         hist.add(i)
+    else:
+        terminated = True
     return accumulator, candidates, terminated
 
 

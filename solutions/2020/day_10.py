@@ -14,7 +14,7 @@ def get_adapters(lines):
 
 def part_1(lines):
     adapters = get_adapters(lines)
-    count_diff = Counter([next - acc for acc, next in itertools.pairwise(adapters)])
+    count_diff = Counter(next - acc for acc, next in itertools.pairwise(adapters))
     return count_diff[1] * count_diff[3]
 
 

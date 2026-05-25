@@ -39,15 +39,7 @@ def is_ticket_valid(value, fields):
 
 def part_1(lines):
     fields, nearby_tickets, your_ticket = parse_input(lines)
-    return sum([val for ticket in nearby_tickets for val in ticket if not is_ticket_valid(val, fields)])
-
-
-def get_next_dict(candidates, assign_name, assign_col):
-    new_candidates = {}
-    for name, t in candidates.items():
-        if name != assign_name:
-            new_candidates[name] = [v for v in t if v != assign_col]
-    return new_candidates
+    return sum(val for ticket in nearby_tickets for val in ticket if not is_ticket_valid(val, fields))
 
 
 def part_2(lines):
@@ -57,20 +49,16 @@ def part_2(lines):
     candidates = {}
     for field, [(a1, a2), (b1, b2)] in fields.items():
         tab = [[(a1 <= val <= a2 or b1 <= val <= b2) for val in ticket] for ticket in valid_ticket]
-        tab_transposed = list(map(list, zip(*tab, strict=False)))
-        candidates[field] = [i for i, t in enumerate(tab_transposed) if all(t)]
+        candidates[field] = [i for i, t in enumerate(zip(*tab, strict=False)) if all(t)]
 
-    assignment, next_candidates = {}, None
+    assignment = {}
     while candidates:
-        for name, tab in candidates.items():
-            if len(tab) == 1:
-                assignment[name] = tab[0]
-                next_candidates = get_next_dict(candidates, name, tab[0])
-                break
-        candidates = next_candidates
+        name, (col,) = next((n, t) for n, t in candidates.items() if len(t) == 1)
+        assignment[name] = col
+        candidates = {n: [v for v in t if v != col] for n, t in candidates.items() if n != name}
 
     return prod(
-        [your_ticket[field_pos] for field_name, field_pos in assignment.items() if field_name.startswith("departure")]
+        your_ticket[field_pos] for field_name, field_pos in assignment.items() if field_name.startswith("departure")
     )
 
 

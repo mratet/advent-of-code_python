@@ -10,19 +10,19 @@ def solve(input, part):
     memory = {}
     bitmask: list[str] = []
     for line in input:
-        if line[:3] == "mem":
+        if line.startswith("mem"):
             m = re.search(r"mem\[(\d+)\] = (\d+)", line)
             assert m
             idx, val = m.groups()
             if part == "part_1":
-                binary_val = ["1" if val == "1" else "0" for val in format(int(val), "36b")]
+                binary_val = format(int(val), "036b")
                 next_val = [
                     mask_val if mask_val != "X" else bin_val
                     for (mask_val, bin_val) in zip(bitmask, binary_val, strict=False)
                 ]
                 memory[idx] = int("".join(next_val), 2)
             elif part == "part_2":
-                binary_idx = ["1" if val == "1" else "0" for val in format(int(idx), "36b")]
+                binary_idx = format(int(idx), "036b")
                 next_val = [
                     mask_val if mask_val != "0" else bin_val
                     for (mask_val, bin_val) in zip(bitmask, binary_idx, strict=False)
@@ -31,13 +31,12 @@ def solve(input, part):
                 n = quant_val.count("X")
                 for i in range(2**n):
                     next_quant = quant_val
-                    bits = ["1" if val == "1" else "0" for val in format(i, f"{n!s}b")]
-                    for bit in bits:
+                    for bit in format(i, f"0{n}b"):
                         next_quant = next_quant.replace("X", bit, 1)
                     memory[int(next_quant, 2)] = int(val)
         else:
-            bitmask = list(line[7:])
-    return sum(list(memory.values()))
+            bitmask = line[7:]
+    return sum(memory.values())
 
 
 def part_1(lines):

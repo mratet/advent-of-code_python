@@ -10,28 +10,30 @@ def two_sum(num_list, numb):
         if numb - n in seen:
             return True
         seen.add(n)
+    return False
 
 
 def part_1(lines):
     lines = [int(n) for n in lines]
     step = 25
     for i in range(step, len(lines)):
-        num_list, numb = lines[i - step : i], lines[i]
-        if not (two_sum(num_list, numb)):
-            return numb
+        window, target = lines[i - step : i], lines[i]
+        if not two_sum(window, target):
+            return target
 
 
 def part_2(lines):
-    lines = [int(n) for n in lines]
     N = part_1(lines)
-    l, r, s = 0, 1, 0
+    lines = [int(n) for n in lines]
+    left, right, s = 0, 1, lines[0]
     while s != N:
-        s = sum(lines[l:r])
         if s > N:
-            l += 1
-        elif s < N:
-            r += 1
-    return min(lines[l:r]) + max(lines[l:r])
+            s -= lines[left]
+            left += 1
+        else:
+            s += lines[right]
+            right += 1
+    return min(lines[left:right]) + max(lines[left:right])
 
 
 # END OF SOLUTION

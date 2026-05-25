@@ -40,38 +40,26 @@ def part_1(lines):
     return get_state_slow_ver(init_state, 100)
 
 
-def next_turn(next, current_cup):
-    N = len(next) - 1
-    destination_cup = None
-
-    n1 = next[current_cup]
-    n2 = next[n1]
-    n3 = next[n2]
-    pu_cups = {n1, n2, n3}
-
-    for i in range(1, 5):
-        elt = (current_cup - i - 1) % N + 1
-        if elt not in pu_cups:
-            destination_cup = elt
-            break
-
-    destination_cup_neigh = next[destination_cup]
-    next[current_cup] = next[n3]
-    next[destination_cup] = n1
-    next[n3] = destination_cup_neigh
-
-    return next, next[current_cup]
-
-
 def get_state_fast_ver(init_state, N):
     current_cup = init_state[0]
-    state = [0] * len(init_state)
+    n = len(init_state) - 1
+    links = [0] * len(init_state)
     for i, j in itertools.pairwise(init_state):
-        state[i] = j
+        links[i] = j
 
     for _ in range(N):
-        state, current_cup = next_turn(state, current_cup)
-    return state
+        n1 = links[current_cup]
+        n2 = links[n1]
+        n3 = links[n2]
+        pu_cups = {n1, n2, n3}
+        for i in range(1, 5):
+            elt = (current_cup - i - 1) % n + 1
+            if elt not in pu_cups:
+                destination_cup = elt
+                break
+        links[current_cup], links[destination_cup], links[n3] = links[n3], n1, links[destination_cup]
+        current_cup = links[current_cup]
+    return links
 
 
 def part_2(lines):

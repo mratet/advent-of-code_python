@@ -11,7 +11,7 @@ def compute_seat_position(seat):
 
 
 def part_1(lines):
-    return max([compute_seat_position(line) for line in lines])
+    return max(compute_seat_position(line) for line in lines)
 
 
 def part_2(lines):

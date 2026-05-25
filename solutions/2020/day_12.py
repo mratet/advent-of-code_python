@@ -2,67 +2,36 @@ from aocd import get_data
 
 input = get_data(day=12, year=2020).splitlines()
 
+DELTA = {"N": (1, 0), "S": (-1, 0), "E": (0, 1), "W": (0, -1)}
+TURN = {"L": -1, "R": 1}
+
+
+def solve(lines, part="part_1"):
+    x, y = 0, 0
+    wx, wy = (0, 1) if part == "part_1" else (1, 10)
+    for line in lines:
+        action, n = line[0], int(line[1:])
+        if action in DELTA:
+            dx, dy = DELTA[action]
+            if part == "part_1":
+                x, y = x + dx * n, y + dy * n
+            else:
+                wx, wy = wx + dx * n, wy + dy * n
+        elif action in TURN:
+            for _ in range(TURN[action] * (n // 90) % 4):
+                wx, wy = -wy, wx
+        elif action == "F":
+            x, y = x + wx * n, y + wy * n
+    return abs(x) + abs(y)
+
 
 # WRITE YOUR SOLUTION HERE
 def part_1(lines):
-    x, y = 0, 0
-    boat_orientation = 0
-
-    for line in lines:
-        action, n = line[0], int(line[1:])
-        match action:
-            case "N":
-                x += n
-            case "S":
-                x -= n
-            case "W":
-                y -= n
-            case "E":
-                y += n
-            case "L":
-                boat_orientation -= n
-            case "R":
-                boat_orientation += n
-            case "F":
-                match (boat_orientation // 90) % 4:
-                    case 0:
-                        y += n
-                    case 1:
-                        x -= n
-                    case 2:
-                        y -= n
-                    case 3:
-                        x += n
-    return abs(x) + abs(y)
+    return solve(lines, "part_1")
 
 
 def part_2(lines):
-    x, y = 0, 0
-    wx, wy = 1, 10
-
-    for line in lines:
-        action, n = line[0], int(line[1:])
-        match action:
-            case "N":
-                wx += n
-            case "S":
-                wx -= n
-            case "W":
-                wy -= n
-            case "E":
-                wy += n
-            case "L":
-                while n:
-                    wx, wy = wy, -wx
-                    n -= 90
-            case "R":
-                while n:
-                    wx, wy = -wy, wx
-                    n -= 90
-            case "F":
-                x += wx * n
-                y += wy * n
-    return abs(x) + abs(y)
+    return solve(lines, "part_2")
 
 
 # END OF SOLUTION

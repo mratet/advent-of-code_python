@@ -22,16 +22,16 @@ def evaluate(input):
         idx = input.find(")")
         if idx == -1:
             return pure_evaluation(input)
-        open = idx - 1
-        while input[open] != "(":
-            open -= 1
-        ram[chr(letter)] = pure_evaluation(input[open + 1 : idx])
-        input = input.replace(input[open : idx + 1], chr(letter), 1)
+        open_idx = idx - 1
+        while input[open_idx] != "(":
+            open_idx -= 1
+        ram[chr(letter)] = pure_evaluation(input[open_idx + 1 : idx])
+        input = input.replace(input[open_idx : idx + 1], chr(letter), 1)
         letter += 1
 
 
 def part_1(lines):
-    return sum([evaluate(line.replace(" ", "")) for line in lines])
+    return sum(evaluate(line.replace(" ", "")) for line in lines)
 
 
 def add_parentheses_around_plus(line):
@@ -70,7 +70,7 @@ def add_parentheses_around_plus(line):
 
 
 def part_2(lines):
-    return sum([evaluate(add_parentheses_around_plus(line.replace(" ", ""))) for line in lines])
+    return sum(evaluate(add_parentheses_around_plus(line.replace(" ", ""))) for line in lines)
 
 
 # END OF SOLUTION

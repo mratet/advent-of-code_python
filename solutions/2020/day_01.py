@@ -1,4 +1,4 @@
-from itertools import product
+from itertools import combinations
 
 from aocd import get_data
 
@@ -17,9 +17,9 @@ def part_1(lines):
 
 def part_2(lines):
     numb = [int(n) for n in lines]
-    numb.sort()
-    for n, m in product(numb, numb):
-        if 2020 - n - m in numb:
+    numb_set = set(numb)
+    for n, m in combinations(numb, 2):
+        if 2020 - n - m in numb_set:
             return n * m * (2020 - n - m)
 
 

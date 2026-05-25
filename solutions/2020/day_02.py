@@ -1,29 +1,36 @@
 import re
+from typing import NamedTuple
 
 from aocd import get_data
 
 input = get_data(day=2, year=2020).splitlines()
 
 
+class Policy(NamedTuple):
+    lo: int
+    hi: int
+    letter: str
+    password: str
+
+
+def parse_line(line):
+    m = re.match(r"(\d+)-(\d+) ([a-z]): (\w+)", line)
+    assert m
+    lo, hi, letter, password = m.groups()
+    return Policy(int(lo), int(hi), letter, password)
+
+
 # WRITE YOUR SOLUTION HERE
 def part_1(lines):
-    cnt = 0
-    for line in lines:
-        m = re.match(r"(\d+)-(\d+) ([a-z]): (\w+)", line)
-        assert m
-        l, h, letter, password = m.groups()
-        cnt += int(l) <= password.count(letter) <= int(h)
-    return cnt
+    return sum(p.lo <= p.password.count(p.letter) <= p.hi for line in lines if (p := parse_line(line)))
 
 
 def part_2(lines):
-    count = 0
-    for line in lines:
-        m = re.match(r"(\d+)-(\d+) ([a-z]): (\w+)", line)
-        assert m
-        l, h, letter, password = m.groups()
-        count += (password[int(l) - 1] == letter) ^ (password[int(h) - 1] == letter)
-    return count
+    return sum(
+        (p.password[p.lo - 1] == p.letter) ^ (p.password[p.hi - 1] == p.letter)
+        for line in lines
+        if (p := parse_line(line))
+    )
 
 
 # END OF SOLUTION
