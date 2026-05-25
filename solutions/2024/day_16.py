@@ -1,6 +1,4 @@
 from collections import defaultdict
-
-# WRITE YOUR SOLUTION HERE
 from heapq import heappop, heappush
 
 from aocd import get_data
@@ -10,10 +8,11 @@ input = get_data(day=16, year=2024).splitlines()
 DIRS = [(0, 1), (1, 0), (0, -1), (-1, 0)]
 
 
+# WRITE YOUR SOLUTION HERE
 def dijkstra(graph, source, target=None):
     prec = dict.fromkeys(graph)
     black = dict.fromkeys(graph, False)
-    dist = {k: float("inf") for k in graph}
+    dist = dict.fromkeys(graph, float("inf"))
     dist[source] = 0
     heap = [(0, source)]
     while heap:
@@ -54,7 +53,7 @@ def construct_graph(lines):
 def part_1(lines):
     graph, (sx, sy), (tx, ty) = construct_graph(lines)
     dist, prec = dijkstra(graph, source=(sx, sy, 0))
-    return min([dist[tx, ty, i] for i in range(4)])
+    return min(dist[tx, ty, i] for i in range(4))
 
 
 def get_path(dist, prec, node, seen):
@@ -68,17 +67,16 @@ def get_path(dist, prec, node, seen):
 def part_2(lines):
     graph, (sx, sy), (tx, ty) = construct_graph(lines)
     dist, prec = dijkstra(graph, source=(sx, sy, 0))
-    _, final_dir = min([(dist[tx, ty, i], i) for i in range(4)])
+    _, final_dir = min((dist[tx, ty, i], i) for i in range(4))
     seen = get_path(dist, prec, (tx, ty, final_dir), {(sx, sy, 0)})
-    for (x, y, dir), _distance in dist.items():
-        dx, dy = DIRS[dir][0], DIRS[dir][1]
-        if (x + dx, y + dy, dist[(x, y, dir)] + 1) in seen:
-            cand = get_path(dist, prec, (x, y, dir), seen)
+    for (x, y, d), _ in dist.items():
+        dx, dy = DIRS[d]
+        if (x + dx, y + dy, dist[(x, y, d)] + 1) in seen:
+            cand = get_path(dist, prec, (x, y, d), seen)
             seen.update(cand)
     return len({(x, y) for (x, y, _) in seen})
 
 
 # END OF SOLUTION
-
 print(f"My answer is {part_1(input)}")
 print(f"My answer is {part_2(input)}")

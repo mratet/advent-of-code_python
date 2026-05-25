@@ -1,4 +1,4 @@
-import bisect
+from bisect import insort
 
 from aocd import get_data
 
@@ -11,14 +11,15 @@ def part_1(lines):
     compact_disk_map = []
     tot_bytes = 0
     for i, c in enumerate(disk_map):
+        n = int(c)
         if i % 2 == 1:
-            compact_disk_map.extend(["."] * int(c))
+            compact_disk_map.extend(["."] * n)
         else:
-            compact_disk_map.extend([str(i // 2)] * int(c))
-            tot_bytes += int(c)
+            compact_disk_map.extend([str(i // 2)] * n)
+            tot_bytes += n
 
-    r = len(compact_disk_map) - 1
     l = 0
+    r = len(compact_disk_map) - 1
     while l < tot_bytes:
         if compact_disk_map[l] != ".":
             l += 1
@@ -28,7 +29,7 @@ def part_1(lines):
                 compact_disk_map[l],
             )
             r -= 1
-    return sum([i * int(compact_disk_map[i]) for i in range(len(compact_disk_map)) if compact_disk_map[i] != "."])
+    return sum(i * int(compact_disk_map[i]) for i in range(len(compact_disk_map)) if compact_disk_map[i] != ".")
 
 
 def part_2(lines):
@@ -39,16 +40,14 @@ def part_2(lines):
     compact = []
     idx = 0
     for i, c in enumerate(disk_map):
-        C, file_id = int(c), i // 2
+        size, file_id = int(c), i // 2
         if i % 2 == 1:
-            compact.extend(["."] * C)
-            free.append((idx, C))
+            compact.extend(["."] * size)
+            free.append((idx, size))
         else:
-            compact.extend([str(file_id)] * C)
-            files[file_id] = (C, idx)
-        idx += C
-
-    free.sort()
+            compact.extend([str(file_id)] * size)
+            files[file_id] = (size, idx)
+        idx += size
 
     for file_id, (file_size, file_idx) in reversed(files.items()):
         for free_idx, free_space in free:
@@ -59,9 +58,9 @@ def part_2(lines):
                 compact[free_idx : free_idx + file_size] = [str(file_id)] * file_size
                 free.remove((free_idx, free_space))
                 if free_space - file_size > 0:
-                    bisect.insort(free, (free_idx + file_size, free_space - file_size))
+                    insort(free, (free_idx + file_size, free_space - file_size))
                 break
-    return sum([int(compact[i]) * i for i in range(len(compact)) if compact[i] != "."])
+    return sum(int(compact[i]) * i for i in range(len(compact)) if compact[i] != ".")
 
 
 # END OF SOLUTION

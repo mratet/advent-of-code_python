@@ -13,13 +13,13 @@ def parse_input(lines):
 
 def part_1(lines):
     left, right = parse_input(lines)
-    return sum([abs(r - l) for l, r in zip(left, right, strict=False)])
+    return sum(abs(r - l) for l, r in zip(left, right, strict=False))
 
 
 def part_2(lines):
     left, right = parse_input(lines)
     right_count = Counter(right)
-    return sum([right_count[l] * l for l in left])
+    return sum(right_count[l] * l for l in left)
 
 
 # END OF SOLUTION

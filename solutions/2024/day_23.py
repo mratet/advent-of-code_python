@@ -7,48 +7,42 @@ input = get_data(day=23, year=2024).splitlines()
 
 
 # WRITE YOUR SOLUTION HERE
-def parse_input(input):
-    computers = set()
-    graph = defaultdict(list)
-
-    for line in input:
-        l, r = line.split("-")
-        computers.update({l, r})
-        graph[l].append(r)
-        graph[r].append(l)
-    return computers, graph
+def parse_input(lines):
+    graph = defaultdict(set)
+    for line in lines:
+        a, b = line.split("-")
+        graph[a].add(b)
+        graph[b].add(a)
+    return graph
 
 
 def part_1(lines):
-    computers, graph = parse_input(lines)
-    owners = {c for c in graph if c[0] == "t"}
+    graph = parse_input(lines)
     triplets = set()
-    for owner in owners:
+    for owner in (c for c in graph if c[0] == "t"):
         for c1, c2 in combinations(graph[owner], 2):
             if c1 in graph[c2]:
-                triplets.add(frozenset([owner, c1, c2]))
-
+                triplets.add(frozenset({owner, c1, c2}))
     return len(triplets)
 
 
 def part_2(lines):
-    computers, graph = parse_input(lines)
-    C = defaultdict(set)
+    graph = parse_input(lines)
+    max_clique = set()
 
     def bron_kerbosch(R, P, X):
+        nonlocal max_clique
         if not P and not X:
-            C[len(R)].add(frozenset(R))
-        for v in P.union(set()):
-            bron_kerbosch(
-                R.union({v}),
-                P.intersection(set(graph[v])),
-                X.intersection(set(graph[v])),
-            )
+            if len(R) > len(max_clique):
+                max_clique = R
+            return
+        for v in set(P):
+            bron_kerbosch(R | {v}, P & graph[v], X & graph[v])
             P.remove(v)
             X.add(v)
 
-    bron_kerbosch(set(), computers, set())
-    return ",".join(sorted(C[max(C)].pop()))
+    bron_kerbosch(set(), set(graph), set())
+    return ",".join(sorted(max_clique))
 
 
 # END OF SOLUTION

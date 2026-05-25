@@ -5,23 +5,18 @@ from aocd import get_data
 input = get_data(day=25, year=2024).split("\n\n")
 
 
-def part_1(input):
-    keys = set()
-    pins = set()
-
-    for schema in input:
+# WRITE YOUR SOLUTION HERE
+def part_1(schemas):
+    keys, pins = set(), set()
+    for schema in schemas:
         grid = list(zip(*schema.splitlines(), strict=False))
-        if grid[0][0] == "#":  # pins
-            pins.add(tuple([t.count("#") - 1 for t in grid]))
-        else:  # keys
-            keys.add(tuple([t.count("#") - 1 for t in grid]))
-
-    ans = 0
-    for key, pin in product(keys, pins):
-        ans += all(t1 + t2 < 6 for t1, t2 in zip(key, pin, strict=False))
-    return ans
+        heights = tuple(t.count("#") - 1 for t in grid)
+        if grid[0][0] == "#":
+            pins.add(heights)
+        else:
+            keys.add(heights)
+    return sum(all(t1 + t2 < 6 for t1, t2 in zip(key, pin, strict=False)) for key, pin in product(keys, pins))
 
 
 # END OF SOLUTION
 print(f"My answer is {part_1(input)}")
-# print(f'My answer is {part_2(input)}')

@@ -6,15 +6,19 @@ input = get_data(day=7, year=2024).splitlines()
 
 
 # WRITE YOUR SOLUTION HERE
+def concat(x, y):
+    return int(str(x) + str(y))
+
+
 def solve(lines, op_list):
     cnt = 0
     for line in lines:
-        numb, x, *Y = map(int, line.replace(":", "").split())
-        X = [x]
-        for y in Y:
-            X = [op(x, y) for x in X for op in op_list if op(x, y) <= numb]
-        if numb in X:
-            cnt += numb
+        target, first, *nums = map(int, line.replace(":", "").split())
+        vals = [first]
+        for num in nums:
+            vals = [op(v, num) for v in vals for op in op_list if op(v, num) <= target]
+        if target in vals:
+            cnt += target
     return cnt
 
 
@@ -23,7 +27,7 @@ def part_1(lines):
 
 
 def part_2(lines):
-    return solve(lines, (add, mul, lambda x, y: int(str(x) + str(y))))
+    return solve(lines, (add, mul, concat))
 
 
 # END OF SOLUTION

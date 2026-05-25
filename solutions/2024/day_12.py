@@ -2,6 +2,8 @@ from aocd import get_data
 
 input = get_data(day=12, year=2024).splitlines()
 
+DIRECTIONS = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+
 
 # WRITE YOUR SOLUTION HERE
 def count_corner(lines, start):
@@ -32,9 +34,9 @@ def dfs(lines, start):
     perimeter = 0
     side = 0
     while to_visit:
-        x, y = to_visit.pop(0)
+        x, y = to_visit.pop()
         neigh = []
-        for dx, dy in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
+        for dx, dy in DIRECTIONS:
             nx, ny = x + dx, y + dy
             if 0 <= nx < len(lines) and 0 <= ny < len(lines[0]) and lines[nx][ny] == color:
                 neigh.append((dx, dy))
@@ -56,28 +58,24 @@ def dfs(lines, start):
     return garden, perimeter, side
 
 
-def part_1(lines):
+def solve(lines, part="part_1"):
     score = 0
     seen = set()
     for x in range(len(lines)):
         for y in range(len(lines[0])):
             if (x, y) not in seen:
-                garden, p, _ = dfs(lines, (x, y))
-                score += len(garden) * p
+                garden, p, s = dfs(lines, (x, y))
+                score += len(garden) * (p if part == "part_1" else s)
                 seen.update(garden)
     return score
+
+
+def part_1(lines):
+    return solve(lines)
 
 
 def part_2(lines):
-    score = 0
-    seen = set()
-    for x in range(len(lines)):
-        for y in range(len(lines[0])):
-            if (x, y) not in seen:
-                garden, _, s = dfs(lines, (x, y))
-                score += len(garden) * s
-                seen.update(garden)
-    return score
+    return solve(lines, part="part_2")
 
 
 # END OF SOLUTION

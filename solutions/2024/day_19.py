@@ -6,28 +6,25 @@ input = get_data(day=19, year=2024).splitlines()
 
 
 # WRITE YOUR SOLUTION HERE
-def part_1(lines):
-    patterns, cand = lines[0].split(", "), lines[2:]
+def solve(lines):
+    patterns, designs = lines[0].split(", "), lines[2:]
 
     @cache
-    def is_designable(l):
-        if l == "":
-            return True
-        return any(is_designable(l[len(pattern) :]) for pattern in patterns if l.startswith(pattern))
+    def count_arrangements(design):
+        if design == "":
+            return 1
+        return sum(count_arrangements(design[len(p) :]) for p in patterns if design.startswith(p))
 
-    return sum(is_designable(l) for l in cand)
+    counts = [count_arrangements(d) for d in designs]
+    return sum(c > 0 for c in counts), sum(counts)
+
+
+def part_1(lines):
+    return solve(lines)[0]
 
 
 def part_2(lines):
-    patterns, cand = lines[0].split(", "), lines[2:]
-
-    @cache
-    def is_designable(l):
-        if l == "":
-            return 1
-        return sum([is_designable(l[len(pattern) :]) for pattern in patterns if l.startswith(pattern)])
-
-    return sum(is_designable(l) for l in cand)
+    return solve(lines)[1]
 
 
 # END OF SOLUTION

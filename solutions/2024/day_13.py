@@ -6,32 +6,30 @@ input = get_data(day=13, year=2024).split("\n\n")
 
 
 # WRITE YOUR SOLUTION HERE
-def solve(Xa, Ya, Xb, Yb, Xc, Yc):
-    det = Xa * Yb - Xb * Ya
-    v1 = -(Xb * Yc - Xc * Yb)
-    v2 = Xa * Yc - Xc * Ya
+def tokens(xa, ya, xb, yb, xc, yc):
+    det = xa * yb - xb * ya
+    v1 = xc * yb - xb * yc
+    v2 = xa * yc - xc * ya
     if v1 % det == 0 and v2 % det == 0:
-        i = v1 // det
-        j = v2 // det
-        return 3 * i + j
+        return 3 * (v1 // det) + (v2 // det)
     return 0
 
 
-def part_1(lines):
+def solve(lines, part="part_1"):
+    offset = 10000000000000 if part == "part_2" else 0
     score = 0
     for block in lines:
-        Xa, Ya, Xb, Yb, Xc, Yc = map(int, re.findall(r"(\d+)", block))
-        score += solve(Xa, Ya, Xb, Yb, Xc, Yc)
+        xa, ya, xb, yb, xc, yc = map(int, re.findall(r"(\d+)", block))
+        score += tokens(xa, ya, xb, yb, xc + offset, yc + offset)
     return score
+
+
+def part_1(lines):
+    return solve(lines)
 
 
 def part_2(lines):
-    score = 0
-    C = 10000000000000
-    for block in lines:
-        Xa, Ya, Xb, Yb, Xc, Yc = map(int, re.findall(r"(\d+)", block))
-        score += solve(Xa, Ya, Xb, Yb, Xc + C, Yc + C)
-    return score
+    return solve(lines, part="part_2")
 
 
 # END OF SOLUTION

@@ -12,23 +12,29 @@ def parse_input(lines):
     for line in lines[0].split():
         a, b = map(int, line.split("|"))
         dict_rule[a].append(b)
-
     pages = [list(map(int, line.split(","))) for line in lines[1].split()]
     return dict_rule, pages
 
 
-def part_1(lines):
+def solve(lines, part="part_1"):
     dict_rule, pages = parse_input(lines)
     cmp = lambda a, b: -1 * int(b in dict_rule[a])
-    return sum([page[len(page) // 2] for page in pages if (page == sorted(page, key=cmp_to_key(cmp)))])
+    total = 0
+    for page in pages:
+        sorted_page = sorted(page, key=cmp_to_key(cmp))
+        if part == "part_2" and sorted_page != page:
+            total += sorted_page[len(sorted_page) // 2]
+        elif part == "part_1" and sorted_page == page:
+            total += page[len(page) // 2]
+    return total
+
+
+def part_1(lines):
+    return solve(lines)
 
 
 def part_2(lines):
-    dict_rule, pages = parse_input(lines)
-    cmp = lambda a, b: -1 * int(b in dict_rule[a])
-    return sum(
-        [sorted_p[len(sorted_p) // 2] for page in pages if (sorted_p := sorted(page, key=cmp_to_key(cmp))) != page]
-    )
+    return solve(lines, part="part_2")
 
 
 # END OF SOLUTION

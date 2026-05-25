@@ -6,21 +6,21 @@ input = get_data(day=2, year=2024).splitlines()
 
 
 # WRITE YOUR SOLUTION HERE
+def parse_input(lines):
+    return [[int(n) for n in line.split()] for line in lines]
+
+
 def is_safe_level(level):
-    return all((l1 < l2 and 1 <= abs(l2 - l1) <= 3) for l1, l2 in pairwise(level)) or all(
-        (l1 > l2 and 1 <= abs(l2 - l1) <= 3) for l1, l2 in pairwise(level)
-    )
+    diffs = [b - a for a, b in pairwise(level)]
+    return all(1 <= d <= 3 for d in diffs) or all(-3 <= d <= -1 for d in diffs)
 
 
 def part_1(lines):
-    levels = [[int(l) for l in levels.split()] for levels in lines]
-    return sum([is_safe_level(level) for level in levels])
+    return sum(is_safe_level(level) for level in parse_input(lines))
 
 
 def part_2(lines):
-    levels = [[int(l) for l in levels.split()] for levels in lines]
-    # combinations keeps the order,
-    return sum([any(map(is_safe_level, combinations(level, len(level) - 1))) for level in levels])
+    return sum(any(map(is_safe_level, combinations(level, len(level) - 1))) for level in parse_input(lines))
 
 
 # END OF SOLUTION
