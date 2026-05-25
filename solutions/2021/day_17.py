@@ -6,6 +6,7 @@ from aocd import get_data
 input = get_data(day=17, year=2021)
 
 
+# WRITE YOUR SOLUTION HERE
 def update_vel_x(vel):
     if vel > 0:
         return vel - 1
@@ -16,29 +17,30 @@ def update_vel_x(vel):
 
 def solve(lines, part="part_1"):
     x1, x2, y1, y2 = map(int, re.findall(r"(-?\d+)", lines))
-    check_target_area = lambda x, y: x1 <= x <= x2 and y1 <= y <= y2
-
-    max_height = 0
+    peak = 0
     s = 0
-    for vel_x, vel_y in product(range(1, 400), range(-100, 400)):
-        pos_x, pos_y = 0, 0
-        height_list = [pos_y]
-        for _step in range(200):
-            pos_x += vel_x
-            pos_y += vel_y
-            height_list.append(pos_y)
-            vel_x = update_vel_x(vel_x)
-            vel_y -= 1
-            if check_target_area(pos_x, pos_y):
-                max_height = max(max(height_list), max_height)
+    # vel_x in [1, x2]: beyond x2 overshoots in one step; below 1 never reaches target
+    # vel_y in [y1, abs(y1)-1]: below y1 misses in one step; above abs(y1)-1 the probe
+    # crosses y=0 downward with speed > abs(y1) and jumps over the target
+    for vel_x, vel_y in product(range(1, x2 + 1), range(y1, abs(y1))):
+        vx, vy, pos_x, pos_y, curr_peak = vel_x, vel_y, 0, 0, 0
+        while True:
+            pos_x += vx
+            pos_y += vy
+            vx = update_vel_x(vx)
+            vy -= 1
+            curr_peak = max(curr_peak, pos_y)
+            if x1 <= pos_x <= x2 and y1 <= pos_y <= y2:
+                peak = max(peak, curr_peak)
                 s += 1
                 break
-    return max_height if part == "part_1" else s
+            if pos_y < y1 or pos_x > x2:
+                break
+    return peak if part == "part_1" else s
 
 
-# WRITE YOUR SOLUTION HERE
 def part_1(lines):
-    return solve(lines, "part_1")
+    return solve(lines)
 
 
 def part_2(lines):

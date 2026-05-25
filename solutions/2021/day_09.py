@@ -2,23 +2,23 @@ from math import prod
 
 from aocd import get_data
 
-NEIGHBOORS = [(-1, 0), (1, 0), (0, -1), (0, 1)]
-
 input = get_data(day=9, year=2021).splitlines()
+
+NEIGHBORS = [(-1, 0), (1, 0), (0, -1), (0, 1)]
 
 
 # WRITE YOUR SOLUTION HERE
-def parse_input(input):
-    return [[int(n) for n in line] for line in input]
+def parse_input(data):
+    return [[int(n) for n in line] for line in data]
 
 
 def detect_low_points(grid):
-    H, W = len(grid), len(grid[0])
+    rows, cols = len(grid), len(grid[0])
     low_points = []
-    for h in range(H):
-        for w in range(W):
-            height_cand = [grid[h + dh][w + dw] for dh, dw in NEIGHBOORS if 0 <= h + dh < H and 0 <= w + dw < W]
-            if all(neigh_height > grid[h][w] for neigh_height in height_cand):
+    for h in range(rows):
+        for w in range(cols):
+            neighbors = [grid[h + dh][w + dw] for dh, dw in NEIGHBORS if 0 <= h + dh < rows and 0 <= w + dw < cols]
+            if all(n > grid[h][w] for n in neighbors):
                 low_points.append((h, w))
     return low_points
 
@@ -29,22 +29,22 @@ def compute_risk_level(grid, low_points):
 
 def measure_basin_size(grid, low_points):
     basin_sizes = []
-    H, W = len(grid), len(grid[0])
+    rows, cols = len(grid), len(grid[0])
     for low_point in low_points:
-        current_cand = [low_point]
+        stack = [low_point]
         seen = set()
-        while len(current_cand) > 0:
-            h, w = current_cand.pop()
+        while stack:
+            h, w = stack.pop()
             if (h, w) in seen:
                 continue
             seen.add((h, w))
-            for dh, dw in NEIGHBOORS:
+            for dh, dw in NEIGHBORS:
                 if (
-                    (0 <= h + dh < H and 0 <= w + dw < W)
+                    (0 <= h + dh < rows and 0 <= w + dw < cols)
                     and grid[h + dh][w + dw] != 9
                     and grid[h + dh][w + dw] > grid[h][w]
                 ):
-                    current_cand.append((h + dh, w + dw))
+                    stack.append((h + dh, w + dw))
         basin_sizes.append(len(seen))
     return basin_sizes
 

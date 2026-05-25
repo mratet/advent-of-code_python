@@ -6,29 +6,26 @@ input = get_data(day=6, year=2021)
 
 
 # WRITE YOUR SOLUTION HERE
-def next_step(lanternfish: deque) -> deque:
-    next_gen = lanternfish[0]
-    lanternfish.rotate(-1)
-    lanternfish[6] += next_gen
-    lanternfish[8] = next_gen
-    return lanternfish
+def parse_input(data):
+    return list(map(int, data.split(",")))
 
 
-def count_lanternfish(initial_fish: list, n: int) -> int:
-    lanternfish = deque([initial_fish.count(i) for i in range(9)])
+def solve(initial_fish, n):
+    fish = deque(initial_fish.count(i) for i in range(9))
     for _ in range(n):
-        lanternfish = next_step(lanternfish)
-    return sum(lanternfish)
+        spawning = fish[0]
+        fish.rotate(-1)
+        fish[6] += spawning
+        fish[8] = spawning
+    return sum(fish)
 
 
-def part_1(input_str: str) -> int:
-    initial_fish = list(map(int, input_str.split(",")))
-    return count_lanternfish(initial_fish, 80)
+def part_1(data):
+    return solve(parse_input(data), 80)
 
 
-def part_2(input_str: str) -> int:
-    initial_fish = list(map(int, input_str.split(",")))
-    return count_lanternfish(initial_fish, 256)
+def part_2(data):
+    return solve(parse_input(data), 256)
 
 
 # END OF SOLUTION

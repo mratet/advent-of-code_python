@@ -15,7 +15,8 @@ OPERATIONS = {
 }
 
 
-def hex_to_bin(hex_str: str) -> str:
+# WRITE YOUR SOLUTION HERE
+def hex_to_bin(hex_str):
     return bin(int(hex_str, 16))[2:].zfill(len(hex_str) * 4)
 
 
@@ -28,13 +29,13 @@ def parse_header(bitstream, current_i):
 
 
 def read_value(bitstream, current_i):
-    num = ""
+    chunks = []
     while bitstream[current_i] == "1":
-        num += bitstream[current_i + 1 : current_i + 5]
+        chunks.append(bitstream[current_i + 1 : current_i + 5])
         current_i += 5
-    num += bitstream[current_i + 1 : current_i + 5]
+    chunks.append(bitstream[current_i + 1 : current_i + 5])
     current_i += 5
-    return current_i, int(num, 2)
+    return current_i, int("".join(chunks), 2)
 
 
 def decode_packet(bitstream, current_i):
@@ -45,6 +46,7 @@ def decode_packet(bitstream, current_i):
     if type_id == 4:
         current_i, value = read_value(bitstream, current_i)
     else:
+        child_values = []
         length_type_id = bitstream[current_i]
         current_i += 1
         if length_type_id == "0":
@@ -62,22 +64,22 @@ def decode_packet(bitstream, current_i):
                 current_i, sum_child_ver, child_val = decode_packet(bitstream, current_i)
                 version_sum += sum_child_ver
                 child_values.append(child_val)
-
         value = OPERATIONS[type_id](child_values)
 
     return current_i, version_sum, value
 
 
-_, total_version_sum, final_value = decode_packet(hex_to_bin(input), 0)
+def solve(data):
+    _, version_sum, value = decode_packet(hex_to_bin(data), 0)
+    return version_sum, value
 
 
-# WRITE YOUR SOLUTION HERE
-def part_1(lines):
-    return total_version_sum
+def part_1(data):
+    return solve(data)[0]
 
 
-def part_2(lines):
-    return final_value
+def part_2(data):
+    return solve(data)[1]
 
 
 # END OF SOLUTION

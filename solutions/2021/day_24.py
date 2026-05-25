@@ -1,10 +1,9 @@
-from itertools import product
-
 from aocd import get_data
 
 input = get_data(day=24, year=2021).splitlines()
 
 
+# WRITE YOUR SOLUTION HERE
 def run_program(model_number):
     variables = {"w": 0, "x": 0, "y": 0, "z": 0}
     j = 0
@@ -45,8 +44,8 @@ def generate_constraints(lines):
     if C < 0, z = z // 26 iff w == (z % 26 - C)
     """
     constraints = []
-    C = [int(line[-3:]) for line in lines[5::18]]
-    C2 = [int(line[-2:]) for line in lines[15::18]]
+    C = [int(line.split()[-1]) for line in lines[5::18]]
+    C2 = [int(line.split()[-1]) for line in lines[15::18]]
     stack = []
     for idx, (c1, c2) in enumerate(zip(C, C2, strict=False)):
         if c1 > 0:
@@ -57,38 +56,27 @@ def generate_constraints(lines):
     return constraints
 
 
-def is_valid(combo, constraints):
-    digits = [0] * 14
-    targets = {target for target, _, _ in constraints}
-    idx_free = sorted(set(range(14)) - targets)
-    for i, val in zip(idx_free, combo, strict=False):
-        digits[i] = val
-
-    for target, source, delta in constraints:
-        val = digits[source] + delta
-        if not (1 <= val <= 9):
-            return False
-        digits[target] = val
-
-    return "".join(map(str, digits))
-
-
-def generate_all_valid_numbers(constraints):
-    domain = range(1, 10)
-    return [number for combo in product(domain, repeat=7) if (number := is_valid(combo, constraints))]
-
-
-# WRITE YOUR SOLUTION HERE
-def part_1(lines):
+def solve(lines):
     constraints = generate_constraints(lines)
-    valid_numbers = generate_all_valid_numbers(constraints)
-    return max(valid_numbers)
+    targets = {target for target, _, _ in constraints}
+    max_digits, min_digits = [0] * 14, [0] * 14
+    for pos in set(range(14)) - targets:
+        max_digits[pos] = 9
+        min_digits[pos] = 1
+    for target, source, delta in constraints:
+        max_digits[source] = min(9, 9 - delta)
+        max_digits[target] = max_digits[source] + delta
+        min_digits[source] = max(1, 1 - delta)
+        min_digits[target] = min_digits[source] + delta
+    return "".join(map(str, max_digits)), "".join(map(str, min_digits))
+
+
+def part_1(lines):
+    return solve(lines)[0]
 
 
 def part_2(lines):
-    constraints = generate_constraints(lines)
-    valid_numbers = generate_all_valid_numbers(constraints)
-    return min(valid_numbers)
+    return solve(lines)[1]
 
 
 # END OF SOLUTION

@@ -4,6 +4,19 @@ from aocd import get_data
 
 input = get_data(day=8, year=2021).splitlines()
 
+digit_mapping = {
+    "abcefg": "0",
+    "cf": "1",
+    "acdeg": "2",
+    "acdfg": "3",
+    "bcdf": "4",
+    "abdfg": "5",
+    "abdefg": "6",
+    "acf": "7",
+    "abcdefg": "8",
+    "abcdfg": "9",
+}
+
 
 # WRITE YOUR SOLUTION HERE
 def part_1(lines):
@@ -34,30 +47,15 @@ def get_reversed_mapping(signal_patterns):
     return {a: "a", b: "b", c: "c", d: "d", e: "e", f: "f", g: "g"}
 
 
-digit_mapping = {
-    "abcefg": "0",
-    "cf": "1",
-    "acdeg": "2",
-    "acdfg": "3",
-    "bcdf": "4",
-    "abdfg": "5",
-    "abdefg": "6",
-    "acf": "7",
-    "abcdefg": "8",
-    "abcdfg": "9",
-}
-
-
 def part_2(lines):
     score = 0
     for display in lines:
         signal_patterns, digit_output = display.split(" | ")
         reversed_mapping = get_reversed_mapping(signal_patterns)
-        clean_digit = ""
-        for digit in digit_output.split(" "):
-            new_digit = "".join(sorted([reversed_mapping[d] for d in digit]))
-            clean_digit += digit_mapping[new_digit]
-        score += int(clean_digit)
+        digits = "".join(
+            digit_mapping["".join(sorted(reversed_mapping[d] for d in digit))] for digit in digit_output.split()
+        )
+        score += int(digits)
     return score
 
 

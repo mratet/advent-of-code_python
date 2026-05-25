@@ -4,35 +4,33 @@ input = get_data(day=2, year=2021).splitlines()
 
 
 # WRITE YOUR SOLUTION HERE
+def parse(line):
+    move, x = line.split()
+    return move, int(x)
+
+
 def part_1(lines):
-    depth = 0
-    horizontal_pos = 0
+    depth, horizontal_pos = 0, 0
+    deltas = {"forward": (1, 0), "down": (0, 1), "up": (0, -1)}
     for line in lines:
-        move, X = line.split()
-        X = int(X)
-        if move == "forward":
-            horizontal_pos += X
-        elif move == "down":
-            depth += X
-        elif move == "up":
-            depth -= X
+        move, x = parse(line)
+        dh, dd = deltas[move]
+        horizontal_pos += dh * x
+        depth += dd * x
     return depth * horizontal_pos
 
 
 def part_2(lines):
-    depth = 0
-    horizontal_pos = 0
-    aim = 0
+    depth, horizontal_pos, aim = 0, 0, 0
     for line in lines:
-        move, X = line.split()
-        X = int(X)
+        move, x = parse(line)
         if move == "forward":
-            horizontal_pos += X
-            depth += aim * X
+            horizontal_pos += x
+            depth += aim * x
         elif move == "down":
-            aim += X
+            aim += x
         elif move == "up":
-            aim -= X
+            aim -= x
     return depth * horizontal_pos
 
 

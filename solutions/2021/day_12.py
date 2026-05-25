@@ -15,39 +15,25 @@ def parse_input(lines):
     return graph
 
 
-def is_valid_path(next_path, part="part_1"):
-    small_caves = {cave for cave in next_path if cave.islower()}
-    if part == "part_1":
-        return not any(next_path.count(cave) > 1 for cave in small_caves)
-    elif part == "part_2":
-        double_visit = [cave for cave in small_caves if next_path.count(cave) > 1]
-        if len(double_visit) > 1:
-            return False
-        if len(double_visit) == 0:
-            return True
-        double_cave = double_visit[0]
-        if double_cave in ("start", "end"):
-            return False
-        return next_path.count(double_cave) == 2
-    return None
-
-
-def solve(lines, part):
+def solve(lines, part="part_1"):
     graph = parse_input(lines)
-    paths = []
 
-    def dfs(current_path):
-        last_node = current_path[-1]
-        if last_node == "end":
-            paths.append(current_path)
-            return
-        for next_node in graph[last_node]:
-            next_path = [*current_path, next_node]
-            if is_valid_path(next_path, part):
-                dfs(next_path)
+    def dfs(node, visited, double_used):
+        if node == "end":
+            return 1
+        total = 0
+        for next_node in graph[node]:
+            if next_node == "start":
+                continue
+            if next_node.islower() and next_node in visited:
+                if not double_used:
+                    total += dfs(next_node, visited, True)
+            else:
+                new_visited = visited | {next_node} if next_node.islower() else visited
+                total += dfs(next_node, new_visited, double_used)
+        return total
 
-    dfs(["start"])
-    return len(paths)
+    return dfs("start", {"start"}, part == "part_1")
 
 
 def part_1(lines):

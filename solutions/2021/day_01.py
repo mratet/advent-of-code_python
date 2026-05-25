@@ -4,9 +4,9 @@ input = get_data(day=1, year=2021).splitlines()
 
 
 # WRITE YOUR SOLUTION HERE
-def solve(input, n):
-    measurements = [int(n) for n in input]
-    return sum(measurements[i] < measurements[i + n] for i in range(len(measurements) - n))
+def solve(input, window):
+    measurements = [int(x) for x in input]
+    return sum(measurements[i] < measurements[i + window] for i in range(len(measurements) - window))
 
 
 def part_1(lines):

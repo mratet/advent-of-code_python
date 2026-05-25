@@ -1,12 +1,12 @@
-import itertools
-import math
 from functools import reduce
+from itertools import permutations
 
 from aocd import get_data
 
 input = get_data(day=18, year=2021).splitlines()
 
 
+# WRITE YOUR SOLUTION HERE
 class SnailfishPair:
     def __init__(self, nums, depths):
         self.nums = nums
@@ -43,64 +43,59 @@ def parse_snailfish_pair(line):
     return SnailfishPair(nums, depths)
 
 
-def add_snailfish_pair(s1: SnailfishPair, s2: SnailfishPair):
+def add_snailfish_pair(s1, s2):
     new_nums = s1.nums + s2.nums
     new_depths = s1.update_depths() + s2.update_depths()
-    new_s = SnailfishPair(new_nums, new_depths)
-    return reduce_snailfish_pair(new_s)
+    return reduce_snailfish_pair(SnailfishPair(new_nums, new_depths))
 
 
-def reduce_snailfish_pair(s: SnailfishPair):
-    if any(d > 4 for d in s.depths):
-        exploded_pair = explode_snailfish_pair(s)
-        return reduce_snailfish_pair(exploded_pair)
-    elif any(n >= 10 for n in s.nums):
-        split_pair = split_snailfish_pair(s)
-        return reduce_snailfish_pair(split_pair)
-    return s
+def reduce_snailfish_pair(s):
+    while True:
+        if any(d > 4 for d in s.depths):
+            s = explode_snailfish_pair(s)
+        elif any(n >= 10 for n in s.nums):
+            s = split_snailfish_pair(s)
+        else:
+            return s
 
 
-def split_snailfish_pair(s: SnailfishPair):
+def split_snailfish_pair(s):
     idx = next(i for i in range(len(s.nums)) if s.nums[i] >= 10)
-    N = s.nums[idx]
-    lN, rN = math.floor(N / 2), math.ceil(N / 2)
+    n = s.nums[idx]
+    ln, rn = n // 2, (n + 1) // 2
     new_nums = s.nums.copy()
     new_depths = s.depths.copy()
-    new_nums[idx] = rN
+    new_nums[idx] = rn
     new_depths[idx] += 1
-    new_nums.insert(idx, lN)
+    new_nums.insert(idx, ln)
     new_depths.insert(idx + 1, new_depths[idx])
     return SnailfishPair(new_nums, new_depths)
 
 
-def explode_snailfish_pair(s: SnailfishPair):
+def explode_snailfish_pair(s):
     idx = next(i for i in range(len(s.nums)) if s.depths[i] > 4)
     new_nums = s.nums.copy()
     new_depths = s.depths.copy()
-    lN, rN = s.nums[idx], s.nums[idx + 1]
+    ln, rn = s.nums[idx], s.nums[idx + 1]
     new_nums.pop(idx + 1)
     new_depths.pop(idx + 1)
-
     new_nums[idx] = 0
     if idx > 0:
-        new_nums[idx - 1] += lN
+        new_nums[idx - 1] += ln
     if idx < len(s.nums) - 2:
-        new_nums[idx + 1] += rN
+        new_nums[idx + 1] += rn
     new_depths[idx] -= 1
     return SnailfishPair(new_nums, new_depths)
 
 
-# WRITE YOUR SOLUTION HERE
 def part_1(lines):
-    fishs = [parse_snailfish_pair(l) for l in lines]
-    current_fish = reduce(add_snailfish_pair, fishs)
-    return current_fish.compute_magnitude()
+    fish = [parse_snailfish_pair(line) for line in lines]
+    return reduce(add_snailfish_pair, fish).compute_magnitude()
 
 
 def part_2(lines):
-    fishs = [parse_snailfish_pair(l) for l in lines]
-    magnitudes = [add_snailfish_pair(f1, f2).compute_magnitude() for f1, f2 in itertools.product(fishs, repeat=2)]
-    return max(magnitudes)
+    fish = [parse_snailfish_pair(line) for line in lines]
+    return max(add_snailfish_pair(f1, f2).compute_magnitude() for f1, f2 in permutations(fish, 2))
 
 
 # END OF SOLUTION

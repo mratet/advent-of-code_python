@@ -24,15 +24,14 @@ def parse_input(input_data):
 
 
 def compute_grid_scores(numbers, bingo_grids):
-    grid_ids = list(range(len(bingo_grids)))
+    remaining = list(range(len(bingo_grids)))
     grid_scores = []
-    for turn in range(len(numbers)):
-        current_markers = numbers[:turn]
-        for grid_id in grid_ids:
-            bingo_grid = bingo_grids[grid_id]
-            if bingo_grid.check_bingo(current_markers):
-                grid_ids.remove(grid_id)
-                grid_scores.append(bingo_grid.compute_score(current_markers) * numbers[turn - 1])
+    for turn in range(1, len(numbers) + 1):
+        current_markers = set(numbers[:turn])
+        winners = [i for i in remaining if bingo_grids[i].check_bingo(current_markers)]
+        for i in winners:
+            remaining.remove(i)
+            grid_scores.append(bingo_grids[i].compute_score(current_markers) * numbers[turn - 1])
     return grid_scores
 
 
