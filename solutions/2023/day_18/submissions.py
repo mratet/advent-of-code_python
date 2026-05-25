@@ -26,7 +26,7 @@ def part_1(lines):
     visited = set()
     pt = (250, 250)
     for line in lines:
-        direction, distance, color = line.split()
+        direction, distance, _color = line.split()
         for _ in range(int(distance)):
             x, y = pt
             next_dir = dir_dict[direction]

@@ -89,7 +89,7 @@ class IntcodeGUI:
         self.computer.memory[0] = 2
 
         if self.mode == Mode.AUTO:
-            for x, y, tile_id in batched(self.computer.run(), n=3):
+            for x, y, tile_id in batched(self.computer.run(), n=3, strict=True):
                 if x == -1 and y == 0:
                     self.score = tile_id
                 elif tile_id == 4:
@@ -98,7 +98,7 @@ class IntcodeGUI:
                     self.paddle_pos = (x, y)
             while not self.computer.hasted:
                 joystick = (self.ball_pos[0] > self.paddle_pos[0]) - (self.ball_pos[0] < self.paddle_pos[0])
-                for x, y, tile_id in batched(self.computer.run([joystick]), n=3):
+                for x, y, tile_id in batched(self.computer.run([joystick]), n=3, strict=True):
                     if x == -1 and y == 0:
                         self.score = tile_id
                     elif tile_id == 4:
@@ -108,7 +108,7 @@ class IntcodeGUI:
             return self.score
 
         initial_output = self.computer.run()
-        for x, y, tile_id in batched(initial_output, n=3):
+        for x, y, tile_id in batched(initial_output, n=3, strict=True):
             if x == -1 and y == 0:
                 self.update_score(tile_id)
             else:
@@ -120,7 +120,7 @@ class IntcodeGUI:
         with self.term.cbreak(), self.term.hidden_cursor():
             while not self.computer.hasted:
                 output = self.computer.run([joystick])
-                for x, y, tile_id in batched(output, n=3):
+                for x, y, tile_id in batched(output, n=3, strict=True):
                     if x == -1 and y == 0:
                         self.update_score(tile_id)
                     else:
@@ -146,7 +146,7 @@ class IntcodeGUI:
 def part_1(lines):
     pc = IntcodeComputer(lines)
     tiles = pc.run()
-    return sum(tile_id == 2 for _, _, tile_id in batched(tiles, 3))
+    return sum(tile_id == 2 for _, _, tile_id in batched(tiles, 3, strict=True))
 
 
 def part_2(lines):

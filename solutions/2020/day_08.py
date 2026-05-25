@@ -31,7 +31,7 @@ def compute_accumulator(lines: list[str]) -> tuple[int, list, bool]:
 
 
 def part_1(lines):
-    acc, candidates, terminated = compute_accumulator(lines)
+    acc, _candidates, _terminated = compute_accumulator(lines)
     return acc
 
 

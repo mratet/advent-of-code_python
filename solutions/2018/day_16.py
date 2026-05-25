@@ -132,7 +132,7 @@ def run_program(program_lines, opcode_mapping):
 
 # WRITE YOUR SOLUTION HERE
 def part_1(lines):
-    samples, program = parse_input_blocks(lines)
+    samples, _program = parse_input_blocks(lines)
     return count_ambiguous_samples(samples)
 
 

@@ -37,7 +37,7 @@ def dfs(graph, start):
 
 
 def part_1(lines):
-    graph, g = _parse(lines)
+    graph, _g = _parse(lines)
     n = len(graph)
     m = dfs(graph, "ddp")
     p = dfs(graph, "stz")

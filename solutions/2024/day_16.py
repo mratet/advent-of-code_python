@@ -52,7 +52,7 @@ def construct_graph(lines):
 
 def part_1(lines):
     graph, (sx, sy), (tx, ty) = construct_graph(lines)
-    dist, prec = dijkstra(graph, source=(sx, sy, 0))
+    dist, _prec = dijkstra(graph, source=(sx, sy, 0))
     return min(dist[tx, ty, i] for i in range(4))
 
 

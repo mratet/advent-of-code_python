@@ -11,7 +11,7 @@ aoc_input = get_data(day=23, year=2019)
 def _process_packets(computer, input_value, packets_queues):
     NAT = None
     output_buffer = computer.run(input_value)
-    for destination_address, X, Y in batched(output_buffer, n=3):
+    for destination_address, X, Y in batched(output_buffer, n=3, strict=True):
         if destination_address == 255:
             NAT = (X, Y)
         else:

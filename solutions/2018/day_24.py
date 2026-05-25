@@ -47,7 +47,7 @@ class Units:
 
 def parse_army_input(text: str) -> list[Units]:
     groups = []
-    current_army = None
+    current_army = ""
     current_lines = []
 
     for line in text.strip().splitlines():

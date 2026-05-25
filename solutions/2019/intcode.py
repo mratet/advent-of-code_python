@@ -33,8 +33,8 @@ class IntcodeComputer:
     def __init__(self, program_file):
         init_program = self.read_program(program_file)
         self.memory = dict(enumerate(init_program))
-        self.input_buffer = deque([])
-        self.output_buffer = deque([])
+        self.input_buffer = deque()
+        self.output_buffer = deque()
         self.rel_base = 0
         self.ip = 0
         self.hasted = False  # useful for day_13

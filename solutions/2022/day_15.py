@@ -26,7 +26,7 @@ def merge_intervals(intervals):
     intervals.sort()
     merged_intervals = [intervals[0]]
     for start, end in intervals[1:]:
-        prev_start, prev_end = merged_intervals[-1]
+        _prev_start, prev_end = merged_intervals[-1]
         if start <= prev_end + 1:
             merged_intervals[-1][1] = max(prev_end, end)
         else:

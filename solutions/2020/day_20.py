@@ -73,7 +73,7 @@ def complete_image(tiles, mapping, starting_tile):
                 neigh.append(image[li][lj])
 
         ref_tiles = [tiles[ref_id][ref_var] for (ref_id, ref_var) in neigh]
-        (ref_id, ref_var) = neigh.pop()
+        (ref_id, _ref_var) = neigh.pop()
 
         for next_id in mapping[ref_id]:
             if next_id in available_tiles:

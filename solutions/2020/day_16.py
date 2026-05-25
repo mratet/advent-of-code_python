@@ -38,7 +38,7 @@ def is_ticket_valid(value, fields):
 
 
 def part_1(lines):
-    fields, nearby_tickets, your_ticket = parse_input(lines)
+    fields, nearby_tickets, _your_ticket = parse_input(lines)
     return sum(val for ticket in nearby_tickets for val in ticket if not is_ticket_valid(val, fields))
 
 

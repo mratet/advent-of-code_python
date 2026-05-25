@@ -11,8 +11,8 @@ def parse_input(lines):
     graph = {}
     for line in lines.splitlines():
         name, flow, neighbors = re.findall(r"Valve (\w+) has flow rate=(\d+); tunnels? leads? to valves? (.+)", line)[0]
-        graph[name] = {"flow": int(flow), "tunnels": list(neighbors.split(", "))}
-    useful_valves = {name for name, props in graph.items() if props["flow"] > 0}
+        graph[name] = {"flow": int(flow), "tunnels": neighbors.split(", ")}
+    useful_valves = {name for name, props in graph.items() if int(props["flow"]) > 0}
     return graph, useful_valves
 
 

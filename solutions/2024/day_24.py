@@ -42,7 +42,7 @@ def part_2(lines):
     # The circuit implements a ripple-carry adder. Render the graph below to visually
     # identify misswapped gate outputs — each swap corrupts the carry chain at one bit position.
     # Swaps found: nqk<->z07, fgt<->pcp, fpq<->z24, srn<->z32
-    state, connections, nodes = parse_input(lines)
+    _state, connections, nodes = parse_input(lines)
     dot = Digraph()
     for node in sorted(nodes):
         dot.node(node, node, shape="circle", style="filled", fillcolor="lightblue")

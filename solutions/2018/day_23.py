@@ -79,7 +79,7 @@ def part_2(lines):
     heap = [(-len(nanobots), 0, initial_box)]
 
     while True:
-        neg_score, dist, box = heappop(heap)
+        _neg_score, dist, box = heappop(heap)
         sub_boxes = divide_box(box)
         if len(sub_boxes) == 1:
             return dist

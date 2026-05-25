@@ -109,7 +109,7 @@ def part_1(lines):
 
 
 def part_2(lines):
-    entrance, dots, doors, keys = parse_input(lines, "part_2")
+    _entrance, dots, doors, keys = parse_input(lines, "part_2")
     graph = {letter: build_graph(keys[letter], dots, keys, doors) for letter in keys}
     return dijkstra(graph, "0123")
 

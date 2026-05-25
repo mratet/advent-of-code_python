@@ -44,7 +44,7 @@ def scrambling(instructions, password, reverse=False):
                 if reverse:
                     X, Y = Y, X
                 c = password.pop(X)
-                password = password[:Y] + [c] + password[Y:]
+                password = [*password[:Y], c, *password[Y:]]
 
     return "".join(password)
 
