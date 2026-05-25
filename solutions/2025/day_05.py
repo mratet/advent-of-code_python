@@ -22,11 +22,7 @@ def part_1(lines):
     fresh_list, available_list = lines
     intervals = parse_intervals(fresh_list)
     ingredient_ids = map(int, available_list.splitlines())
-
-    count = 0
-    for ingredient_id in ingredient_ids:
-        count += any(f1 <= ingredient_id <= f2 for f1, f2 in intervals)
-    return count
+    return sum(any(f1 <= ingredient_id <= f2 for f1, f2 in intervals) for ingredient_id in ingredient_ids)
 
 
 def part_2(lines):

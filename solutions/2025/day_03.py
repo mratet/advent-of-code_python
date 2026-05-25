@@ -4,16 +4,14 @@ input = get_data(day=3, year=2025).splitlines()
 
 
 # WRITE YOUR SOLUTION HERE
-def max_digits_sequence(s, N):
+def max_digits_sequence(digits, n):
     result = []
     start = 0
-    for remaining in range(N, 0, -1):
-        end = len(s) - remaining + 1
-        best_digit = max(s[start:end])
-        start = s.index(best_digit, start, end) + 1
-
+    for remaining in range(n, 0, -1):
+        end = len(digits) - remaining + 1
+        best_digit = max(digits[start:end])
+        start = digits.index(best_digit, start, end) + 1
         result.append(best_digit)
-
     return int("".join(result))
 
 

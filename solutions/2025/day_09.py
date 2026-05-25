@@ -1,4 +1,4 @@
-from itertools import product
+from itertools import combinations
 
 from aocd import get_data
 
@@ -9,13 +9,11 @@ input = get_data(day=9, year=2025).splitlines()
 def part_1(lines):
     coords = [list(map(int, line.split(","))) for line in lines]
     dists = []
-    for (i1, c1), (i2, c2) in product(enumerate(coords), repeat=2):
-        if i1 == i2 or i1 > i2:
-            continue
+    for (_, c1), (_, c2) in combinations(enumerate(coords), 2):
         min_x, max_x = min(c1[0], c2[0]), max(c1[0], c2[0])
         min_y, max_y = min(c1[1], c2[1]), max(c1[1], c2[1])
-        _dist = (max_x - min_x + 1) * (max_y - min_y + 1)
-        dists.append(_dist)
+        area = (max_x - min_x + 1) * (max_y - min_y + 1)
+        dists.append(area)
     return max(dists)
 
 
@@ -36,13 +34,15 @@ def part_2(lines):
 
     xs = sorted({x for x, _ in coords})
     ys = sorted({y for _, y in coords})
-    W, H = len(xs), len(ys)
+    n_cols, n_rows = len(xs), len(ys)
+    xs_idx = {x: i for i, x in enumerate(xs)}
+    ys_idx = {y: j for j, y in enumerate(ys)}
 
-    grid = [[is_inside_or_boundary(xs[i], ys[j]) for i in range(W)] for j in range(H)]
+    grid = [[is_inside_or_boundary(xs[i], ys[j]) for i in range(n_cols)] for j in range(n_rows)]
 
-    prefix = [[0] * (W + 1) for _ in range(H + 1)]
-    for j in range(H):
-        for i in range(W):
+    prefix = [[0] * (n_cols + 1) for _ in range(n_rows + 1)]
+    for j in range(n_rows):
+        for i in range(n_cols):
             prefix[j + 1][i + 1] = grid[j][i] + prefix[j][i + 1] + prefix[j + 1][i] - prefix[j][i]
 
     def rect_all_valid(gx1, gy1, gx2, gy2):
@@ -57,8 +57,8 @@ def part_2(lines):
             x1, x2 = min(x1, x2), max(x1, x2)
             y1, y2 = min(y1, y2), max(y1, y2)
 
-            gx1, gx2 = xs.index(x1), xs.index(x2)
-            gy1, gy2 = ys.index(y1), ys.index(y2)
+            gx1, gx2 = xs_idx[x1], xs_idx[x2]
+            gy1, gy2 = ys_idx[y1], ys_idx[y2]
 
             if rect_all_valid(gx1, gy1, gx2, gy2):
                 best = max(best, (x2 - x1 + 1) * (y2 - y1 + 1))

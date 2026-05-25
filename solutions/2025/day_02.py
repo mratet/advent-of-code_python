@@ -4,6 +4,10 @@ input = get_data(day=2, year=2025).splitlines()
 
 
 # WRITE YOUR SOLUTION HERE
+def is_doubled(s):
+    return s[: len(s) // 2] == s[len(s) // 2 :]
+
+
 def is_repeated_pattern(s):
     return any(
         len(s) % pattern_size == 0 and s[:pattern_size] * (len(s) // pattern_size) == s
@@ -25,7 +29,7 @@ def sum_valid_ids(lines, validator):
 
 
 def part_1(lines):
-    return sum_valid_ids(lines, lambda x: x[: len(x) // 2] == x[len(x) // 2 :])
+    return sum_valid_ids(lines, is_doubled)
 
 
 def part_2(lines):

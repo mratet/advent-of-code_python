@@ -19,10 +19,10 @@ def build_graph(lines):
 
 def make_counter(graph):
     @cache
-    def count(u, target):
-        if u == target:
+    def count(node, target):
+        if node == target:
             return 1
-        return sum(count(v, target) for v in graph[u])
+        return sum(count(neighbor, target) for neighbor in graph[node])
 
     return count
 

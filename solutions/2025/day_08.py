@@ -1,12 +1,13 @@
 from itertools import combinations
 from math import dist
+from operator import itemgetter
 
 from aocd import get_data
 from disjoint_set import DisjointSet
 
-STEPS = 1000
-
 input = get_data(day=8, year=2025).splitlines()
+
+STEPS = 1000
 
 
 # WRITE YOUR SOLUTION HERE
@@ -16,7 +17,7 @@ def parse_coords(lines):
 
 def compute_sorted_distances(coords):
     return sorted(
-        [(dist(coords[i], coords[j]), i, j) for i, j in combinations(range(len(coords)), 2)], key=lambda x: x[0]
+        [(dist(coords[i], coords[j]), i, j) for i, j in combinations(range(len(coords)), 2)], key=itemgetter(0)
     )
 
 
@@ -42,9 +43,7 @@ def part_2(lines):
         ds.union(i, j)
 
         if len(list(ds)) == len(coords):
-            x1, _, _ = coords[i]
-            x2, _, _ = coords[j]
-            return x1 * x2
+            return coords[i][0] * coords[j][0]
 
 
 # END OF SOLUTION

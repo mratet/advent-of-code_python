@@ -6,11 +6,10 @@ from aocd import get_data
 
 input = get_data(day=6, year=2025).splitlines()
 
-
-# WRITE YOUR SOLUTION HERE
 OPS = {"+": add, "*": mul}
 
 
+# WRITE YOUR SOLUTION HERE
 def part_1(lines):
     ops = lines[-1].split()
     columns = [line.split() for line in lines[:-1]]
@@ -20,23 +19,20 @@ def part_1(lines):
 def part_2(lines):
     columns = ["".join(col).strip() for col in zip_longest(*lines, fillvalue=" ")]
     total = 0
-    current: int | None = None
+    current = 0
     op = add
 
     for token in columns:
         if not token:
-            assert current is not None
             total += current
-            current = None
-
+            current = 0
         elif token[-1] in OPS:
             op = OPS[token[-1]]
             current = int(token[:-1])
         else:
-            assert current is not None
             current = op(current, int(token))
 
-    return total + (current or 0)
+    return total + current
 
 
 # END OF SOLUTION

@@ -4,10 +4,10 @@ from aocd import get_data
 
 input = get_data(day=4, year=2025).splitlines()
 
-# WRITE YOUR SOLUTION HERE
 NEIGHBORS = [(dx, dy) for dx, dy in product([-1, 0, 1], repeat=2) if (dx, dy) != (0, 0)]
 
 
+# WRITE YOUR SOLUTION HERE
 def parse_grid(lines):
     return {(x, y) for x, line in enumerate(lines) for y, symb in enumerate(line) if symb == "@"}
 

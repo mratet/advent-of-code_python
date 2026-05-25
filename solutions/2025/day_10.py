@@ -1,5 +1,6 @@
 from functools import reduce
 from itertools import combinations
+from operator import xor
 
 import numpy as np
 from aocd import get_data
@@ -41,7 +42,7 @@ def part_1(lines):
             len(combo)
             for size in range(machine["num_lights"] + 1)
             for combo in combinations(machine["buttons"], size)
-            if reduce(lambda acc, b: acc ^ b, combo, 0) == machine["target"]
+            if reduce(xor, combo, 0) == machine["target"]
         )
         for machine in machines
     )

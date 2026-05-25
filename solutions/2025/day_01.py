@@ -1,4 +1,4 @@
-from itertools import accumulate, pairwise
+from itertools import accumulate, chain, pairwise
 
 from aocd import get_data
 
@@ -16,7 +16,7 @@ def part_1(lines):
 
 
 def part_2(lines):
-    positions = (DIAL_START_POS + x for x in [0, *accumulate(map(int, lines))])
+    positions = (DIAL_START_POS + x for x in chain([0], accumulate(map(int, lines))))
     return sum(abs(next_pos // DIAL_SIZE - pos // DIAL_SIZE) for pos, next_pos in pairwise(positions))
 
 
