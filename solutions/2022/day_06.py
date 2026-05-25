@@ -3,11 +3,11 @@ from aocd import get_data
 input = get_data(day=6, year=2022)
 
 
-def solve(signal, N):
-    return next(i + N for i in range(len(signal)) if len(set(signal[i : i + N])) == N)
-
-
 # WRITE YOUR SOLUTION HERE
+def solve(signal, n):
+    return next(i + n for i in range(len(signal)) if len(set(signal[i : i + n])) == n)
+
+
 def part_1(lines):
     return solve(lines, 4)
 

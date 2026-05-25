@@ -1,8 +1,11 @@
+from collections import deque
+
 from aocd import get_data
 
 input = get_data(day=12, year=2022).splitlines()
 
 
+# WRITE YOUR SOLUTION HERE
 def parse_grid(lines):
     grid = {}
     for y, line in enumerate(lines):
@@ -17,29 +20,32 @@ def parse_grid(lines):
     return grid, start, end
 
 
-def dfs(grid, start, end):
+def bfs(grid, start, end):
     distance = {start: 0}
-    to_visit = [start]
+    to_visit = deque([start])
     while to_visit:
-        node = to_visit.pop(0)
+        node = to_visit.popleft()
         for dx, dy in ((-1, 0), (1, 0), (0, -1), (0, 1)):
-            neigh_node = (node[0] + dx, node[1] + dy)
-            if neigh_node in grid and grid[neigh_node] <= grid[node] + 1 and neigh_node not in distance:
-                distance[neigh_node] = distance[node] + 1
-                to_visit.append(neigh_node)
+            neigh = (node[0] + dx, node[1] + dy)
+            if neigh in grid and grid[neigh] <= grid[node] + 1 and neigh not in distance:
+                distance[neigh] = distance[node] + 1
+                to_visit.append(neigh)
     return distance.get(end, 1e9)
 
 
-# WRITE YOUR SOLUTION HERE
-def part_1(lines):
+def solve(lines, part="part_1"):
     grid, start, end = parse_grid(lines)
-    return dfs(grid, start, end)
+    if part == "part_1":
+        return bfs(grid, start, end)
+    return min(bfs(grid, s, end) for s in grid if grid[s] == ord("a"))
+
+
+def part_1(lines):
+    return solve(lines)
 
 
 def part_2(lines):
-    grid, start, end = parse_grid(lines)
-    starts = [node for node in grid if grid[node] == ord("a")]
-    return min(dfs(grid, start, end) for start in starts)
+    return solve(lines, "part_2")
 
 
 # END OF SOLUTION

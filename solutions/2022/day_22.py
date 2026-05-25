@@ -6,7 +6,6 @@ from aocd import get_data
 input = get_data(day=22, year=2022)
 FACE_SIZE = 50
 
-
 Direction = namedtuple("Direction", ["dx", "dy", "letter"])
 DIRECTIONS = [
     Direction(1, 0, "R"),
@@ -27,6 +26,14 @@ def transition_dict(pairs):
         d[(to_fid, to_dir)] = (from_fid, from_dir)
     return d
 
+
+# Face layout (specific to this puzzle input):
+#  12
+#  3
+# 45
+#  6
+# Board uses face-relative coordinates (face_id, x, y) with x, y in [0, FACE_SIZE).
+# Edge transitions and coordinate transforms are hardcoded for this input's cube folding.
 
 FACE_TRANSITION_PART1 = transition_dict(
     {
@@ -62,51 +69,70 @@ FACE_TRANSITION_PART2 = transition_dict(
     }
 )
 
+_S = FACE_SIZE - 1
+COORD_TRANSFORMS = {
+    "1R": lambda x, y: (0, y),
+    "4R": lambda x, y: (0, y),
+    "2L": lambda x, y: (_S, y),
+    "5L": lambda x, y: (_S, y),
+    "1D": lambda x, y: (x, 0),
+    "3D": lambda x, y: (x, 0),
+    "4D": lambda x, y: (x, 0),
+    "6D": lambda x, y: (x, 0),
+    "2U": lambda x, y: (x, _S),
+    "3U": lambda x, y: (x, _S),
+    "5U": lambda x, y: (x, _S),
+    "6U": lambda x, y: (x, _S),
+    "1L": lambda x, y: (x, _S - y),
+    "4L": lambda x, y: (x, _S - y),
+    "2R": lambda x, y: (x, _S - y),
+    "5R": lambda x, y: (x, _S - y),
+    "1U": lambda x, y: (y, x),
+    "2D": lambda x, y: (y, x),
+    "3R": lambda x, y: (y, x),
+    "3L": lambda x, y: (y, x),
+    "4U": lambda x, y: (y, x),
+    "5D": lambda x, y: (y, x),
+    "6R": lambda x, y: (y, x),
+    "6L": lambda x, y: (y, x),
+}
 
+
+# WRITE YOUR SOLUTION HERE
 def build_face_map(grid):
     face_map = {}
     face_id = 1
     for y, row in enumerate(grid):
         for x, char in enumerate(row):
             if char != " ":
-                tile_x = x // FACE_SIZE
-                tile_y = y // FACE_SIZE
-                key = (tile_x, tile_y)
+                key = (x // FACE_SIZE, y // FACE_SIZE)
                 if key not in face_map:
                     face_map[key] = face_id
                     face_id += 1
     return face_map
 
 
-def get_face_id(x, y, face_map, face_size=FACE_SIZE):
-    return face_map.get(((x // face_size), (y // face_size)), None)  # None si hors des faces
+def get_face_id(x, y, face_map):
+    return face_map.get((x // FACE_SIZE, y // FACE_SIZE))
 
 
-def get_real_coords(pos, face_map, face_size=FACE_SIZE):
+def get_real_coords(pos, inv_map):
     fid, x, y = pos
-    inv_map = {v: k for k, v in face_map.items()}
     fx, fy = inv_map[fid]
-    return x + fx * face_size, y + fy * face_size
+    return x + fx * FACE_SIZE, y + fy * FACE_SIZE
 
 
 def parse_input(raw_input):
     board_text, path_text = raw_input.split("\n\n")
     face_map = build_face_map(board_text.split("\n"))
-
     board = {}
     for y, line in enumerate(board_text.splitlines()):
         for x, c in enumerate(line):
             if c != " ":
                 fid = get_face_id(x, y, face_map)
                 board[(fid, x % FACE_SIZE, y % FACE_SIZE)] = c
-
-    matches = parse_path(path_text)
-    return board, matches, face_map
-
-
-def parse_path(path_text):
-    matches = re.findall(r"(\d+)([RL]?)", path_text)
-    return [(int(num), turn) for num, turn in matches]
+    path = [(int(num), turn) for num, turn in re.findall(r"(\d+)([RL]?)", path_text)]
+    return board, path, face_map
 
 
 def wrap_position(pos, dir_idx, part):
@@ -115,66 +141,11 @@ def wrap_position(pos, dir_idx, part):
     transitions = FACE_TRANSITION_PART1 if part == "part_1" else FACE_TRANSITION_PART2
     new_fid, arrival_dir = transitions[(fid, direction.letter)]
     sid = f"{fid}{direction.letter}"
-
     if part == "part_1":
         x = FACE_SIZE - 1 if direction.letter == "L" else 0 if direction.letter == "R" else x
         y = FACE_SIZE - 1 if direction.letter == "U" else 0 if direction.letter == "D" else y
-    elif part == "part_2":
-        match sid:
-            case "1R":
-                x = 0
-            case "1D":
-                y = 0
-            case "1L":
-                y = FACE_SIZE - 1 - y
-            case "1U":
-                x, y = y, x
-
-            case "2R":
-                y = FACE_SIZE - 1 - y
-            case "2D":
-                x, y = y, x
-            case "2L":
-                x = FACE_SIZE - 1
-            case "2U":
-                y = FACE_SIZE - 1
-
-            case "3R":
-                x, y = y, x
-            case "3D":
-                y = 0
-            case "3L":
-                x, y = y, x
-            case "3U":
-                y = FACE_SIZE - 1
-
-            case "4R":
-                x = 0
-            case "4D":
-                y = 0
-            case "4L":
-                y = FACE_SIZE - 1 - y
-            case "4U":
-                x, y = y, x
-
-            case "5R":
-                y = FACE_SIZE - 1 - y
-            case "5D":
-                x, y = y, x
-            case "5L":
-                x = FACE_SIZE - 1
-            case "5U":
-                y = FACE_SIZE - 1
-
-            case "6R":
-                x, y = y, x
-            case "6D":
-                y = 0
-            case "6L":
-                x, y = y, x
-            case "6U":
-                y = FACE_SIZE - 1
-
+    else:
+        x, y = COORD_TRANSFORMS[sid](x, y)
     return (new_fid, x, y), (LETTER_TO_DIR[arrival_dir] + 2) % 4
 
 
@@ -187,7 +158,6 @@ def next_position(pos, dir_idx, board, part):
         pos, new_dir_idx = wrap_position(pos, dir_idx, part)
     else:
         pos = (fid, nx, ny)
-
     return (pos, new_dir_idx) if board.get(pos) != "#" else ((fid, x, y), dir_idx)
 
 
@@ -202,19 +172,20 @@ def simulate(board, path, part="part_1"):
     return pos, dir_idx
 
 
-# WRITE YOUR SOLUTION HERE
-def part_1(lines):
+def solve(lines, part="part_1"):
     board, path, face_map = parse_input(lines)
-    pos, dir_idx = simulate(board, path, "part_1")
-    rx, ry = get_real_coords(pos, face_map)
+    inv_map = {v: k for k, v in face_map.items()}
+    pos, dir_idx = simulate(board, path, part)
+    rx, ry = get_real_coords(pos, inv_map)
     return 1000 * (ry + 1) + 4 * (rx + 1) + dir_idx
+
+
+def part_1(lines):
+    return solve(lines)
 
 
 def part_2(lines):
-    board, path, face_map = parse_input(lines)
-    pos, dir_idx = simulate(board, path, "part_2")
-    rx, ry = get_real_coords(pos, face_map)
-    return 1000 * (ry + 1) + 4 * (rx + 1) + dir_idx
+    return solve(lines, "part_2")
 
 
 # END OF SOLUTION

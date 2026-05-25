@@ -6,13 +6,14 @@ input = get_data(day=8, year=2022).splitlines()
 X, Y = len(input), len(input[0])
 
 
+# WRITE YOUR SOLUTION HERE
 def get_views(tree):
     xt, yt = tree
     return [
-        [(xt - x, yt) for x in range(1, X) if (xt - x) >= 0],  # left
-        [(xt + x, yt) for x in range(1, X) if (xt + x) < X],  # right
-        [(xt, yt - y) for y in range(1, Y) if (yt - y) >= 0],  # down
-        [(xt, yt + y) for y in range(1, Y) if (yt + y) < Y],  # up
+        [(xt - x, yt) for x in range(1, X) if (xt - x) >= 0],
+        [(xt + x, yt) for x in range(1, X) if (xt + x) < X],
+        [(xt, yt - y) for y in range(1, Y) if (yt - y) >= 0],
+        [(xt, yt + y) for y in range(1, Y) if (yt + y) < Y],
     ]
 
 
@@ -34,15 +35,19 @@ def compute_scenic_score(tree, grid):
     return prod(scenic_view)
 
 
-# WRITE YOUR SOLUTION HERE
-def part_1(lines):
+def solve(lines, part="part_1"):
     grid = {(x, y): int(c) for y, row in enumerate(lines) for x, c in enumerate(row)}
-    return sum(1 for tree in grid if check_tree_visibility(tree, grid))
+    if part == "part_1":
+        return sum(1 for tree in grid if check_tree_visibility(tree, grid))
+    return max(compute_scenic_score(tree, grid) for tree in grid)
+
+
+def part_1(lines):
+    return solve(lines)
 
 
 def part_2(lines):
-    grid = {(x, y): int(c) for y, row in enumerate(lines) for x, c in enumerate(row)}
-    return max(compute_scenic_score(tree, grid) for tree in grid)
+    return solve(lines, "part_2")
 
 
 # END OF SOLUTION

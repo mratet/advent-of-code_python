@@ -6,24 +6,27 @@ input = get_data(day=4, year=2022).splitlines()
 
 
 # WRITE YOUR SOLUTION HERE
+def parse_input(lines):
+    return [
+        (range(x1, x2 + 1), range(y1, y2 + 1))
+        for line in lines
+        for x1, x2, y1, y2 in [tuple(map(int, re.findall(r"\d+", line)))]
+    ]
+
+
+def solve(lines, part="part_1"):
+    pairs = parse_input(lines)
+    if part == "part_1":
+        return sum(set(p1).issubset(p2) or set(p2).issubset(p1) for p1, p2 in pairs)
+    return sum(bool(set(p1) & set(p2)) for p1, p2 in pairs)
+
+
 def part_1(lines):
-    s1 = 0
-    for line in lines:
-        x1, x2, y1, y2 = map(int, re.findall(r"\d+", line))
-        p1, p2 = range(x1, x2 + 1), range(y1, y2 + 1)
-        if set(p1).issubset(p2) or set(p2).issubset(p1):
-            s1 += 1
-    return s1
+    return solve(lines)
 
 
 def part_2(lines):
-    s2 = 0
-    for line in lines:
-        x1, x2, y1, y2 = map(int, re.findall(r"\d+", line))
-        p1, p2 = range(x1, x2 + 1), range(y1, y2 + 1)
-        if len(set(p1) & set(p2)) > 0:
-            s2 += 1
-    return s2
+    return solve(lines, "part_2")
 
 
 # END OF SOLUTION

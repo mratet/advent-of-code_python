@@ -5,6 +5,7 @@ from aocd import get_data
 input = get_data(day=15, year=2022).splitlines()
 
 
+# WRITE YOUR SOLUTION HERE
 def manhattan_distance(p1, p2):
     return abs(p1[0] - p2[0]) + abs(p1[1] - p2[1])
 
@@ -44,26 +45,32 @@ def get_coverage_intervals(y, sensors):
     return merge_intervals(intervals)
 
 
-# WRITE YOUR SOLUTION HERE
-def part_1(lines):
-    y_target = 2_000_000
+def solve(lines, part="part_1"):
     sensors = parse_input(lines)
-    [[x, y]] = get_coverage_intervals(y_target, sensors)
-    return y - x
+    if part == "part_1":
+        [[x, y]] = get_coverage_intervals(2_000_000, sensors)
+        return y - x
+    max_y = 4_000_000
+    # The uncovered point lies at the intersection of neighboring sensor boundaries.
+    # In rotated coordinates u=x+y, v=x-y, each boundary is a line u=c or v=c.
+    # Generate O(n) candidate u and v values, then check their O(n²) intersections.
+    u_candidates = {sx + sy + sign * (d + 1) for (sx, sy), d in sensors for sign in (1, -1)}
+    v_candidates = {sx - sy + sign * (d + 1) for (sx, sy), d in sensors for sign in (1, -1)}
+    for u in u_candidates:
+        for v in v_candidates:
+            if (u + v) % 2 != 0:
+                continue
+            x, y = (u + v) // 2, (u - v) // 2
+            if 0 <= x <= max_y and 0 <= y <= max_y and all(manhattan_distance((x, y), s) > d for s, d in sensors):
+                return x * max_y + y
+
+
+def part_1(lines):
+    return solve(lines)
 
 
 def part_2(lines):
-    MAX_Y = 4_000_000
-    sensors = parse_input(lines)
-
-    for y in range(MAX_Y + 1):
-        intervals = get_coverage_intervals(y, sensors)
-
-        if len(intervals) > 1:
-            x_gap = intervals[0][1] + 1
-            return x_gap * MAX_Y + y
-
-    raise Exception("No solution")
+    return solve(lines, "part_2")
 
 
 # END OF SOLUTION

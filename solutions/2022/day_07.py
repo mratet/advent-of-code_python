@@ -5,6 +5,7 @@ from aocd import get_data
 input = get_data(day=7, year=2022).splitlines()
 
 
+# WRITE YOUR SOLUTION HERE
 class Dir:
     def __init__(self, name, parent=None):
         self.name = name
@@ -68,24 +69,22 @@ def compute_directory_size(directory):
     return size
 
 
-# WRITE YOUR SOLUTION HERE
+def solve(lines, part="part_1"):
+    root, all_dirs = parse_filesystem(lines)
+    sizes = {d: compute_directory_size(d) for d in all_dirs}
+    if part == "part_1":
+        return sum(s for s in sizes.values() if s <= 100_000)
+    total_space, needed_space = 70_000_000, 30_000_000
+    missing_space = needed_space - (total_space - sizes[root])
+    return min(s for s in sizes.values() if s >= missing_space)
+
+
 def part_1(lines):
-    _, all_dirs = parse_filesystem(lines)
-    return sum(size for d in all_dirs if (size := compute_directory_size(d)) <= 100_000)
+    return solve(lines)
 
 
 def part_2(lines):
-    root_dir, all_dirs = parse_filesystem(lines)
-    TOTAL_SPACE = 70_000_000
-    NEEDED_SPACE = 30_000_000
-    used_space = compute_directory_size(root_dir)
-    free_space = TOTAL_SPACE - used_space
-    missing_space = NEEDED_SPACE - free_space
-
-    valid_dirs = [d for d in all_dirs if compute_directory_size(d) >= missing_space]
-    smallest = min(valid_dirs, key=compute_directory_size)
-
-    return compute_directory_size(smallest)
+    return solve(lines, "part_2")
 
 
 # END OF SOLUTION

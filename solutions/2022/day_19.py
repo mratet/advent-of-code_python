@@ -1,122 +1,97 @@
 import re
-from functools import cache
-from math import prod
+from math import ceil, prod
 
 from aocd import get_data
 
-MAX_ROBOTS = 10
-MAX_RESOURCES = 40
-
 input = get_data(day=19, year=2022)
 
+BUILD_OPTIONS = [
+    ("geode_robot", (0, 0, 0, 1)),
+    ("obsidian_robot", (0, 0, 1, 0)),
+    ("clay_robot", (0, 1, 0, 0)),
+    ("ore_robot", (1, 0, 0, 0)),
+]
 
+
+# WRITE YOUR SOLUTION HERE
 def parse_blueprints(text):
     blueprints = []
-
-    blueprint_pattern = re.compile(
-        r"Blueprint (\d+): "
-        r"Each ore robot costs (\d+) ore\. "
-        r"Each clay robot costs (\d+) ore\. "
-        r"Each obsidian robot costs (\d+) ore and (\d+) clay\. "
-        r"Each geode robot costs (\d+) ore and (\d+) obsidian\."
-    )
-
     for line in text.splitlines():
-        match = blueprint_pattern.match(line)
-        assert match
-        (
-            blueprint_id,
-            ore_cost,
-            clay_cost,
-            obs_ore_cost,
-            obs_clay_cost,
-            geo_ore_cost,
-            geo_obs_cost,
-        ) = map(int, match.groups())
-
-        blueprint = {
-            "ore_robot": (ore_cost, 0, 0),
-            "clay_robot": (clay_cost, 0, 0),
-            "obsidian_robot": (obs_ore_cost, obs_clay_cost, 0),
-            "geode_robot": (geo_ore_cost, 0, geo_obs_cost),
-        }
-
-        blueprints.append(blueprint)
+        _, ore_cost, clay_cost, obs_ore_cost, obs_clay_cost, geo_ore_cost, geo_obs_cost = map(
+            int, re.findall(r"\d+", line)
+        )
+        blueprints.append(
+            {
+                "ore_robot": (ore_cost, 0, 0),
+                "clay_robot": (clay_cost, 0, 0),
+                "obsidian_robot": (obs_ore_cost, obs_clay_cost, 0),
+                "geode_robot": (geo_ore_cost, 0, geo_obs_cost),
+            }
+        )
     return blueprints
 
 
 def simulate_blueprint(blueprint, max_minutes):
-    max_geodes = 0
+    max_ore = max(c[0] for c in blueprint.values())
+    max_clay = blueprint["obsidian_robot"][1]
+    max_obs = blueprint["geode_robot"][2]
+    best = 0
 
-    @cache
-    def simulate(minute, ore_r, clay_r, obs_r, geo_r, ore, clay, obs, geo):
-        nonlocal max_geodes
-
-        if minute >= max_minutes:
-            max_geodes = max(max_geodes, geo)
-            return
-
+    def dfs(minute, ore_r, clay_r, obs_r, geo_r, ore, clay, obs, geo):
+        nonlocal best
         time_left = max_minutes - minute
-        optimistic = geo + geo_r * time_left + (time_left * (time_left - 1)) // 2
-        if optimistic <= max_geodes:
+        best = max(best, geo + geo_r * time_left)
+
+        if geo + geo_r * time_left + (time_left * (time_left - 1)) // 2 <= best:
             return
 
-        if any(resource > MAX_RESOURCES for resource in [ore, clay, obs]):
-            return
-
-        if any(robot > MAX_ROBOTS for robot in [ore_r, clay_r, obs_r]):
-            return
-
-        build_options = [
-            ("geode_robot", (0, 0, 0, 1)),
-            ("obsidian_robot", (0, 0, 1, 0)),
-            ("clay_robot", (0, 1, 0, 0)),
-            ("ore_robot", (1, 0, 0, 0)),
-        ]
-
-        for robot_type, (dr_ore, dr_clay, dr_obs, dr_geo) in build_options:
+        for robot_type, (dr_ore, dr_clay, dr_obs, dr_geo) in BUILD_OPTIONS:
             ore_cost, clay_cost, obs_cost = blueprint[robot_type]
-            if ore >= ore_cost and clay >= clay_cost and obs >= obs_cost:
-                simulate(
-                    minute + 1,
-                    ore_r + dr_ore,
-                    clay_r + dr_clay,
-                    obs_r + dr_obs,
-                    geo_r + dr_geo,
-                    ore + ore_r - ore_cost,
-                    clay + clay_r - clay_cost,
-                    obs + obs_r - obs_cost,
-                    geo + geo_r,
-                )
+            if robot_type == "ore_robot" and ore_r >= max_ore:
+                continue
+            if robot_type == "clay_robot" and clay_r >= max_clay:
+                continue
+            if robot_type == "obsidian_robot" and (obs_r >= max_obs or clay_r == 0):
+                continue
+            if robot_type == "geode_robot" and obs_r == 0:
+                continue
+            wait = max(
+                ceil((ore_cost - ore) / ore_r) if ore_cost > ore else 0,
+                ceil((clay_cost - clay) / clay_r) if clay_cost > clay and clay_r > 0 else 0,
+                ceil((obs_cost - obs) / obs_r) if obs_cost > obs and obs_r > 0 else 0,
+            )
+            t = wait + 1
+            if minute + t >= max_minutes:
+                continue
+            dfs(
+                minute + t,
+                ore_r + dr_ore,
+                clay_r + dr_clay,
+                obs_r + dr_obs,
+                geo_r + dr_geo,
+                ore + ore_r * t - ore_cost,
+                clay + clay_r * t - clay_cost,
+                obs + obs_r * t - obs_cost,
+                geo + geo_r * t,
+            )
 
-        simulate(
-            minute + 1,
-            ore_r,
-            clay_r,
-            obs_r,
-            geo_r,
-            ore + ore_r,
-            clay + clay_r,
-            obs + obs_r,
-            geo + geo_r,
-        )
-
-    simulate(0, 1, 0, 0, 0, 0, 0, 0, 0)
-    return max_geodes
+    dfs(0, 1, 0, 0, 0, 0, 0, 0, 0)
+    return best
 
 
-# WRITE YOUR SOLUTION HERE
-def part_1(lines):
+def solve(lines, part="part_1"):
     blueprints = parse_blueprints(lines)
-    return sum(
-        blueprint_id * simulate_blueprint(blueprint, max_minutes=24)
-        for blueprint_id, blueprint in enumerate(blueprints, start=1)
-    )
+    if part == "part_1":
+        return sum(i * simulate_blueprint(bp, 24) for i, bp in enumerate(blueprints, 1))
+    return prod(simulate_blueprint(bp, 32) for bp in blueprints[:3])
+
+
+def part_1(lines):
+    return solve(lines)
 
 
 def part_2(lines):
-    blueprints = parse_blueprints(lines)
-    return prod(simulate_blueprint(blueprint, max_minutes=32) for blueprint in blueprints[:3])
+    return solve(lines, "part_2")
 
 
 # END OF SOLUTION

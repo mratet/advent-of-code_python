@@ -1,34 +1,38 @@
-import numpy as np
 from advent_of_code_ocr import convert_array_6
 from aocd import get_data
 
 input = get_data(day=10, year=2022).splitlines()
 
 
+# WRITE YOUR SOLUTION HERE
 def run_program(lines):
-    X = 1
-    yield X
+    x = 1
+    yield x
     for line in lines:
         if line == "noop":
-            yield X
+            yield x
         else:
-            _, V = line.split()
-            yield X
-            yield X
-            X += int(V)
+            _, v = line.split()
+            yield x
+            yield x
+            x += int(v)
 
 
-# WRITE YOUR SOLUTION HERE
-def part_1(lines):
+def solve(lines, part="part_1"):
     state = list(run_program(lines))
-    return sum(cycle * state[cycle] for cycle in range(20, 221, 40))
+    if part == "part_1":
+        return sum(cycle * state[cycle] for cycle in range(20, 221, 40))
+    w, h = 40, 6
+    pixels = [1 if abs((i % w) - x) <= 1 else 0 for i, x in enumerate(state[1:])]
+    return convert_array_6([pixels[i * w : (i + 1) * w] for i in range(h)], fill_pixel=1, empty_pixel=0)
+
+
+def part_1(lines):
+    return solve(lines)
 
 
 def part_2(lines):
-    W, H = 40, 6
-    state = list(run_program(lines))[1:]  # Skip cycle 0
-    screen = np.array([1 if abs((i % W) - x) <= 1 else 0 for i, x in enumerate(state)]).reshape(H, W)
-    return convert_array_6(screen.tolist(), fill_pixel=1, empty_pixel=0)
+    return solve(lines, "part_2")
 
 
 # END OF SOLUTION

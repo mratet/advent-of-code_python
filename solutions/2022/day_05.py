@@ -6,9 +6,9 @@ from aocd import get_data
 input = get_data(day=5, year=2022).split("\n\n")
 
 
+# WRITE YOUR SOLUTION HERE
 def parse_input(lines):
     raw_stack, instructions = lines
-
     cargo_stacks = defaultdict(list)
     for line in zip(*raw_stack.splitlines(), strict=False):
         reversed_line = "".join(reversed(line))
@@ -19,25 +19,21 @@ def parse_input(lines):
     return cargo_stacks, instructions
 
 
-def get_final_state(cargo_stacks, instructions, part="part_1"):
+def solve(lines, part="part_1"):
+    cargo_stacks, instructions = parse_input(lines)
     for line in instructions.splitlines():
         q, id1, id2 = re.findall(r"(\d+)", line)
         selected_crates = [cargo_stacks[id1].pop() for _ in range(int(q))]
         cargo_stacks[id2].extend(selected_crates if part == "part_1" else reversed(selected_crates))
-    return cargo_stacks
+    return "".join(s[-1] for s in cargo_stacks.values())
 
 
-# WRITE YOUR SOLUTION HERE
 def part_1(lines):
-    cargo_stacks, instructions = parse_input(lines)
-    cargo_stacks = get_final_state(cargo_stacks, instructions, "part_1")
-    return "".join([s[-1] for s in cargo_stacks.values()])
+    return solve(lines)
 
 
 def part_2(lines):
-    cargo_stacks, instructions = parse_input(lines)
-    cargo_stacks = get_final_state(cargo_stacks, instructions, "part_2")
-    return "".join([s[-1] for s in cargo_stacks.values()])
+    return solve(lines, "part_2")
 
 
 # END OF SOLUTION

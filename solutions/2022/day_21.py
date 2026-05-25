@@ -1,5 +1,4 @@
 import operator
-import re
 
 from aocd import get_data
 from sympy import Eq, solve, symbols, sympify
@@ -15,60 +14,52 @@ OPERATORS = {
 GET_SYMBOL = {v: k for k, v in OPERATORS.items()}
 
 
+# WRITE YOUR SOLUTION HERE
 def parse_input(lines):
     monkeys = {}
-    for monkey in lines:
-        monkey_name, stuff = monkey.split(": ")
+    for line in lines:
+        name, stuff = line.split(": ")
         if stuff.isdigit():
-            monkeys[monkey_name] = int(stuff)
+            monkeys[name] = int(stuff)
         else:
-            m = re.search(r"(\w+) ([+-/*]) (\w+)", stuff)
-            assert m
-            v1, symbol, v2 = m.groups()
-            monkeys[monkey_name] = (OPERATORS[symbol], v1, v2)
+            v1, symbol, v2 = stuff.split()
+            monkeys[name] = (OPERATORS[symbol], v1, v2)
     return monkeys
 
 
-def eval_monkey(monkeys, monkey):
-    val = monkeys[monkey]
+def eval_monkey(monkeys, name):
+    val = monkeys[name]
     if isinstance(val, int):
         return val
     op, m1, m2 = val
     return op(eval_monkey(monkeys, m1), eval_monkey(monkeys, m2))
 
 
-def get_full_expression_from_monkey(start_monkey, monkeys):
-    to_visit = [start_monkey]
-    full_expression = start_monkey
-    while to_visit:
-        monkey = to_visit.pop(0)
-        if monkey == "humn":
-            full_expression = full_expression.replace("humn", "X")
-        elif isinstance(monkeys[monkey], int):
-            full_expression = full_expression.replace(f"{monkey}", str(monkeys[monkey]))
-        else:
-            op, m1, m2 = monkeys[monkey]
-            expression = f"({m1} {GET_SYMBOL[op]} {m2})"
-            full_expression = full_expression.replace(f"{monkey}", expression)
-            to_visit.append(m1)
-            to_visit.append(m2)
-    return full_expression
+def build_expr(monkeys, name):
+    if name == "humn":
+        return "X"
+    val = monkeys[name]
+    if isinstance(val, int):
+        return str(val)
+    op, m1, m2 = val
+    return f"({build_expr(monkeys, m1)} {GET_SYMBOL[op]} {build_expr(monkeys, m2)})"
 
 
-# WRITE YOUR SOLUTION HERE
-def part_1(lines):
+def solve_puzzle(lines, part="part_1"):
     monkeys = parse_input(lines)
-    return eval_monkey(monkeys, "root")
+    if part == "part_1":
+        return eval_monkey(monkeys, "root")
+    _, lm, rm = monkeys["root"]
+    equation = Eq(sympify(build_expr(monkeys, lm)), sympify(build_expr(monkeys, rm)))
+    return solve(equation, symbols("X"))[0]
+
+
+def part_1(lines):
+    return solve_puzzle(lines)
 
 
 def part_2(lines):
-    monkeys = parse_input(lines)
-    _, lm, rm = monkeys["root"]
-    lhs = get_full_expression_from_monkey(lm, monkeys)
-    rhs = get_full_expression_from_monkey(rm, monkeys)
-    equation = Eq(sympify(lhs), sympify(rhs))
-    solution = solve(equation, symbols("X"))
-    return solution[0]
+    return solve_puzzle(lines, "part_2")
 
 
 # END OF SOLUTION

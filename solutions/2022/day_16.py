@@ -1,28 +1,22 @@
-import itertools
 import re
 from collections import deque
-from functools import cache
 
 from aocd import get_data
 
 input = get_data(day=16, year=2022)
 
 
+# WRITE YOUR SOLUTION HERE
 def parse_input(lines):
     graph = {}
-
     for line in lines.splitlines():
-        match = re.match(r"Valve (\w+) has flow rate=(\d+); tunnels? leads? to valves? (.+)", line)
-        assert match
-        name, flow, neighbors = match.groups()
+        name, flow, neighbors = re.findall(r"Valve (\w+) has flow rate=(\d+); tunnels? leads? to valves? (.+)", line)[0]
         graph[name] = {"flow": int(flow), "tunnels": list(neighbors.split(", "))}
-
     useful_valves = {name for name, props in graph.items() if props["flow"] > 0}
     return graph, useful_valves
 
 
 def compute_distances(graph):
-    """BFS to compute shortest path lengths between all pairs of valves."""
     dists = {}
     for start in graph:
         queue = deque([(start, 0)])
@@ -37,49 +31,40 @@ def compute_distances(graph):
     return dists
 
 
-def solve(graph, useful_valves, max_minutes=30):
+def compute_all_scores(graph, useful_valves, max_minutes):
     dists = compute_distances(graph)
+    valve_idx = {v: 1 << i for i, v in enumerate(useful_valves)}
+    scores = {}
 
-    @cache
-    def dfs(current, time_left, unopened):
-        best = 0
-        for valve in unopened:
-            travel_time = dists[(current, valve)] + 1  # 1 minute to open
+    def dfs(current, time_left, opened, pressure):
+        scores[opened] = max(scores.get(opened, 0), pressure)
+        for valve in useful_valves:
+            bit = valve_idx[valve]
+            if opened & bit:
+                continue
+            travel_time = dists[(current, valve)] + 1
             if time_left >= travel_time:
                 remaining_time = time_left - travel_time
-                gain = graph[valve]["flow"] * remaining_time
-                best = max(
-                    best,
-                    gain + dfs(valve, remaining_time, frozenset(unopened - {valve})),
-                )
-        return best
+                dfs(valve, remaining_time, opened | bit, pressure + graph[valve]["flow"] * remaining_time)
 
-    return dfs("AA", max_minutes, frozenset(useful_valves))
+    dfs("AA", max_minutes, 0, 0)
+    return scores
 
 
-def generate_disjoint_partitions_7_8(elements):
-    # We share the valves equally with the elephant
-    all_partitions = []
-    for subset_a in itertools.combinations(elements, 7):
-        subset_b = tuple(sorted(set(elements) - set(subset_a)))
-        all_partitions.append((tuple(sorted(subset_a)), subset_b))
-    return all_partitions
-
-
-# WRITE YOUR SOLUTION HERE
-def part_1(lines):
+def solve(lines, part="part_1"):
     graph, useful_valves = parse_input(lines)
-    return solve(graph, useful_valves, max_minutes=30)
+    if part == "part_1":
+        return max(compute_all_scores(graph, useful_valves, 30).values())
+    scores = compute_all_scores(graph, useful_valves, 26)
+    return max(v1 + v2 for s1, v1 in scores.items() for s2, v2 in scores.items() if not s1 & s2)
+
+
+def part_1(lines):
+    return solve(lines)
 
 
 def part_2(lines):
-    graph, useful_valves = parse_input(lines)
-    max_minutes = 26
-    return max(
-        solve(graph, useful_valves=valves_1, max_minutes=max_minutes)
-        + solve(graph, useful_valves=valves_2, max_minutes=max_minutes)
-        for valves_1, valves_2 in generate_disjoint_partitions_7_8(useful_valves)
-    )
+    return solve(lines, "part_2")
 
 
 # END OF SOLUTION
