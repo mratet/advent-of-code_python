@@ -1,47 +1,35 @@
-# WRITE YOUR SOLUTION HERE
+import math
 from operator import gt, lt
 
 from aocd import get_data
 
-input = get_data(day=19, year=2023).splitlines()
+input = get_data(day=19, year=2023)
 
-OPERATORS = {
-    "<": lt,
-    ">": gt,
-}
+# WRITE YOUR SOLUTION HERE
+
+OPERATORS = {"<": lt, ">": gt}
 
 
 class Conditional:
     def __init__(self, key, op, value, redirect):
         self.key = key
-        self.op = op
+        self.op = OPERATORS[op]
         self.value = value
         self.redirect = redirect
 
     def apply(self, part):
-        return OPERATORS[self.op](part[self.key], self.value)
+        return self.op(part[self.key], self.value)
 
     def split(self, part):
-        if self.op == "<":
-            T = (part[self.key][0], min(part[self.key][1], self.value - 1))
-            F = (max(self.value, part[self.key][0]), part[self.key][1])
-        elif self.op == ">":
-            F = (part[self.key][0], min(part[self.key][1], self.value))
-            T = (max(self.value + 1, part[self.key][0]), part[self.key][1])
-
-        if T[0] <= T[1]:
-            t_part = dict(part)
-            t_part[self.key] = T
+        if self.op is lt:
+            true_range = (part[self.key][0], min(part[self.key][1], self.value - 1))
+            false_range = (max(self.value, part[self.key][0]), part[self.key][1])
         else:
-            t_part = None
-
-        if F[0] <= F[1]:
-            f_part = dict(part)
-            f_part[self.key] = F
-        else:
-            f_part = None
-
-        return (t_part, f_part)
+            false_range = (part[self.key][0], min(part[self.key][1], self.value))
+            true_range = (max(self.value + 1, part[self.key][0]), part[self.key][1])
+        t_part = dict(part) | {self.key: true_range} if true_range[0] <= true_range[1] else None
+        f_part = dict(part) | {self.key: false_range} if false_range[0] <= false_range[1] else None
+        return t_part, f_part
 
 
 class Workflow:
@@ -78,75 +66,43 @@ class Workflow:
         if redirect == "R":
             return 0
         if redirect == "A":
-            total = 1
-            for rs, re in part.values():
-                total *= re - rs + 1
-            return total
+            return math.prod(end - start + 1 for start, end in part.values())
         return workflows[redirect].count(part, workflows)
 
 
-def isAccepted(part, workflows):
-    ID = "in"
-
-    while ID not in ["R", "A"]:
-        wf = workflows[ID]
-        ID = wf.apply(part)
-    return ID == "A"
+def is_accepted(part, workflows):
+    workflow_id = "in"
+    while workflow_id not in {"R", "A"}:
+        workflow_id = workflows[workflow_id].apply(part)
+    return workflow_id == "A"
 
 
-def parseParts(lines):
-    parts = []
-    for line in lines:
-        segments = line[1:-1].split(",")
-        parts.append(
-            {
-                "x": int(segments[0].split("=")[-1]),
-                "m": int(segments[1].split("=")[-1]),
-                "a": int(segments[2].split("=")[-1]),
-                "s": int(segments[3].split("=")[-1]),
-            }
-        )
-
-    return parts
+def parse_parts(lines):
+    return [{k: int(v) for k, v in (seg.split("=") for seg in line[1:-1].split(","))} for line in lines]
 
 
-def parseWorkflows(lines):
-    workflows = {}
-
-    for line in lines:
-        wf = Workflow(line)
-        workflows[wf.name] = wf
-
-    return workflows
+def parse_workflows(lines):
+    return {wf.name: wf for wf in (Workflow(line) for line in lines)}
 
 
-def _parse(lines):
-    empty_line = lines.index("")
-
-    workflows = parseWorkflows(lines[:empty_line])
-    parts = parseParts(lines[empty_line + 1 :])
-
-    return workflows, parts
+def parse_input(data):
+    workflows_data, parts_data = data.split("\n\n")
+    return parse_workflows(workflows_data.splitlines()), parse_parts(parts_data.splitlines())
 
 
-def part_1(input):
-    workflows, parts = _parse(input)
-
-    total = 0
-    for part in parts:
-        if isAccepted(part, workflows):
-            total += sum(part.values())
-
-    return total
+def part_1(data):
+    workflows, parts = parse_input(data)
+    return sum(sum(part.values()) for part in parts if is_accepted(part, workflows))
 
 
-def part_2(input):
-    workflows, _ = _parse(input)
+def part_2(data):
+    workflows, _ = parse_input(data)
     start = dict.fromkeys("xmas", (1, 4000))
     return workflows["in"].count(start, workflows)
 
 
 # END OF SOLUTION
+
 
 print(f"My answer is {part_1(input)}")
 print(f"My answer is {part_2(input)}")

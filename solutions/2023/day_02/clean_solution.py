@@ -1,45 +1,36 @@
 import collections
+import math
 
 from aocd import get_data
 
 input = get_data(day=2, year=2023).splitlines()
 
-
 # WRITE YOUR SOLUTION HERE
-def _parse(line):
-    games = line.split(":")[1].split(";")
+
+
+def parse_input(line):
     synthesis = collections.defaultdict(list)
-
-    for game_set in games:
-        game = game_set.split(",")
-        for tirage in game:
-            tirage = tirage.split(" ")
-            number, color = tirage[1], tirage[2]
-            synthesis[color].append(int(number))
-
+    for game_set in line.split(":")[1].split(";"):
+        for tirage in game_set.split(","):
+            n, color = tirage.split()
+            synthesis[color].append(int(n))
     return synthesis
 
 
-def part_1(input):
+def part_1(lines):
     max_values = {"red": 12, "green": 13, "blue": 14}
-
-    ans = 0
-    for i, line in enumerate(input):
-        synthesis = _parse(line)
-        if all(all(max_val >= val for val in synthesis[k]) for k, max_val in max_values.items()):
-            ans += i + 1
-
-    return ans
+    return sum(
+        i
+        for i, line in enumerate(lines, start=1)
+        for syn in [parse_input(line)]
+        if all(max(syn[k], default=0) <= v for k, v in max_values.items())
+    )
 
 
-def part_2(input):
-    ans = 0
-    for _i, line in enumerate(input):
-        synthesis = _parse(line)
-        b, g, r = [max(color_val) for k, color_val in synthesis.items()]
-        ans += b * g * r
-
-    return ans
+def part_2(lines):
+    return sum(
+        math.prod(max(syn[c]) for c in ("red", "green", "blue")) for line in lines for syn in [parse_input(line)]
+    )
 
 
 # END OF SOLUTION

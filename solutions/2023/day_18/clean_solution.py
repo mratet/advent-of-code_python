@@ -1,60 +1,45 @@
+from itertools import pairwise
+
 from aocd import get_data
 
 input = get_data(day=18, year=2023).splitlines()
 
 # WRITE YOUR SOLUTION HERE
-
 N, S, W, E = (0, -1), (0, 1), (-1, 0), (1, 0)
-dir_dict = {
-    "U": N,
-    "D": S,
-    "R": E,
-    "L": W,
-}
 
-second_dir_dict = {
-    "0": E,
-    "1": N,
-    "2": W,
-    "3": S,
-}
+DIRECTIONS = {"U": N, "D": S, "R": E, "L": W}
+HEX_DIRECTIONS = {"0": E, "1": S, "2": W, "3": N}
 
 
 def shoelace_area(points):
-    area = 0
-    for i in range(len(points) - 1):
-        area += points[i][0] * points[i + 1][1] - points[i + 1][0] * points[i][1]
-    return area // 2
+    return abs(sum(x1 * y2 - x2 * y1 for (x1, y1), (x2, y2) in pairwise(points))) // 2
 
 
-def _parse(input, part):
+def parse_input(lines, part="part_1"):
     perimeter, points, point = 0, [], (0, 0)
-
-    for line in input:
+    for line in lines:
         direction, distance, hexa = line.split()
         if part == "part_2":
-            direction, distance = second_dir_dict[hexa[-2]], int(hexa[2:-2], 16)
+            direction, distance = HEX_DIRECTIONS[hexa[-2]], int(hexa[2:-2], 16)
         else:
-            direction = dir_dict[direction]
-            distance = int(distance)
-
+            direction, distance = DIRECTIONS[direction], int(distance)
         point = (point[0] + distance * direction[0], point[1] + distance * direction[1])
         perimeter += distance
         points.append(point)
-
     return points, perimeter
 
 
-def part_1(input):
-    points, perimeter = _parse(input, "part_1")
-    area = shoelace_area(points)
-    return abs(area) + perimeter // 2 + 1
+def solve(lines, part="part_1"):
+    points, perimeter = parse_input(lines, part)
+    return shoelace_area(points) + perimeter // 2 + 1
 
 
-def part_2(input):
-    points, perimeter = _parse(input, "part_2")
-    area = shoelace_area(points)
-    return abs(area) + perimeter // 2 + 1
+def part_1(lines):
+    return solve(lines)
+
+
+def part_2(lines):
+    return solve(lines, part="part_2")
 
 
 # END OF SOLUTION

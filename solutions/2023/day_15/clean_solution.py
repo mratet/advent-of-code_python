@@ -1,34 +1,34 @@
-# WRITE YOUR SOLUTION HERE
 from collections import defaultdict
 from functools import reduce
 
 from aocd import get_data
 
-input = get_data(day=15, year=2023).splitlines()
+input = get_data(day=15, year=2023).strip().split(",")
 
-char = lambda i, c: (i + ord(c)) * 17 % 256
-hash = lambda s: reduce(char, s, 0)
-
-
-def _parse(lines):
-    return lines[0].split(",")
+# WRITE YOUR SOLUTION HERE
 
 
-def part_1(lines):
-    return sum(map(hash, _parse(lines)))
+def char(acc, c):
+    return (acc + ord(c)) * 17 % 256
 
 
-def part_2(lines):
+def holiday_hash(s):
+    return reduce(char, s, 0)
+
+
+def part_1(steps):
+    return sum(map(holiday_hash, steps))
+
+
+def part_2(steps):
     boxes = defaultdict(dict)
-    for u in _parse(lines):
-        if "-" in u:
-            label = u[:-1]
-            box_number = hash(label)
-            boxes[box_number].pop(label, None)
+    for step in steps:
+        if "-" in step:
+            label = step[:-1]
+            boxes[holiday_hash(label)].pop(label, None)
         else:
-            label, focal_length = u.split("=")
-            boxes[hash(label)][label] = int(focal_length)
-
+            label, focal_length = step.split("=")
+            boxes[holiday_hash(label)][label] = int(focal_length)
     return sum((i + 1) * (j + 1) * l for i in boxes for j, l in enumerate(boxes[i].values()))
 
 

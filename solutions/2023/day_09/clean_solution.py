@@ -11,18 +11,16 @@ def next_history_value(history):
     return history[-1] + next_history_value(diffs) if history else 0
 
 
-def _parse(input):
-    return [list(map(int, line.split())) for line in input]
+def parse_input(lines):
+    return [list(map(int, line.split())) for line in lines]
 
 
-def part_1(input):
-    histories = _parse(input)
-    return sum([next_history_value(history) for history in histories])
+def part_1(lines):
+    return sum(next_history_value(history) for history in parse_input(lines))
 
 
-def part_2(input):
-    histories = _parse(input)
-    return sum([next_history_value(history[::-1]) for history in histories])
+def part_2(lines):
+    return sum(next_history_value(history[::-1]) for history in parse_input(lines))
 
 
 # END OF SOLUTION

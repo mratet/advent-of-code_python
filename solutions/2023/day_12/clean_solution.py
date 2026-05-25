@@ -1,9 +1,10 @@
-# WRITE YOUR SOLUTION HERE
 from functools import cache
 
 from aocd import get_data
 
 input = get_data(day=12, year=2023).splitlines()
+
+# WRITE YOUR SOLUTION HERE
 
 
 @cache
@@ -31,24 +32,24 @@ def solve(string, decoded):
     return result
 
 
-def _parse(input, part):
-    tab = []
-    for line in input:
-        encoded, decoded = line.split()
-        decoded = tuple([int(c) for c in decoded.split(",")])
+def parse_input(lines, part="part_1"):
+    result = []
+    for line in lines:
+        encoded, decoded_str = line.split()
+        decoded = tuple(int(c) for c in decoded_str.split(","))
         if part == "part_2":
-            encoded = ((encoded + "?") * 5)[:-1]
+            encoded = "?".join([encoded] * 5)
             decoded = decoded * 5
-        tab.append((encoded, decoded))
-    return tab
+        result.append((encoded, decoded))
+    return result
 
 
 def part_1(lines):
-    return sum([solve(encod, decod) for encod, decod in _parse(input, "part_1")])
+    return sum(solve(encoded, decoded) for encoded, decoded in parse_input(lines))
 
 
 def part_2(lines):
-    return sum([solve(encod, decod) for encod, decod in _parse(input, "part_2")])
+    return sum(solve(encoded, decoded) for encoded, decoded in parse_input(lines, part="part_2"))
 
 
 # END OF SOLUTION

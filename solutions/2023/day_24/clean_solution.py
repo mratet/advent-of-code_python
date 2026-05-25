@@ -6,66 +6,56 @@ from aocd import get_data
 
 input = get_data(day=24, year=2023).splitlines()
 
+MIN_VAL = 200000000000000
+MAX_VAL = 400000000000000
 
-def _parse(lines):
+# WRITE YOUR SOLUTION HERE
+
+
+def parse_input(lines):
     return [list(map(int, re.findall(r"-?\d+", line))) for line in lines]
 
 
 def find_intersection_2d(a1, a2):
-    """
-    Solve this linear system using Cramer's rule (cf https://en.wikipedia.org/wiki/Cramer%27s_rule):
-    - t1 * vx1 + t2 * (-vx2) = px2 - px1
-    - t1 * vy1 + t2 * (-vy2) = py2 - py1
-    """
+    # Cramer's rule
     px1, py1, _, vx1, vy1, _ = a1
     px2, py2, _, vx2, vy2, _ = a2
-
-    determinant = lambda a, b, c, d: a * d - b * c
-    det = determinant(vx1, -vx2, vy1, -vy2)
-
+    det = vx2 * vy1 - vx1 * vy2
     if det == 0:
-        return -1, 0, 0
-    t1 = determinant(px2 - px1, -vx2, py2 - py1, -vy2) / det
-    t2 = determinant(vx1, px2 - px1, vy1, py2 - py1) / det
+        return -1, 0, (0, 0)
+    dx, dy = px2 - px1, py2 - py1
+    t1 = (vx2 * dy - vy2 * dx) / det
+    t2 = (vx1 * dy - vy1 * dx) / det
     return t1, t2, (px1 + t1 * vx1, py1 + t1 * vy1)
 
 
 def solve_rock(hailstones):
-    prx, pry, prz = sp.symbols("prx pry prz")
-    vrx, vry, vrz = sp.symbols("vrx vry vrz")
-    t1, t2, t3 = sp.symbols("t1 t2 t3")
-
+    prx, pry, prz, vrx, vry, vrz = sp.symbols("prx pry prz vrx vry vrz")
+    t_syms = sp.symbols("t1 t2 t3")
     eqs = []
-
-    for i, (px, py, pz, vx, vy, vz) in enumerate(hailstones[:3]):
-        t = [t1, t2, t3][i]
-        eqs.append(prx - px - (vx - vrx) * t)
-        eqs.append(pry - py - (vy - vry) * t)
-        eqs.append(prz - pz - (vz - vrz) * t)
-
-    sol = sp.solve(eqs, (prx, pry, prz, vrx, vry, vrz, t1, t2, t3), dict=True)[0]
+    for (px, py, pz, vx, vy, vz), t in zip(hailstones[:3], t_syms, strict=False):
+        eqs += [
+            prx - px - (vx - vrx) * t,
+            pry - py - (vy - vry) * t,
+            prz - pz - (vz - vrz) * t,
+        ]
+    sol = sp.solve(eqs, (prx, pry, prz, vrx, vry, vrz, *t_syms), dict=True)[0]
     return sol[prx], sol[pry], sol[prz]
 
 
-# WRITE YOUR SOLUTION HERE
 def part_1(lines):
-    asteroids = _parse(lines)
-
-    ans = 0
-    min_val = 200000000000000
-    max_val = 400000000000000
-
-    for a1, a2 in combinations(asteroids, 2):
-        t1, t2, intersection = find_intersection_2d(a1, a2)
-        if t1 >= 0 and t2 >= 0 and min_val <= intersection[0] <= max_val and min_val <= intersection[1] <= max_val:
-            ans += 1
-    return ans
+    hailstones = parse_input(lines)
+    count = 0
+    for a1, a2 in combinations(hailstones, 2):
+        t1, t2, (x, y) = find_intersection_2d(a1, a2)
+        if t1 >= 0 and t2 >= 0 and MIN_VAL <= x <= MAX_VAL and MIN_VAL <= y <= MAX_VAL:
+            count += 1
+    return count
 
 
 def part_2(lines):
-    asteroids = _parse(lines)
-    pos = solve_rock(asteroids)
-    return sum(pos)
+    hailstones = parse_input(lines)
+    return sum(solve_rock(hailstones))
 
 
 # END OF SOLUTION

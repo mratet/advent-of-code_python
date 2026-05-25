@@ -1,9 +1,10 @@
-# WRITE YOUR SOLUTION HERE
 from math import ceil, floor, prod
 
 from aocd import get_data
 
 input = get_data(day=6, year=2023).splitlines()
+
+# WRITE YOUR SOLUTION HERE
 
 
 def nb_records(time, distance):
@@ -14,34 +15,30 @@ def nb_records(time, distance):
     In particular, we're computing the distance between both squares-roots
     With a bit of basic algebra, we can show that :
     """
-    y = (time**2 - 4 * distance) ** 0.5
-    x_1 = (time - y) / 2
-    x_2 = (time + y) / 2
-    X_1 = ceil(x_1)
-    X_2 = floor(x_2)
+    sqrt_disc = (time**2 - 4 * distance) ** 0.5
+    root_low = (time - sqrt_disc) / 2
+    root_high = (time + sqrt_disc) / 2
+    int_low = ceil(root_low)
+    int_high = floor(root_high)
+    return int_high - int_low + 1 - int(root_low == int_low) - int(root_high == int_high)
 
-    return X_2 - X_1 + 1 - int(x_1 == X_1) - int(x_2 == X_2)
 
-
-def _parse(input, part):
-    times, distances = None, None
-    match part:
-        case "part_1":
-            times = list(map(int, input[0].split(":")[1].split()))
-            distances = list(map(int, input[1].split(":")[1].split()))
-        case "part_2":
-            times = int(input[0].split(":")[1].replace(" ", ""))
-            distances = int(input[1].split(":")[1].replace(" ", ""))
+def parse_input(lines, part="part_1"):
+    times = list(map(int, lines[0].split(":")[1].split()))
+    distances = list(map(int, lines[1].split(":")[1].split()))
+    if part == "part_2":
+        times = int("".join(map(str, times)))
+        distances = int("".join(map(str, distances)))
     return times, distances
 
 
-def part_1(input):
-    times, distances = _parse(input, "part_1")
-    return prod([nb_records(time, distance) for time, distance in zip(times, distances, strict=False)])
+def part_1(lines):
+    times, distances = parse_input(lines)
+    return prod(nb_records(time, distance) for time, distance in zip(times, distances, strict=False))
 
 
 def part_2(lines):
-    time, distance = _parse(input, "part_2")
+    time, distance = parse_input(lines, part="part_2")
     return nb_records(time, distance)
 
 

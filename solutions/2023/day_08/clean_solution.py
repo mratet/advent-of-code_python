@@ -1,6 +1,6 @@
-# WRITE YOUR SOLUTION HERE
 import math
 import re
+from itertools import cycle
 
 from aocd import get_data
 
@@ -8,41 +8,35 @@ input = get_data(day=8, year=2023).splitlines()
 
 binary = {"L": 0, "R": 1}
 
+# WRITE YOUR SOLUTION HERE
 
-def _parse(input):
-    movements = [binary[c] for c in input[0]]
+
+def parse_input(lines):
+    movements = [binary[c] for c in lines[0]]
     network = {}
-    for node in input[2:]:
+    for node in lines[2:]:
         source, target_l, target_r = re.findall(r"\b[A-Z]{3}\b", node)
         network[source] = (target_l, target_r)
-
     return movements, network
 
 
-def network_navigation(state, movements, network, part):
-    i = 0
-    while True:
-        # We move either L/R and repeat the instruction until we verify our condition
-        state = network[state][movements[i % len(movements)]]
-        if (part == "part_1" and state == "ZZZ") or (part == "part_2" and state[2] == "Z"):
-            return i + 1
-
-        i += 1
+def network_navigation(start, movements, network, end_condition):
+    for step, move in enumerate(cycle(movements), 1):
+        start = network[start][move]
+        if end_condition(start):
+            return step
 
 
-def part_1(input):
-    movements, network = _parse(input)
-    state = "AAA"
-    return network_navigation(state, movements, network, "part_1")
+def part_1(lines):
+    movements, network = parse_input(lines)
+    return network_navigation("AAA", movements, network, lambda s: s == "ZZZ")
 
 
-def part_2(input):
-    movements, network = _parse(input)
-
+def part_2(lines):
+    movements, network = parse_input(lines)
     starting_states = [source for source in network if source[2] == "A"]
-    tab = [network_navigation(state, movements, network, "part_2") for state in starting_states]
-
-    return math.lcm(*tab)
+    cycle_lengths = [network_navigation(state, movements, network, lambda s: s[-1] == "Z") for state in starting_states]
+    return math.lcm(*cycle_lengths)
 
 
 # END OF SOLUTION

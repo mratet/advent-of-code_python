@@ -1,49 +1,42 @@
-# WRITE YOUR SOLUTION HERE
+import collections
 import re
 
 from aocd import get_data
 
 input = get_data(day=3, year=2023).splitlines()
 
+NUMBER = re.compile(r"\d+")
+
+# WRITE YOUR SOLUTION HERE
+
+
+def adjacent_cells(grid, row_idx, col_start, col_end, row):
+    for adj_row in [row_idx - 1, row_idx, row_idx + 1]:
+        for adj_col in range(col_start - 1, col_end + 1):
+            if 0 <= adj_row < len(grid) and 0 <= adj_col < len(row):
+                yield adj_row, adj_col, grid[adj_row][adj_col]
+
 
 def part_1(grid):
-    def is_valid(r, s, e):
-        for cr in [r - 1, r, r + 1]:
-            for cc in range(s - 1, e + 1):
-                if 0 <= cr < len(grid) and 0 <= cc < len(row) and grid[cr][cc] not in ".01234556789":
-                    return True
-        return False
-
-    total = 0
-    for r, row in enumerate(grid):
-        for match in re.finditer("\\d+", row):
-            if is_valid(r, match.start(), match.end()):
-                total += int(match.group())
-
-    return total
+    return sum(
+        int(match.group())
+        for row_idx, row in enumerate(grid)
+        for match in NUMBER.finditer(row)
+        if any(
+            char not in ".0123456789" for _, _, char in adjacent_cells(grid, row_idx, match.start(), match.end(), row)
+        )
+    )
 
 
 def part_2(grid):
-    gears = {}
-
-    def scan(r, s, e, n):
-        for cr in [r - 1, r, r + 1]:
-            for cc in range(s - 1, e + 1):
-                if 0 <= cr < len(grid) and 0 <= cc < len(row) and grid[cr][cc] == "*":
-                    if (cr, cc) not in gears:
-                        gears[(cr, cc)] = []
-                    gears[(cr, cc)].append(n)
-
-    for r, row in enumerate(grid):
-        for match in re.finditer("\\d+", row):
-            scan(r, match.start(), match.end(), int(match.group()))
-
-    total = 0
-    for array in gears.values():
-        if len(array) == 2:
-            total += array[0] * array[1]
-
-    return total
+    gears = collections.defaultdict(list)
+    for row_idx, row in enumerate(grid):
+        for match in NUMBER.finditer(row):
+            num = int(match.group())
+            for adj_row, adj_col, char in adjacent_cells(grid, row_idx, match.start(), match.end(), row):
+                if char == "*":
+                    gears[(adj_row, adj_col)].append(num)
+    return sum(nums[0] * nums[1] for nums in gears.values() if len(nums) == 2)
 
 
 # END OF SOLUTION

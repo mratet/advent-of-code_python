@@ -5,24 +5,24 @@ input = get_data(day=4, year=2023).splitlines()
 # WRITE YOUR SOLUTION HERE
 
 
-def count_match(line):
-    win_cards, cards = line.split(":")[1].split("|")
-    set_win_cards, set_cards = set(win_cards.split()), set(cards.split())
-    return len(set_cards & set_win_cards)
+def parse_input(lines):
+    return [
+        len(set(owned.split()) & set(winning.split()))
+        for line in lines
+        for winning, owned in [line.split(":")[1].split("|")]
+    ]
 
 
 def part_1(lines):
-    # int to avoid counting 1/2 when there are no matches
-    return sum([int(2 ** (count_match(line) - 1)) for line in lines])
+    return sum(int(2 ** (match_count - 1)) for match_count in parse_input(lines))
 
 
 def part_2(lines):
-    counts = [1] * len(lines)
-    for i, line in enumerate(lines):
-        n = count_match(line)
-        for j in range(n):
-            counts[i + 1 + j] += counts[i]
-    return sum(counts)
+    card_counts = [1] * len(lines)
+    for card_idx, match_count in enumerate(parse_input(lines)):
+        for bonus_idx in range(match_count):
+            card_counts[card_idx + 1 + bonus_idx] += card_counts[card_idx]
+    return sum(card_counts)
 
 
 # END OF SOLUTION

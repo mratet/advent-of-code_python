@@ -1,69 +1,60 @@
-# WRITE YOUR SOLUTION HERE
 import collections
 
 from aocd import get_data
 
 input = get_data(day=21, year=2023).splitlines()
 
-
-def _parse(input):
-    maze = {(x, y): c for y, line in enumerate(input) for x, c in enumerate(line)}
-    s_co = next(co for co, v in maze.items() if v == "S")
-
-    return maze, s_co
+# WRITE YOUR SOLUTION HERE
 
 
-def bfs(maze, start, nb):
-    q = collections.deque()
-    n = 1 + max(maze.keys())[0]
+def parse_input(lines):
+    maze = {(x, y): c for y, line in enumerate(lines) for x, c in enumerate(line)}
+    start = next(co for co, v in maze.items() if v == "S")
+    return maze, start
 
-    q.append(start)
-    visited = set()
 
-    for _i in range(nb):
-        visited.clear()
-        for _ in range(len(q)):
-            x, y = q.popleft()
+def bfs_distances(maze, start, max_nb, n):
+    dist = {start: 0}
+    q = collections.deque([start])
+    while q:
+        x, y = q.popleft()
+        if dist[(x, y)] >= max_nb:
+            continue
+        for dx, dy in ((0, 1), (0, -1), (1, 0), (-1, 0)):
+            nx, ny = x + dx, y + dy
+            if (nx, ny) not in dist and maze.get((nx % n, ny % n)) != "#":
+                dist[(nx, ny)] = dist[(x, y)] + 1
+                q.append((nx, ny))
+    return dist
 
-            for move in (0, 1), (0, -1), (1, 0), (-1, 0):
-                nx = x + move[0]
-                ny = y + move[1]
-                current_car = maze.get((nx % n, ny % n), "#")
 
-                if current_car != "#" and (nx, ny) not in visited:
-                    visited.add((nx, ny))
-                    q.append((nx, ny))
-
-    return len(q)
+def count_at(dist, nb):
+    return sum(1 for d in dist.values() if d <= nb and d % 2 == nb % 2)
 
 
 def part_1(lines):
-    maze, s_co = _parse(lines)
-    return bfs(maze, s_co, 64)
+    maze, start = parse_input(lines)
+    n = len(lines)
+    return count_at(bfs_distances(maze, start, 64, n), 64)
 
 
 def part_2(lines):
-    maze, s_co = _parse(lines)
-    size = 1 + max(maze.keys())[0]
-
+    maze, start = parse_input(lines)
+    n = len(lines)
     steps = 26501365
-    x = steps % (2 * size)
-    values = []
-
-    while True:
-        values.append(bfs(maze, s_co, x))
-        if len(values) == 3:
-            break
-        x += 2 * size
-    # Extrapolation to a second degree polynom
-    a = 0.5 * (values[2] - 2 * values[1] + values[0])
+    # f(steps % size + k*size) is quadratic in k: each extra size steps adds one full ring
+    # of tiles, whose area grows linearly, so the cumulative count grows quadratically.
+    # size = 2*n (not n) because n=131 is odd: adding n steps flips parity, so the three
+    # sample points must be spaced 2n apart to stay on the same parity as steps=26501365.
+    size = 2 * n
+    targets = [steps % size + i * size for i in range(3)]
+    dist = bfs_distances(maze, start, targets[-1], n)
+    values = [count_at(dist, nb) for nb in targets]
+    a = (values[2] - 2 * values[1] + values[0]) // 2
     c = values[0]
     b = values[1] - a - c
-
-    def f(x):
-        return a * x**2 + b * x + c
-
-    return f(steps // (2 * size))
+    x = steps // size
+    return a * x**2 + b * x + c
 
 
 # END OF SOLUTION

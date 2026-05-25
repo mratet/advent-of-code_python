@@ -7,15 +7,16 @@ input = get_data(day=25, year=2023).splitlines()
 
 CUTS = [("lmg", "krx"), ("vzb", "tnr"), ("tqn", "tvf")]
 
-
 # WRITE YOUR SOLUTION HERE
-def _parse(lines):
-    graph = collections.defaultdict(list)
+
+
+def parse_input(lines):
+    graph = collections.defaultdict(set)
     for line in lines:
         parent, child = line.split(":")
         for node in child.split():
-            graph[parent].append(node)
-            graph[node].append(parent)
+            graph[parent].add(node)
+            graph[node].add(parent)
     return graph
 
 
@@ -30,33 +31,27 @@ def save_graph(graph, filename="graph_day25"):
 
 def cut_edges(graph, cuts):
     for a, b in cuts:
-        graph[a].remove(b)
-        graph[b].remove(a)
+        graph[a].discard(b)
+        graph[b].discard(a)
 
 
 def dfs(graph, start):
     q = [start]
     visited = {start}
-
     while q:
         node = q.pop()
         for neighbor in graph[node]:
             if neighbor not in visited:
                 q.append(neighbor)
                 visited.add(neighbor)
-
     return len(visited)
 
 
 def part_1(lines):
-    graph = _parse(lines)
-    # save_graph(graph)
+    graph = parse_input(lines)
     cut_edges(graph, CUTS)
-    n = len(graph)
-    m = dfs(graph, "ddp")
-    p = dfs(graph, "stz")
-    assert n == m + p
-    return m * p
+    m = dfs(graph, next(iter(graph)))
+    return m * (len(graph) - m)
 
 
 # END OF SOLUTION

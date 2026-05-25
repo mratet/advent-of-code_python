@@ -1,61 +1,47 @@
 from aocd import get_data
 
-input = get_data(day=13, year=2023).splitlines()
-
+input = get_data(day=13, year=2023)
 
 # WRITE YOUR SOLUTION HERE
-def check_mirrors(tab, mismatched):
-    n, i, index = len(tab), 0, 0
-    cnt = 0
-
-    while index < n - 1:
-        while index - i >= 0 and index + i + 1 <= n - 1:
-            cnt += sum([x != y for x, y in zip(tab[index + 1 + i], tab[index - i], strict=False)])
-            i += 1
-
-        if cnt == mismatched:
-            return index + 1
-
-        index += 1
-        i = 0
-        cnt = 0
-
-    return 0
 
 
-def _parse(input):
-    # can be optimize using [....splitlines() for block in input.split('\n\n')]
-    patterns, pattern = [], []
-
-    for line in input:
-        if not line:
-            cols = ["".join([pattern[i][j] for i in range(len(pattern))]) for j in range(len(pattern[0]))]
-            patterns.append((pattern, cols))
-            pattern = []
-        else:
-            pattern.append(line)
-
-    if pattern:
-        cols = ["".join([pattern[i][j] for i in range(len(pattern))]) for j in range(len(pattern[0]))]
-        patterns.append((pattern, cols))
-
+def parse_input(data):
+    patterns = []
+    for block in data.split("\n\n"):
+        rows = block.splitlines()
+        cols = ["".join(col) for col in zip(*rows, strict=False)]
+        patterns.append((rows, cols))
     return patterns
 
 
-def part_1(lines):
-    patterns = _parse(lines)
-    hor_reflec = sum([check_mirrors(rows, 0) for rows, _ in patterns])
-    vert_reflec = sum([check_mirrors(cols, 0) for _, cols in patterns])
+def check_mirrors(tab, mismatched):
+    n, mirror_pos = len(tab), 0
+    while mirror_pos < n - 1:
+        mismatch_count, offset = 0, 0
+        while mirror_pos - offset >= 0 and mirror_pos + offset + 1 <= n - 1:
+            mismatch_count += sum(
+                x != y for x, y in zip(tab[mirror_pos + 1 + offset], tab[mirror_pos - offset], strict=False)
+            )
+            offset += 1
+        if mismatch_count == mismatched:
+            return mirror_pos + 1
+        mirror_pos += 1
+    return 0
 
-    return hor_reflec * 100 + vert_reflec
+
+def solve(data, part="part_1"):
+    mismatched = 1 if part == "part_2" else 0
+    return sum(
+        check_mirrors(rows, mismatched) * 100 + check_mirrors(cols, mismatched) for rows, cols in parse_input(data)
+    )
 
 
-def part_2(lines):
-    patterns = _parse(lines)
-    hor_reflec = sum([check_mirrors(rows, 1) for rows, _ in patterns])
-    vert_reflec = sum([check_mirrors(cols, 1) for _, cols in patterns])
+def part_1(data):
+    return solve(data)
 
-    return hor_reflec * 100 + vert_reflec
+
+def part_2(data):
+    return solve(data, part="part_2")
 
 
 # END OF SOLUTION
