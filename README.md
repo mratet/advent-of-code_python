@@ -1,45 +1,34 @@
 # advent-of-code_python
 
-This repository contains all my solution for advent of code problems. I'm trying to refactor them so that they are understandable and relatively effective for my input (< 1s).
+Solutions to [Advent of Code](https://adventofcode.com/) problems in Python (2015–2025), aiming for < 1s per problem. Also includes solutions written in non-English languages in `i18n_solutions/`.
 
 # Setup
 
-## Python environment
+**Requirements:** Python >= 3.13, [uv](https://docs.astral.sh/uv/)
 
-This project requires Python >= 3.13 and uses [uv](https://docs.astral.sh/uv/) for dependency management.
+1. Install dependencies:
 
 ```bash
-# Install uv (if not already installed)
-curl -LsSf https://astral.sh/uv/install.sh | sh
-
-# Create the virtual environment and install all dependencies from pyproject.toml
 uv sync
 ```
 
-## AoC session token
-
-Solutions use [advent-of-code-data](https://github.com/wimglenn/advent-of-code-data) to download puzzle inputs automatically. A valid AoC session token is required.
+2. Configure your AoC session token (used to download inputs via [advent-of-code-data](https://github.com/wimglenn/advent-of-code-data)):
 
 ```bash
-# Scrape the token automatically from your browser's cookies (Chrome/Firefox must be open and logged in to adventofcode.com)
+# Auto-detect from browser cookies (Chrome/Firefox must be logged in to adventofcode.com)
 uv run aocd-token
 
-# Alternatively, set it manually: copy the session cookie from your browser's DevTools (Application > Cookies > adventofcode.com)
-mkdir -p ~/.config/aocd
-echo "YOUR_SESSION_COOKIE" > ~/.config/aocd/token
+# Or set it manually
+mkdir -p ~/.config/aocd && echo "YOUR_SESSION_COOKIE" > ~/.config/aocd/token
 ```
 
-## pre-commit
-
-This project uses [pre-commit](https://pre-commit.com/) to run `ruff` (linter + formatter) and `ty` (type checker) before each commit.
+3. Install pre-commit hooks (`ruff` + `ty`):
 
 ```bash
-# Install the git hooks (one-time setup)
 uv run pre-commit install
-
-# Run manually on all files
-uv run pre-commit run --all-files
 ```
+
+# Usage
 
 ## Running a single solution
 
@@ -77,57 +66,16 @@ uv run python run_all.py --year 2024 --sequential
 
 # Favorite problems
 
-## 2025
-- **Nice** : 7, 11
-- **Hard** : 10
-- **Very cool** : 8
-
-## 2024
-- **Nice** : 11, 14, 20
-- **Hard** : 12, 15
-- **Very cool** : 9, 17, 21 (BOY), 24
-
-## 2023
-- **Nice** : 8, 10, 16, 18, 21
-- **Hard** : 12, 19
-- **Very cool** : 5, 20 (BOY), 24
-
-## 2022
-- **Nice** : 10, 14, 17, 18, 23, 25
-- **Hard** : 15, 19
-- **Very cool** : 7, 16, 22 (BOY)
-
-## 2021
-- **Nice** : 6, 12, 13, 18, 21, 22
-- **Hard** : 8
-- **Very cool** : 14, 16 (imo tres difficile), 19 / 24 (BOY)
-
-## 2020
-- **Nice** : 8, 10, 23
-- **Hard** : 18, 19
-- **Very cool** : 14, 20 (BOY), 22
-
-## 2019
-- **Nice** : 8, 10, 14
-- **Hard** : 12, 18, 22 (peut-être le meilleur problème d'un pdv recherche)
-- **Very cool** : Intcode (2, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25), 16 (compliqué sans avoir l'intuition de la FFT), 20
-
-## 2018
-- **Nice** : 7, 8, 10, 16 (alternative sympa sur le reverse engenerring), 17 (original)
-- **Hard** : 11, 13, 21 (reverse hardcore), 23 (non trivial)
-- **Very cool** : 9, 12, 15 / 24 (deux problèmes très cool), 19 (reverse sympa)
-
-## 2017
-- **Nice** : 6, 7, 9, 13 (surprisingly only brute-forceable), 17, 19
-- **Hard** : 3 , 21 (easy thanks to numpy), 24
-- **Very cool** : 18, 20 (particle collision optimization), 23 (reverse engineering)
-
-## 2016
-- **Nice** : 8, 15, 21
-- **Hard** : 11, 22 (sympa d'un pdv recherche)
-- **Very cool** : 9, 19 (j'adore ces problemes), 12 / 23 / 25
-
-## 2015
-- **Nice** : 10, 11, 14, 18, 25
-- **Hard** : 7, 22
-- **Very cool** : 19, 20 (malheureusement brute-force)
+| Year | Nice                   | Hard            | Very cool                                                              |
+|------|------------------------|-----------------|------------------------------------------------------------------------|
+| 2025 | 7, 11                  | 10              | 8 (BOY)                                                                |
+| 2024 | 11, 14, 20             | 12, 15          | 9, 17, 21 (BOY), 24                                                    |
+| 2023 | 8, 10, 16, 18, 21      | 12, 19          | 5, 20 (BOY), 24                                                        |
+| 2022 | 10, 14, 17, 18, 23, 25 | 15, 19          | 7, 16, 22 (BOY)                                                        |
+| 2021 | 6, 12, 13, 18, 21, 22  | 8               | 14, 16, 19 / 24 (BOY)                                                  |
+| 2020 | 8, 10, 23              | 18, 19          | 14, 20 (BOY), 22                                                       |
+| 2019 | 8, 10, 14              | 12, 18, 22 (BOY)| Intcode (2, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25), 16 (FFT), 20   |
+| 2018 | 7, 8, 10, 16, 17       | 11, 13, 21, 23  | 9, 12, 15 / 24 (BOY), 19                                              |
+| 2017 | 6, 7, 9, 13, 17, 19    | 3, 21, 24       | 18, 20, 23 (BOY)                                                       |
+| 2016 | 8, 15, 21              | 11, 22          | 9, 19 (BOY), 12 / 23 / 25                                             |
+| 2015 | 10, 11, 14, 18, 25     | 7, 22           | 19 (BOY), 20                                                           |
