@@ -49,20 +49,15 @@ This downloads the puzzle input via `aocd` and creates an empty solution file.
 `run_all.py` runs every solution found in `solutions/` and produces a timing report in `results.txt`.
 
 ```bash
-# Default: parallel execution (cpu_count / 2 workers) — fast but times are approximate
+# Run all solutions
 uv run python run_all.py
 
-# Sequential: accurate per-solution benchmarking
-uv run python run_all.py --sequential
-
 # Pre-download all inputs before running (avoids counting download time on first run)
-uv run python run_all.py --warm-cache --sequential
+uv run python run_all.py --warm-cache
 
 # Run only one year
-uv run python run_all.py --year 2024 --sequential
+uv run python run_all.py --year 2024
 ```
-
-> **Note:** Times reported in parallel mode are wall-clock times under CPU contention and will be higher than actual solution runtime. Use `--sequential` for reliable benchmarks.
 
 # Favorite problems
 

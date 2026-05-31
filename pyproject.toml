@@ -8,6 +8,7 @@ dependencies = [
     "advent-of-code-ocr>=1.1.0",
     "bcrypt>=4.0.0",
     "blessed>=1.33.0",
+    "browser-cookie3>=0.20.1",
     "disjoint-set>=0.8.0",
     "graphviz>=0.20.3",
     "matplotlib>=3.10.3",
